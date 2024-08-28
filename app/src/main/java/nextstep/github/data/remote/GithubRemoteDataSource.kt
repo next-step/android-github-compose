@@ -1,4 +1,4 @@
-package nextstep.github.remote
+package nextstep.github.data.remote
 
 import nextstep.github.model.GithubRepositoryDto
 

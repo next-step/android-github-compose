@@ -3,9 +3,9 @@ package nextstep.github
 import nextstep.github.data.GithubRepository
 import nextstep.github.data.GithubRepositoryImpl
 import nextstep.github.model.GithubRepositoryDto
-import nextstep.github.remote.GithubRemoteDataSource
-import nextstep.github.remote.GithubRemoteDataSourceImpl
-import nextstep.github.remote.api.GithubApiService
+import nextstep.github.data.remote.GithubRemoteDataSource
+import nextstep.github.data.remote.GithubRemoteDataSourceImpl
+import nextstep.github.data.remote.api.GithubApiService
 import org.junit.Test
 import kotlinx.coroutines.test.runTest
 

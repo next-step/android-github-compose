@@ -4,9 +4,9 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import nextstep.github.data.GithubRepository
 import nextstep.github.data.GithubRepositoryImpl
-import nextstep.github.remote.GithubRemoteDataSource
-import nextstep.github.remote.GithubRemoteDataSourceImpl
-import nextstep.github.remote.api.GithubApiService
+import nextstep.github.data.remote.GithubRemoteDataSource
+import nextstep.github.data.remote.GithubRemoteDataSourceImpl
+import nextstep.github.data.remote.api.GithubApiService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.MediaType.Companion.toMediaType

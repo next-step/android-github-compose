@@ -1,4 +1,4 @@
-package nextstep.github.remote.api
+package nextstep.github.data.remote.api
 
 import nextstep.github.model.GithubRepositoryDto
 import retrofit2.http.GET

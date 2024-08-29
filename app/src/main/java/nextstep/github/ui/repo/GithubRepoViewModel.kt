@@ -20,13 +20,27 @@ class GithubRepoViewModel(
     private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
     val repositories = _repositories.asStateFlow()
 
+    private val _uiState = MutableStateFlow<GithubRepoUiState>(GithubRepoUiState.Loading)
+    val uiState = _uiState.asStateFlow()
+
     init {
+        fetchRepositories()
+    }
+
+    private fun fetchRepositories() {
         viewModelScope.launch {
             githubRepository
                 .getRepositories(DEFAULT_REPOSITORY_ORGANIZATION)
                 .onSuccess {
-                    _repositories.value = it
+                    _uiState.value =
+                        if (it.isEmpty()) {
+                            GithubRepoUiState.Empty
+                        } else {
+                            GithubRepoUiState.Success(it)
+                        }
                 }.onFailure {
+                    _uiState.value =
+                        GithubRepoUiState.Error(it.message ?: "Unknown error occurred")
                     Log.e(TAG, "Failed to fetch repositories", it)
                 }
         }

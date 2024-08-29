@@ -20,9 +20,9 @@
   - [v] Divider 추가
   - [v] organization 선언 수정
   - [v] `GithubRepoScreenTest`에 `study` package 이동
-- [] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UiState 생성
+- [v] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UiState 생성
   - [v] `GithubRepoUiState` 생성
-  - [] `GithubRepoUiState`에 각 상태에 따른 데이터 추가
+  - [v] `GithubRepoUiState`에 각 상태에 따른 데이터 추가
 - [] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UI 처리
   - [] 각 상태에 따른 UI test 작성
   - [] 로딩 상태에 따른 UI 처리

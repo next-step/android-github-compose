@@ -15,6 +15,7 @@ class AppContainer {
     private val serialization = Json {
         ignoreUnknownKeys = true
         prettyPrint = true
+        coerceInputValues = true
     }
 
     private val provideOkHttpClient = OkHttpClient.Builder()

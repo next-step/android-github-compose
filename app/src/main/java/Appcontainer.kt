@@ -4,6 +4,7 @@ import nextstep.github.data.ExampleRepository
 import nextstep.github.data.GithubService
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
+import okhttp3.MediaType.Companion.toMediaType
 
 class AppContainer {
 
@@ -13,10 +14,10 @@ class AppContainer {
         .client(OkHttpClient.Builder().build())
         .addConverterFactory(serialization.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
-    private val githubService = retrofit
+    val githubService = retrofit
         .create(GithubService::class.java)
 
-    val exampleRepository: ExampleRepository = ExampleRepository() // githubService 인스턴스를 활용하여 초기화
+    val exampleRepository: ExampleRepository = ExampleRepository(githubService) // githubService 인스턴스를 활용하여 초기화
 
     companion object {
         private const val CONTENT_TYPE = "application/json"

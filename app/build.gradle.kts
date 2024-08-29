@@ -64,8 +64,11 @@ dependencies {
     implementation(libs.androidx.lifecycle.runtime.compose)
     implementation(libs.kotlinx.serialization.json) // "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
     implementation(libs.retrofit2.kotlinx.serialization.converter) // "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
-
+    implementation(libs.okhttp) // Add this line
     testImplementation(libs.junit)
+    testImplementation(libs.kotlinx.coroutines.test)
+    testImplementation(libs.truth)
+    androidTestImplementation(libs.truth)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)
     androidTestImplementation(platform(libs.androidx.compose.bom))

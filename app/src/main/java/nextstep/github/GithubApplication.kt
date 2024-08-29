@@ -1,7 +1,6 @@
 package nextstep.github
 
 import android.app.Application
-import android.content.Context
 import nextstep.github.di.AppContainer
 
 class GithubApplication : Application() {

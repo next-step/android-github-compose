@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
         val appContainer = application.getAppContainer()
         val repository = appContainer.githubRepository
         lifecycleScope.launch {
-            repository.getRepositories("square")
+            repository.getRepositories("next-step")
         }
 
         setContent {

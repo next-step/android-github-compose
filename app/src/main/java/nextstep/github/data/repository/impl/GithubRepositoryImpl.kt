@@ -8,7 +8,9 @@ internal class GithubRepositoryImpl(
     private val githubService: GithubService
 ) : GithubRepository {
 
-    override suspend fun getRepositories(organization: String): List<RepositoryResponse> {
-        return githubService.getRepositories(organization)
+    override suspend fun getRepositories(organization: String): Result<List<RepositoryResponse>> {
+        return runCatching {
+            githubService.getRepositories(organization)
+        }
     }
 }

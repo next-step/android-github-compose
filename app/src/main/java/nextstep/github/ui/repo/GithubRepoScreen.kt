@@ -81,7 +81,7 @@ internal fun GithubRepoScreen(
             val result =
                 snackBarHostState.showSnackbar(
                     message = context.getString(R.string.message_error_unknown),
-                    duration = SnackbarDuration.Short,
+                    duration = SnackbarDuration.Long,
                     actionLabel = context.getString(R.string.action_retry),
                 )
             when (result) {

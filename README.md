@@ -6,3 +6,11 @@
 - [v] NEXTSTEP 조직의 저장소 목록을 가져오는 Client를 구현
 - [v] 네트워크 요청으로 저장소 목록을 가져오는 기능 구현
 - [v] 수동 DI를 구현한다. (Hilt와 같은 별도의 DI 라이브러리를 활용하지 않는다)
+
+## 🚀 2단계 - GitHub(UI 레이어)
+
+- [v] Repositories 화면 구현
+  - [v] `GithubRepoScreen` 생성
+  - [v] `GithubRepoScreen` UI test 구현
+  - [v] `GithubRepoScreen` 컴퍼넌트 상세 구현
+- [v] Repositories 화면에 필요한 데이터를 전달하는 ViewModel 구현

@@ -14,6 +14,6 @@ data class ResponseRepositoriesItem(
 
 fun ResponseRepositoriesItem.toEntity() =
     RepositoryEntity(
-        fullName = fullName,
-        description = description,
+        fullName = fullName ?: "",
+        description = description ?: "",
     )

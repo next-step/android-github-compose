@@ -1,8 +1,10 @@
 package nextstep.github.ui.repo
 
-import androidx.compose.ui.test.assertCountEquals
+import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
-import androidx.compose.ui.test.onAllNodesWithTag
+import androidx.compose.ui.test.onNodeWithTag
+import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performScrollToIndex
 import nextstep.github.core.model.RepositoryEntity
 import org.junit.Rule
 import org.junit.Test
@@ -14,11 +16,15 @@ class GithubRepoScreenTest {
     @Test
     fun 깃헙_저장소_목록을_화면에_보여준다() {
         // given
-        val repositories =
-            listOf(
-                RepositoryEntity("nextstep/compose", "갓뮤지님의 강의"),
-                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의"),
+        val repositories = mutableListOf<RepositoryEntity>()
+        (1..10).forEach { index ->
+            repositories.add(
+                RepositoryEntity("nextstep/compose", "갓뮤지님의 $index 강의"),
             )
+            repositories.add(
+                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 $index 강의"),
+            )
+        }
 
         composeTestRule.setContent {
             GithubRepoScreen(
@@ -26,9 +32,18 @@ class GithubRepoScreenTest {
             )
         }
 
-        // then
         composeTestRule
-            .onAllNodesWithTag("GithubRepoCard")
-            .assertCountEquals(repositories.size)
+            .onNodeWithText("갓뮤지님의 1 강의")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithTag("GithubRepoCards")
+            .performScrollToIndex(repositories.size - 1)
+
+        composeTestRule
+            .onNodeWithText("Jason님의 10 강의")
+            .assertIsDisplayed()
+
+        composeTestRule.waitForIdle()
     }
 }

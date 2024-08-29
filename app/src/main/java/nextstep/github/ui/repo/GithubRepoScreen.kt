@@ -3,6 +3,7 @@ package nextstep.github.ui.repo
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -65,14 +66,16 @@ internal fun GithubRepoScreen(
         },
         modifier = modifier,
     ) { innerPadding ->
-
-        LazyColumn(contentPadding = innerPadding) {
+        LazyColumn(
+            modifier =
+                Modifier
+                    .fillMaxSize()
+                    .padding(innerPadding)
+                    .testTag("GithubRepoCards"),
+        ) {
             items(repositories) { item ->
                 GithubRepoCard(
-                    modifier =
-                        Modifier
-                            .padding(16.dp)
-                            .testTag("GithubRepoCard"),
+                    modifier = Modifier.padding(16.dp),
                 ) {
                     GithubRepoContent(
                         fullName = item.fullName,

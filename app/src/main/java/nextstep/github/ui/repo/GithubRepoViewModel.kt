@@ -12,14 +12,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
 import nextstep.github.core.data.GithubRepository
-import nextstep.github.core.model.RepositoryEntity
 
 class GithubRepoViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
-    private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
-    val repositories = _repositories.asStateFlow()
-
     private val _uiState = MutableStateFlow<GithubRepoUiState>(GithubRepoUiState.Loading)
     val uiState = _uiState.asStateFlow()
 

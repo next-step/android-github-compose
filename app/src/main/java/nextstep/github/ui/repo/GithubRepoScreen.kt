@@ -5,11 +5,8 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
@@ -21,16 +18,16 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.core.model.RepositoryEntity
+import nextstep.github.ui.repo.component.LoadingScreen
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -41,10 +38,10 @@ fun GithubRepoRoute(
             factory = GithubRepoViewModel.Factory,
         ),
 ) {
-    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     GithubRepoScreen(
-        repositories = repositories,
+        uiState = uiState,
         modifier = modifier,
     )
 }
@@ -52,7 +49,7 @@ fun GithubRepoRoute(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 internal fun GithubRepoScreen(
-    repositories: List<RepositoryEntity>,
+    uiState: GithubRepoUiState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -68,24 +65,41 @@ internal fun GithubRepoScreen(
         },
         modifier = modifier,
     ) { innerPadding ->
-        LazyColumn(
-            modifier =
-                Modifier
-                    .fillMaxSize()
-                    .padding(innerPadding)
-                    .testTag("GithubRepoCards"),
-        ) {
-            items(repositories) { item ->
-                GithubRepoCard(
-                    modifier = Modifier.fillMaxWidth(),
-                ) {
-                    GithubRepoContent(
-                        fullName = item.fullName,
-                        description = item.description,
-                    )
-                }
+        when (uiState) {
+            GithubRepoUiState.Loading -> {
+                LoadingScreen()
+            }
+
+            is GithubRepoUiState.Error -> {
+                TODO("Not yet implemented")
+            }
+
+            GithubRepoUiState.Empty -> {
+                TODO("Not yet implemented")
+            }
+
+            is GithubRepoUiState.Success -> {
+                TODO("Not yet implemented")
             }
         }
+//        LazyColumn(
+//            modifier =
+//            Modifier
+//                .fillMaxSize()
+//                .padding(innerPadding)
+//                .testTag("GithubRepoCards"),
+//        ) {
+//            items(repositories) { item ->
+//                GithubRepoCard(
+//                    modifier = Modifier.fillMaxWidth(),
+//                ) {
+//                    GithubRepoContent(
+//                        fullName = item.fullName,
+//                        description = item.description,
+//                    )
+//                }
+//            }
+//        }
     }
 }
 
@@ -142,28 +156,34 @@ private fun GithubRepoContent(
 @Preview
 @Composable
 private fun GithubRepoScreenPreview(
-    @PreviewParameter(GithubRepoScreenProvider::class) repositories: List<RepositoryEntity>,
+    @PreviewParameter(GithubRepoScreenProvider::class) uiState: GithubRepoUiState,
 ) {
     GithubTheme {
         GithubRepoScreen(
-            repositories = repositories,
+            uiState = uiState,
         )
     }
 }
 
-private class GithubRepoScreenProvider : PreviewParameterProvider<List<RepositoryEntity>> {
-    override val values: Sequence<List<RepositoryEntity>>
-        get() =
-            sequenceOf(
-                listOf(
-                    RepositoryEntity(
-                        fullName = "next-step/TDD",
-                        description = "Test-Driven Development",
-                    ),
-                    RepositoryEntity(
-                        fullName = "next-step/behavioral-objects",
-                        description = "Behavioral Objects",
-                    ),
+private class GithubRepoScreenProvider :
+    CollectionPreviewParameterProvider<GithubRepoUiState>(
+        collection =
+            listOf(
+                GithubRepoUiState.Loading,
+                GithubRepoUiState.Error(errorMessage = "Error"),
+                GithubRepoUiState.Empty,
+                GithubRepoUiState.Success(
+                    repositories =
+                        listOf(
+                            RepositoryEntity(
+                                fullName = "nextstep/compose",
+                                description = "갓뮤지님의 강의",
+                            ),
+                            RepositoryEntity(
+                                fullName = "nextstep/kotlin-tdd",
+                                description = "Jason님의 강의",
+                            ),
+                        ),
                 ),
-            )
-}
+            ),
+    )

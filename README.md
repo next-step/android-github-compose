@@ -23,9 +23,9 @@
 - [v] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UiState 생성
   - [v] `GithubRepoUiState` 생성
   - [v] `GithubRepoUiState`에 각 상태에 따른 데이터 추가
-- [] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UI 처리
+- [v] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UI 처리
   - [v] 각 상태에 따른 UI test 작성
   - [v] 로딩 상태에 따른 UI 처리
   - [v] 에러 상태에 따른 UI 처리
   - [v] 빈 목록 상태에 따른 UI 처리
-  - [] 성공 상태에 따른 UI 처리
+  - [v] 성공 상태에 따른 UI 처리

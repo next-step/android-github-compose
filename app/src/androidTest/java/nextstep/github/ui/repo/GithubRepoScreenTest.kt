@@ -67,7 +67,7 @@ class GithubRepoScreenTest {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Loading,
                 showErrorMessage = true,
-                onShowErrorMessageChanged = {},
+                onShowErrorMessageDone = {},
             )
         }
         composeTestRule.waitForIdle()

@@ -59,7 +59,7 @@ fun GithubRepoRoute(
         uiState = uiState,
         snackBarHostState = snackBarHostState,
         showErrorMessage = showErrorMessage,
-        onShowErrorMessageChanged = { showErrorMessage = false },
+        onShowErrorMessageDone = { showErrorMessage = false },
         onRetry = viewModel::retry,
         modifier = modifier,
     )
@@ -72,7 +72,7 @@ internal fun GithubRepoScreen(
     modifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
     showErrorMessage: Boolean = false,
-    onShowErrorMessageChanged: () -> Unit = {},
+    onShowErrorMessageDone: () -> Unit = {},
     onRetry: () -> Unit = {},
 ) {
     val context = LocalContext.current
@@ -86,12 +86,12 @@ internal fun GithubRepoScreen(
                 )
             when (result) {
                 SnackbarResult.ActionPerformed -> {
-                    onShowErrorMessageChanged()
+                    onShowErrorMessageDone()
                     onRetry()
                 }
 
                 SnackbarResult.Dismissed -> {
-                    onShowErrorMessageChanged()
+                    onShowErrorMessageDone()
                 }
             }
         }

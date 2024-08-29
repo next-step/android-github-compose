@@ -1,10 +1,11 @@
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import nextstep.github.data.ExampleRepository
+import nextstep.github.data.GithubRepository
 import nextstep.github.data.GithubService
+import nextstep.github.data.impl.GithubRepositoryImpl
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
-import okhttp3.MediaType.Companion.toMediaType
 
 class AppContainer {
 
@@ -14,14 +15,13 @@ class AppContainer {
         .client(OkHttpClient.Builder().build())
         .addConverterFactory(serialization.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
-    val githubService = retrofit
+    private val githubService = retrofit
         .create(GithubService::class.java)
 
-    val exampleRepository: ExampleRepository = ExampleRepository(githubService) // githubService 인스턴스를 활용하여 초기화
+    val githubRepository: GithubRepository = GithubRepositoryImpl(githubService) // githubService 인스턴스를 활용하여 초기화
 
     companion object {
         private const val CONTENT_TYPE = "application/json"
         private const val BASE_URL = "https://api.github.com"
     }
-
 }

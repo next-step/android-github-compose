@@ -71,7 +71,7 @@ private fun GithubRepoCard(
             modifier =
                 Modifier
                     .fillMaxWidth()
-                    .align(alignment = Alignment.TopCenter),
+                    .align(alignment = Alignment.BottomCenter),
         )
     }
 }

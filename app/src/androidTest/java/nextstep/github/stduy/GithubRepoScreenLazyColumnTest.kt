@@ -1,4 +1,4 @@
-package nextstep.github.ui.repo
+package nextstep.github.stduy
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
@@ -6,10 +6,11 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
 import nextstep.github.core.model.RepositoryEntity
+import nextstep.github.ui.repo.GithubRepoScreen
 import org.junit.Rule
 import org.junit.Test
 
-class GithubRepoScreenTest {
+class GithubRepoScreenLazyColumnTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 

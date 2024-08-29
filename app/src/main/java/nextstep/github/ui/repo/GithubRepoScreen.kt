@@ -110,7 +110,10 @@ internal fun GithubRepoScreen(
         when (uiState) {
             GithubRepoUiState.Loading -> {
                 LoadingScreen(
-                    modifier = Modifier.fillMaxSize(),
+                    modifier =
+                        Modifier
+                            .fillMaxSize()
+                            .testTag("LoadingScreen"),
                 )
             }
 

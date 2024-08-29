@@ -44,7 +44,6 @@ fun GithubRepoRoute(
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     val snackBarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
     var showErrorMessage by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect {

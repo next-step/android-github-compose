@@ -5,6 +5,7 @@ import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
@@ -27,6 +28,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.core.model.RepositoryEntity
+import nextstep.github.ui.repo.component.EmptyScreen
 import nextstep.github.ui.repo.component.LoadingScreen
 import nextstep.github.ui.theme.GithubTheme
 
@@ -67,7 +69,9 @@ internal fun GithubRepoScreen(
     ) { innerPadding ->
         when (uiState) {
             GithubRepoUiState.Loading -> {
-                LoadingScreen()
+                LoadingScreen(
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
 
             is GithubRepoUiState.Error -> {
@@ -75,7 +79,9 @@ internal fun GithubRepoScreen(
             }
 
             GithubRepoUiState.Empty -> {
-                TODO("Not yet implemented")
+                EmptyScreen(
+                    modifier = Modifier.fillMaxSize(),
+                )
             }
 
             is GithubRepoUiState.Success -> {

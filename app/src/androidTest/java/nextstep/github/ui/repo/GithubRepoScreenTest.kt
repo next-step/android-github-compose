@@ -17,6 +17,7 @@ class GithubRepoScreenTest {
         composeTestRule.setContent {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Loading,
+                onRetry = {},
             )
         }
 
@@ -32,6 +33,7 @@ class GithubRepoScreenTest {
         composeTestRule.setContent {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Empty,
+                onRetry = {},
             )
         }
 
@@ -52,6 +54,7 @@ class GithubRepoScreenTest {
         composeTestRule.setContent {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Success(repositories),
+                onRetry = {},
             )
         }
         // then
@@ -66,6 +69,7 @@ class GithubRepoScreenTest {
         composeTestRule.setContent {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Error("에러가 발생했습니다."),
+                onRetry = {},
             )
         }
         composeTestRule.waitForIdle()

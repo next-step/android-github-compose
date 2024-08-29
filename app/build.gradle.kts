@@ -1,6 +1,7 @@
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.jetbrains.kotlin.android)
+    alias(libs.plugins.kotlinSerialization)
 }
 
 android {
@@ -61,6 +62,9 @@ dependencies {
     implementation(libs.androidx.material3)
     implementation(libs.androidx.lifecycle.viewmodel.compose)
     implementation(libs.androidx.lifecycle.runtime.compose)
+    implementation(libs.kotlinx.serialization.json) // "org.jetbrains.kotlinx:kotlinx-serialization-json:1.6.3"
+    implementation(libs.retrofit2.kotlinx.serialization.converter) // "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
+
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)
     androidTestImplementation(libs.androidx.espresso.core)

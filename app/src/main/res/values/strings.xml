@@ -2,4 +2,5 @@
     <string name="app_name">GitHub</string>
     <string name="github_repo_top_bar_title">NEXTSTEP Repositories</string>
     <string name="title_empty_screen">목록이 비었습니다.</string>
+    <string name="message_error_unknown">예상치 못한 오류가 발생했습니다.</string>
 </resources>

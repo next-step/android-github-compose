@@ -7,9 +7,14 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
 import nextstep.github.core.model.RepositoryEntity
 import nextstep.github.ui.repo.GithubRepoScreen
+import nextstep.github.ui.repo.GithubRepoUiState
 import org.junit.Rule
 import org.junit.Test
 
+/**
+ * [GithubRepoScreen] 내 LazyColumn 을 이용해 학습 테스트를 작성하였습니다.
+ * [GithubRepoScreen] 의 테스트가 아닌, LazyColumn 내에 있는 컴포저블들이 제대로 동작하는지 확인하는 테스트이오니 양해바랍니다.
+ */
 class GithubRepoScreenLazyColumnTest {
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -29,7 +34,8 @@ class GithubRepoScreenLazyColumnTest {
 
         composeTestRule.setContent {
             GithubRepoScreen(
-                repositories = repositories,
+                uiState = GithubRepoUiState.Success(repositories),
+                onRetry = {},
             )
         }
 

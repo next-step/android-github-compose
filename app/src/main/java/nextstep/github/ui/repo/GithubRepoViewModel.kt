@@ -42,6 +42,10 @@ class GithubRepoViewModel(
         }
     }
 
+    fun retry() {
+        fetchRepositories()
+    }
+
     companion object {
         private const val TAG = "GithubRepoViewModel"
 

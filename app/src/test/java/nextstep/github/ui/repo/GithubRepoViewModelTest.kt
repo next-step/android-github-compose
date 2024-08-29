@@ -5,6 +5,7 @@ import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
+import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
@@ -82,6 +83,50 @@ class GithubRepoViewModelTest : BaseTest() {
                 assertEquals(
                     GithubRepoUiState.Error(errorMessage),
                     awaitItem(),
+                )
+            }
+        }
+
+    // 실패 후 재시도 성공
+    @Test
+    fun 데이터_로딩_실패_후_재시도_성공하여_SUCCESS_상태를_반환한다() =
+        runTest {
+            // given
+            val repositories =
+                listOf(
+                    RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의"),
+                    RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의"),
+                )
+            val fakeRepository =
+                object : GithubRepository {
+                    private var count = 0
+
+                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
+                        if (count++ == 0) {
+                            Result.failure(Exception("error"))
+                        } else {
+                            Result.success(repositories)
+                        }
+                }
+            val viewModel = GithubRepoViewModel(fakeRepository)
+            viewModel.uiState.test {
+                val item = awaitItem()
+                assertEquals(
+                    GithubRepoUiState.Error("error"),
+                    item,
+                )
+            }
+
+            // when
+            viewModel.retry()
+            advanceUntilIdle()
+
+            // then
+            viewModel.uiState.test {
+                val item = awaitItem()
+                assertEquals(
+                    GithubRepoUiState.Success(repositories),
+                    item,
                 )
             }
         }

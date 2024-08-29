@@ -35,7 +35,6 @@ class GithubRepoScreenLazyColumnTest {
         composeTestRule.setContent {
             GithubRepoScreen(
                 uiState = GithubRepoUiState.Success(repositories),
-                onRetry = {},
             )
         }
 

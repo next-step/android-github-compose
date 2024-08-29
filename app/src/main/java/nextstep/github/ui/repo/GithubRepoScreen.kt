@@ -43,8 +43,24 @@ fun GithubRepoRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val snackBarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+    var showErrorMessage by remember { mutableStateOf(false) }
+    LaunchedEffect(viewModel.effect) {
+        viewModel.effect.collect {
+            when (it) {
+                is GithubRepoEffect.ShowErrorMessage -> {
+                    showErrorMessage = true
+                }
+            }
+        }
+    }
+
     GithubRepoScreen(
         uiState = uiState,
+        snackBarHostState = snackBarHostState,
+        showErrorMessage = showErrorMessage,
+        onShowErrorMessageChanged = { showErrorMessage = false },
         onRetry = viewModel::retry,
         modifier = modifier,
     )
@@ -54,31 +70,34 @@ fun GithubRepoRoute(
 @Composable
 internal fun GithubRepoScreen(
     uiState: GithubRepoUiState,
-    onRetry: () -> Unit,
     modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
+    showErrorMessage: Boolean = false,
+    onShowErrorMessageChanged: () -> Unit = {},
+    onRetry: () -> Unit = {},
 ) {
-    val snackBarHostState = remember { SnackbarHostState() }
     val context = LocalContext.current
-    var showSnackbar by remember { mutableStateOf(false) }
-    LaunchedEffect(uiState, showSnackbar) {
-        if (uiState is GithubRepoUiState.Error && showSnackbar) {
+    LaunchedEffect(showErrorMessage) {
+        if (showErrorMessage) {
             val result =
                 snackBarHostState.showSnackbar(
                     message = context.getString(R.string.message_error_unknown),
                     duration = SnackbarDuration.Short,
+                    actionLabel = context.getString(R.string.action_retry),
                 )
             when (result) {
                 SnackbarResult.ActionPerformed -> {
-                    showSnackbar = false
+                    onShowErrorMessageChanged()
                     onRetry()
                 }
 
                 SnackbarResult.Dismissed -> {
-                    showSnackbar = false
+                    onShowErrorMessageChanged()
                 }
             }
         }
     }
+
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -106,10 +125,6 @@ internal fun GithubRepoScreen(
                             .fillMaxSize()
                             .testTag("LoadingScreen"),
                 )
-            }
-
-            is GithubRepoUiState.Error -> {
-                showSnackbar = true
             }
 
             GithubRepoUiState.Empty -> {
@@ -140,7 +155,6 @@ private fun GithubRepoScreenPreview(
     GithubTheme {
         GithubRepoScreen(
             uiState = uiState,
-            onRetry = {},
         )
     }
 }
@@ -150,7 +164,6 @@ private class GithubRepoScreenProvider :
         collection =
             listOf(
                 GithubRepoUiState.Loading,
-                GithubRepoUiState.Error(errorMessage = "Error"),
                 GithubRepoUiState.Empty,
                 GithubRepoUiState.Success(
                     repositories =

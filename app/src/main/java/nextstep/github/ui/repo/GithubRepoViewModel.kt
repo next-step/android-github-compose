@@ -23,7 +23,7 @@ class GithubRepoViewModel(
     init {
         viewModelScope.launch {
             githubRepository
-                .getRepositories("next-step")
+                .getRepositories(DEFAULT_REPOSITORY_ORGANIZATION)
                 .onSuccess {
                     _repositories.value = it
                 }.onFailure {
@@ -34,6 +34,8 @@ class GithubRepoViewModel(
 
     companion object {
         private const val TAG = "GithubRepoViewModel"
+
+        private const val DEFAULT_REPOSITORY_ORGANIZATION = "next-step"
 
         val Factory: ViewModelProvider.Factory =
             viewModelFactory {

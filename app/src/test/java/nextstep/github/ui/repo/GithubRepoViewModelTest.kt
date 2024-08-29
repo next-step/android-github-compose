@@ -4,8 +4,8 @@ import app.cash.turbine.test
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
@@ -73,15 +73,18 @@ class GithubRepoViewModelTest : BaseTest() {
             val errorMessage = "error"
             val fakeRepository =
                 object : GithubRepository {
-                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
-                        Result.failure(Exception(errorMessage))
+                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> {
+                        // 테스트를 위한 임의 delay
+                        delay(1000)
+                        return Result.failure(Exception(errorMessage))
+                    }
                 }
             val viewModel = GithubRepoViewModel(fakeRepository)
 
             // then
-            viewModel.uiState.test {
+            viewModel.effect.test {
                 assertEquals(
-                    GithubRepoUiState.Error(errorMessage),
+                    GithubRepoEffect.ShowErrorMessage(errorMessage),
                     awaitItem(),
                 )
             }
@@ -103,23 +106,22 @@ class GithubRepoViewModelTest : BaseTest() {
 
                     override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
                         if (count++ == 0) {
+                            delay(1000)
                             Result.failure(Exception("error"))
                         } else {
                             Result.success(repositories)
                         }
                 }
             val viewModel = GithubRepoViewModel(fakeRepository)
-            viewModel.uiState.test {
-                val item = awaitItem()
+            viewModel.effect.test {
                 assertEquals(
-                    GithubRepoUiState.Error("error"),
-                    item,
+                    GithubRepoEffect.ShowErrorMessage("error"),
+                    awaitItem(),
                 )
             }
 
             // when
             viewModel.retry()
-            advanceUntilIdle()
 
             // then
             viewModel.uiState.test {

@@ -13,4 +13,4 @@
   - [v] `GithubRepoScreen` 생성
   - [v] `GithubRepoScreen` UI test 구현
   - [v] `GithubRepoScreen` 컴퍼넌트 상세 구현
-- [] Repositories 화면에 필요한 데이터를 전달하는 ViewModel 구현
+- [v] Repositories 화면에 필요한 데이터를 전달하는 ViewModel 구현

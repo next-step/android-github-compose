@@ -24,14 +24,24 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.core.model.RepositoryEntity
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun GithubRepoRoute(modifier: Modifier = Modifier) {
+fun GithubRepoRoute(
+    modifier: Modifier = Modifier,
+    viewModel: GithubRepoViewModel =
+        viewModel(
+            factory = GithubRepoViewModel.Factory,
+        ),
+) {
+    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+
     GithubRepoScreen(
-        repositories = emptyList(),
+        repositories = repositories,
         modifier = modifier,
     )
 }

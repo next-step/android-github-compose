@@ -3,7 +3,7 @@ import kotlinx.serialization.Serializable
 import nextstep.github.core.model.RepositoryEntity
 
 @Serializable
-data class ResponseRepositoriesItem(
+data class ResponseRepositoriesDto(
     @SerialName("id")
     val id: Long,
     @SerialName("full_name")
@@ -12,7 +12,7 @@ data class ResponseRepositoriesItem(
     val description: String?,
 )
 
-fun ResponseRepositoriesItem.toEntity() =
+fun ResponseRepositoriesDto.toEntity() =
     RepositoryEntity(
         fullName = fullName ?: "",
         description = description ?: "",

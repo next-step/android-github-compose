@@ -10,13 +10,9 @@ class GithubRepositoryImpl(
     override suspend fun getRepositories(): Result<List<RepositoryEntity>> {
         return try {
             val repositories = githubService.getRepositories("next-step")
-            if (repositories.isEmpty()) {
-                Result.failure(Exception("데이터 비어있음"))
-            } else {
-                Result.success(repositories)
-            }
+            Result.success(repositories)
         } catch (e: Exception) {
-            Result.failure(e)
+            Result.failure(Exception("예상치 못한 오류가 발생했습니다."))
         }
     }
 }

@@ -19,8 +19,8 @@ class GithubRepositoryImplTest {
     }
 
     @Test
-    fun `리파지토리 데이터가 비어있지 않은지 확인해 본다`(): Unit = runTest {
-        val actual = repository.getRepositories("next-step").fold(
+    fun `리파지토리 데이터가 내려오는 경우 데이터가 비어있지 않은지 확인한다`(): Unit = runTest {
+        val actual = repository.getRepositories().fold(
             onSuccess = { it },
             onFailure = { emptyList() }
         )

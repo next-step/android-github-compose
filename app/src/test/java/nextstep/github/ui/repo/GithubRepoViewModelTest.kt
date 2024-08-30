@@ -10,6 +10,8 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
 import nextstep.github.core.data.GithubRepository
+import nextstep.github.core.domain.GetNextStepRepositoryUseCase
+import nextstep.github.core.model.NextStepRepository
 import nextstep.github.core.model.Organization
 import nextstep.github.core.model.RepositoryEntity
 import org.junit.Before
@@ -32,7 +34,8 @@ class GithubRepoViewModelTest : BaseTest() {
                     override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         Result.success(emptyList())
                 }
-            val viewModel = GithubRepoViewModel(fakeRepository)
+            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val viewModel = GithubRepoViewModel(useCase)
 
             // then
             viewModel.uiState.test {
@@ -49,18 +52,24 @@ class GithubRepoViewModelTest : BaseTest() {
                     RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의", 100),
                     RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
+            val nextStepRepositories =
+                listOf(
+                    NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
+                )
             val fakeRepository =
                 object : GithubRepository {
                     override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         Result.success(repositories)
                 }
-            val viewModel = GithubRepoViewModel(fakeRepository)
+            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val viewModel = GithubRepoViewModel(useCase)
 
             // then
             viewModel.uiState.test {
                 assertEquals(
                     GithubRepoUiState.Success(
-                        repositories,
+                        nextStepRepositories,
                     ),
                     awaitItem(),
                 )
@@ -80,7 +89,8 @@ class GithubRepoViewModelTest : BaseTest() {
                         return Result.failure(Exception(errorMessage))
                     }
                 }
-            val viewModel = GithubRepoViewModel(fakeRepository)
+            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val viewModel = GithubRepoViewModel(useCase)
 
             // then
             viewModel.effect.test {
@@ -101,6 +111,11 @@ class GithubRepoViewModelTest : BaseTest() {
                     RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의", 100),
                     RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
+            val nextStepRepositories =
+                listOf(
+                    NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
+                )
             val fakeRepository =
                 object : GithubRepository {
                     private var count = 0
@@ -113,7 +128,8 @@ class GithubRepoViewModelTest : BaseTest() {
                             Result.success(repositories)
                         }
                 }
-            val viewModel = GithubRepoViewModel(fakeRepository)
+            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val viewModel = GithubRepoViewModel(useCase)
             viewModel.effect.test {
                 assertEquals(
                     GithubRepoEffect.ShowErrorMessage("error"),
@@ -128,7 +144,7 @@ class GithubRepoViewModelTest : BaseTest() {
             viewModel.uiState.test {
                 val item = awaitItem()
                 assertEquals(
-                    GithubRepoUiState.Success(repositories),
+                    GithubRepoUiState.Success(nextStepRepositories),
                     item,
                 )
             }

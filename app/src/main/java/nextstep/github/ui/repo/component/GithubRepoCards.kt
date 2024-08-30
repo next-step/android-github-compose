@@ -20,7 +20,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.core.model.RepositoryEntity
+import nextstep.github.core.model.NextStepRepository
 import nextstep.github.ui.repo.GithubRepoUiState
 import nextstep.github.ui.theme.GithubTheme
 
@@ -121,8 +121,8 @@ private fun GithubRepoCardsPreview() {
             uiState =
                 GithubRepoUiState.Success(
                     listOf(
-                        RepositoryEntity("nextstep/compose", "갓뮤지님의 강의", 100),
-                        RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의", 49),
+                        NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 강의", 100),
+                        NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 강의", 49),
                     ),
                 ),
             modifier = Modifier.fillMaxSize(),

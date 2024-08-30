@@ -36,7 +36,7 @@
 - [v] Star 개수 API 응답에 추가
 - [] Star 개수를 기준으로 인기 저장소 목록을 가져오는 기능(UseCase) 구현
     - [v] NexStepRepository Entity 생성
-    - [] GetNextStepRepositoriesUseCase 생성 및 테스트 코드 수정
+    - [v] GetNextStepRepositoriesUseCase 생성 및 테스트 코드 수정
     - [] GetNextStepRepositoriesUseCase에 Star 개수를 기준으로 정렬하는 로직 추가
 - [] Star 개수에 따른 `HOT` UI 노출
 - [] Star 개수 UI 노출

@@ -13,11 +13,10 @@ import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
-import nextstep.github.core.data.GithubRepository
-import nextstep.github.core.model.Organization
+import nextstep.github.core.domain.GetNextStepRepositoryUseCase
 
 class GithubRepoViewModel(
-    private val githubRepository: GithubRepository,
+    private val getNextStepRepositoryUseCase: GetNextStepRepositoryUseCase,
 ) : ViewModel() {
     private val _uiState = MutableStateFlow<GithubRepoUiState>(GithubRepoUiState.Loading)
     val uiState = _uiState.asStateFlow()
@@ -31,8 +30,7 @@ class GithubRepoViewModel(
 
     private fun fetchRepositories() {
         viewModelScope.launch {
-            githubRepository
-                .getRepositories(Organization.NEXT_STEP)
+            getNextStepRepositoryUseCase()
                 .onSuccess {
                     _uiState.value =
                         if (it.isEmpty()) {
@@ -60,16 +58,14 @@ class GithubRepoViewModel(
     companion object {
         private const val TAG = "GithubRepoViewModel"
 
-        private const val DEFAULT_REPOSITORY_ORGANIZATION = "next-step"
-
         val Factory: ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {
-                    val githubRepository =
+                    val getNextStepRepositoryUseCase =
                         (this[APPLICATION_KEY] as MainApplication)
                             .appContainer
-                            .githubRepository
-                    GithubRepoViewModel(githubRepository)
+                            .getNextStepRepositoryUseCase
+                    GithubRepoViewModel(getNextStepRepositoryUseCase)
                 }
             }
     }

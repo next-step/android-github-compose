@@ -2,6 +2,7 @@ package nextstep.github.ui.repo.component
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,7 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.core.model.RepositoryEntity
@@ -34,6 +34,15 @@ internal fun GithubRepoCards(
         items(uiState.repositories) { item ->
             GithubRepoCard(
                 modifier = Modifier.fillMaxWidth(),
+                decoration = {
+                    HorizontalDivider(
+                        color = MaterialTheme.colorScheme.outlineVariant,
+                        modifier =
+                            Modifier
+                                .fillMaxWidth()
+                                .align(alignment = Alignment.BottomCenter),
+                    )
+                },
             ) {
                 GithubRepoCardContent(
                     fullName = item.fullName,
@@ -47,11 +56,11 @@ internal fun GithubRepoCards(
 @Composable
 private fun GithubRepoCard(
     modifier: Modifier = Modifier,
-    bottomBorderColor: Color = MaterialTheme.colorScheme.outlineVariant,
     contentPadding: PaddingValues = PaddingValues(16.dp),
+    decoration: @Composable (BoxScope.() -> Unit) = {},
     tag: @Composable (() -> Unit) = {},
     badge: @Composable (() -> Unit) = {},
-    content: @Composable () -> Unit = {},
+    content: @Composable () -> Unit,
 ) {
     Box(modifier = modifier) {
         Column(
@@ -66,13 +75,7 @@ private fun GithubRepoCard(
             }
             content()
         }
-        HorizontalDivider(
-            color = bottomBorderColor,
-            modifier =
-                Modifier
-                    .fillMaxWidth()
-                    .align(alignment = Alignment.BottomCenter),
-        )
+        decoration()
     }
 }
 

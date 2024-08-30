@@ -14,6 +14,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
 import nextstep.github.core.data.GithubRepository
+import nextstep.github.core.model.Organization
 
 class GithubRepoViewModel(
     private val githubRepository: GithubRepository,
@@ -31,7 +32,7 @@ class GithubRepoViewModel(
     private fun fetchRepositories() {
         viewModelScope.launch {
             githubRepository
-                .getRepositories(DEFAULT_REPOSITORY_ORGANIZATION)
+                .getRepositories(Organization.NEXT_STEP)
                 .onSuccess {
                     _uiState.value =
                         if (it.isEmpty()) {

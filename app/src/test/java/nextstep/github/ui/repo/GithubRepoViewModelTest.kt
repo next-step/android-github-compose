@@ -10,6 +10,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
 import nextstep.github.core.data.GithubRepository
+import nextstep.github.core.model.Organization
 import nextstep.github.core.model.RepositoryEntity
 import org.junit.Before
 import org.junit.Test
@@ -28,7 +29,8 @@ class GithubRepoViewModelTest : BaseTest() {
             // given
             val fakeRepository =
                 object : GithubRepository {
-                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> = Result.success(emptyList())
+                    override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
+                        Result.success(emptyList())
                 }
             val viewModel = GithubRepoViewModel(fakeRepository)
 
@@ -49,7 +51,7 @@ class GithubRepoViewModelTest : BaseTest() {
                 )
             val fakeRepository =
                 object : GithubRepository {
-                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
+                    override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         Result.success(repositories)
                 }
             val viewModel = GithubRepoViewModel(fakeRepository)
@@ -73,7 +75,7 @@ class GithubRepoViewModelTest : BaseTest() {
             val errorMessage = "error"
             val fakeRepository =
                 object : GithubRepository {
-                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> {
+                    override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> {
                         // 테스트를 위한 임의 delay
                         delay(1000)
                         return Result.failure(Exception(errorMessage))
@@ -104,7 +106,7 @@ class GithubRepoViewModelTest : BaseTest() {
                 object : GithubRepository {
                     private var count = 0
 
-                    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
+                    override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         if (count++ == 0) {
                             delay(1000)
                             Result.failure(Exception("error"))

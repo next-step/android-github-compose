@@ -5,6 +5,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import androidx.test.platform.app.InstrumentationRegistry
+import nextstep.github.R
 import nextstep.github.core.model.RepositoryEntity
 import org.junit.Rule
 import org.junit.Test
@@ -12,6 +15,7 @@ import org.junit.Test
 class GithubRepoScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+    private val context = InstrumentationRegistry.getInstrumentation().targetContext
 
     @Composable
     private fun GithubRepoScreen(
@@ -93,6 +97,29 @@ class GithubRepoScreenTest {
         composeTestRule
             .onNodeWithTag("Snackbar")
             .assertExists()
+    }
+
+    @Test
+    fun 깃헙_목록_조회_실패시_에러_메시지가_표시된_후_다시_시도_버튼을_누르면_다시_시도한다() {
+        // given
+        var isRetry = false
+        composeTestRule.setContent {
+            GithubRepoScreen(
+                uiState = GithubRepoUiState.Loading,
+                showErrorMessage = true,
+                onShowErrorMessageDone = {},
+                onRetry = { isRetry = true },
+            )
+        }
+        composeTestRule.waitForIdle()
+
+        // when
+        composeTestRule
+            .onNodeWithText(context.getString(R.string.action_retry))
+            .performClick()
+
+        // then
+        assert(isRetry)
     }
 
     companion object {

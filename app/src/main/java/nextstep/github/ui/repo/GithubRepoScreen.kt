@@ -43,7 +43,6 @@ fun GithubRepoRoute(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    val snackBarHostState = remember { SnackbarHostState() }
     var showErrorMessage by remember { mutableStateOf(false) }
     LaunchedEffect(viewModel.effect) {
         viewModel.effect.collect {
@@ -57,7 +56,6 @@ fun GithubRepoRoute(
 
     GithubRepoScreen(
         uiState = uiState,
-        snackBarHostState = snackBarHostState,
         showErrorMessage = showErrorMessage,
         onShowErrorMessageDone = { showErrorMessage = false },
         onRetry = viewModel::retry,

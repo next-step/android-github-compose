@@ -1,7 +1,7 @@
 package nextstep.github.core.network
 
-import ResponseRepositoriesItem
+import ResponseRepositoriesDto
 
 interface ApiClient {
-    suspend fun getRepositories(organization: String): Result<List<ResponseRepositoriesItem>>
+    suspend fun getRepositories(organization: String): Result<List<ResponseRepositoriesDto>>
 }

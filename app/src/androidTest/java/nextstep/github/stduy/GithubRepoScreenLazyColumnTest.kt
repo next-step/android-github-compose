@@ -1,5 +1,7 @@
 package nextstep.github.stduy
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -18,6 +20,20 @@ import org.junit.Test
 class GithubRepoScreenLazyColumnTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    @Composable
+    private fun GithubRepoScreen(
+        uiState: GithubRepoUiState,
+        modifier: Modifier = Modifier,
+    ) {
+        GithubRepoScreen(
+            uiState = uiState,
+            showErrorMessage = false,
+            onShowErrorMessageDone = {},
+            onRetry = {},
+            modifier = modifier,
+        )
+    }
 
     @Test
     fun 깃헙_저장소_목록을_화면에_보여준다() {

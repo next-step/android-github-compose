@@ -69,9 +69,9 @@ internal fun GithubRepoScreen(
     uiState: GithubRepoUiState,
     modifier: Modifier = Modifier,
     snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
-    showErrorMessage: Boolean = false,
-    onShowErrorMessageDone: () -> Unit = {},
-    onRetry: () -> Unit = {},
+    showErrorMessage: Boolean,
+    onShowErrorMessageDone: () -> Unit,
+    onRetry: () -> Unit,
 ) {
     val context = LocalContext.current
     LaunchedEffect(showErrorMessage) {
@@ -152,6 +152,9 @@ private fun GithubRepoScreenPreview(
     GithubTheme {
         GithubRepoScreen(
             uiState = uiState,
+            showErrorMessage = false,
+            onShowErrorMessageDone = {},
+            onRetry = {},
         )
     }
 }

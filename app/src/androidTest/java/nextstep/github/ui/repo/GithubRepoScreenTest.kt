@@ -1,5 +1,7 @@
 package nextstep.github.ui.repo
 
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
@@ -10,6 +12,20 @@ import org.junit.Test
 class GithubRepoScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
+
+    @Composable
+    private fun GithubRepoScreen(
+        uiState: GithubRepoUiState,
+        modifier: Modifier = Modifier,
+    ) {
+        GithubRepoScreen(
+            uiState = uiState,
+            showErrorMessage = false,
+            onShowErrorMessageDone = {},
+            onRetry = {},
+            modifier = modifier,
+        )
+    }
 
     @Test
     fun 화면_초기_진입_시_로딩_화면이_표시된다() {
@@ -68,6 +84,7 @@ class GithubRepoScreenTest {
                 uiState = GithubRepoUiState.Loading,
                 showErrorMessage = true,
                 onShowErrorMessageDone = {},
+                onRetry = {},
             )
         }
         composeTestRule.waitForIdle()

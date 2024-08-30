@@ -171,10 +171,12 @@ private class GithubRepoScreenProvider :
                             RepositoryEntity(
                                 fullName = "nextstep/compose",
                                 description = "갓뮤지님의 강의",
+                                stars = 100,
                             ),
                             RepositoryEntity(
                                 fullName = "nextstep/kotlin-tdd",
                                 description = "Jason님의 강의",
+                                stars = 49,
                             ),
                         ),
                 ),

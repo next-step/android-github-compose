@@ -41,10 +41,10 @@ class GithubRepoScreenLazyColumnTest {
         val repositories = mutableListOf<RepositoryEntity>()
         (1..10).forEach { index ->
             repositories.add(
-                RepositoryEntity("nextstep/compose", "갓뮤지님의 $index 강의"),
+                RepositoryEntity("nextstep/compose", "갓뮤지님의 $index 강의", index),
             )
             repositories.add(
-                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 $index 강의"),
+                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 $index 강의", index),
             )
         }
 

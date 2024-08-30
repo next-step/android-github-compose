@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -43,6 +44,20 @@ internal fun GithubRepoCards(
                                 .align(alignment = Alignment.BottomCenter),
                     )
                 },
+                tag = {
+                    if (item.stars >= 50) {
+                        Text(
+                            text = "🔥",
+                            style = MaterialTheme.typography.titleLarge,
+                        )
+                    }
+                },
+                badge = {
+                    Text(
+                        text = "🌟${item.stars}",
+                        style = MaterialTheme.typography.titleLarge,
+                    )
+                },
             ) {
                 GithubRepoCardContent(
                     fullName = item.fullName,
@@ -71,6 +86,7 @@ private fun GithubRepoCard(
                 modifier = Modifier.fillMaxWidth(),
             ) {
                 tag()
+                Spacer(modifier = Modifier.weight(1f))
                 badge()
             }
             content()
@@ -105,8 +121,8 @@ private fun GithubRepoCardsPreview() {
             uiState =
                 GithubRepoUiState.Success(
                     listOf(
-                        RepositoryEntity("nextstep/compose", "갓뮤지님의 강의"),
-                        RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의"),
+                        RepositoryEntity("nextstep/compose", "갓뮤지님의 강의", 100),
+                        RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의", 49),
                     ),
                 ),
             modifier = Modifier.fillMaxSize(),

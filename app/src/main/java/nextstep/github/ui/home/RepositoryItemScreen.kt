@@ -10,6 +10,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.data.RepositoryEntity
@@ -20,16 +21,25 @@ fun RepositoryItem(
     modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = modifier.fillMaxWidth().height(80.dp).padding(start = 15.dp),
+        modifier = modifier
+            .fillMaxWidth()
+            .padding(
+                horizontal = 15.dp,
+                vertical = 16.dp
+            ),
         verticalArrangement = Arrangement.Center
     ) {
         Text(
             text = repository.fullName ?: "",
-            style = MaterialTheme.typography.titleLarge
+            style = MaterialTheme.typography.titleLarge,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
         Text(
             text = repository.description ?: "",
-            style = MaterialTheme.typography.titleMedium
+            style = MaterialTheme.typography.titleMedium,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
@@ -37,5 +47,10 @@ fun RepositoryItem(
 @Preview(showBackground = true)
 @Composable
 private fun RepositoryListPreview() {
-    RepositoryItem(repository = RepositoryEntity("123", "456"))
+    RepositoryItem(
+        repository = RepositoryEntity(
+            "123123123123123123123123123123123123123",
+            "456456456456456456456456456456456456456456456456456"
+        )
+    )
 }

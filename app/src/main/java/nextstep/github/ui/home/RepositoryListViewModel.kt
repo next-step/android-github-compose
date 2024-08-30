@@ -15,27 +15,39 @@ import nextstep.github.data.RepositoryEntity
 
 sealed interface RepositoryUiState {
     data object Loading : RepositoryUiState
-    data class Success(val repositories: List<RepositoryEntity>) : RepositoryUiState
-    data class Error(val message: String) : RepositoryUiState
+    data class Success(val repositories: List<RepositoryEntity>) : RepositoryUiState {
+        val isEmpty: Boolean
+            get() = repositories.isNullOrEmpty()
+    }
+
 }
+
+sealed interface RepositoryErrorState {
+    data object None : RepositoryErrorState
+    data class Error(val message: String) : RepositoryErrorState
+}
+
 
 class RepositoryListViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
-
     private val _repositoryUiState = MutableStateFlow<RepositoryUiState>(RepositoryUiState.Loading)
     val repositoryUiState: StateFlow<RepositoryUiState> = _repositoryUiState
 
-    fun fetchRepositories(organization: String) {
+    private val _repositoryErrorState = MutableStateFlow<RepositoryErrorState>(RepositoryErrorState.None)
+    val repositoryErrorState: StateFlow<RepositoryErrorState> = _repositoryErrorState
+
+    fun fetchRepositories() {
         _repositoryUiState.value = RepositoryUiState.Loading
+        _repositoryErrorState.value = RepositoryErrorState.None
         viewModelScope.launch {
-            githubRepository.getRepositories(organization)
+            githubRepository.getRepositories()
                 .fold(
                     onSuccess = { repositories ->
                         _repositoryUiState.value = RepositoryUiState.Success(repositories)
                     },
                     onFailure = { throwable ->
-                        _repositoryUiState.value = RepositoryUiState.Error(throwable.message ?: "Unknown error")
+                        _repositoryErrorState.value = RepositoryErrorState.Error(throwable.message ?: "Unknown error")
                     }
                 )
         }

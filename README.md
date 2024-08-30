@@ -38,6 +38,6 @@
     - [v] NexStepRepository Entity 생성
     - [v] GetNextStepRepositoriesUseCase 생성 및 테스트 코드 수정
     - [v] GetNextStepRepositoriesUseCase에 Star 개수를 기준으로 정렬하는 로직 추가
-- [] Star 개수에 따른 `HOT` UI 노출
-- [] Star 개수 UI 노출
+- [v] Star 개수에 따른 `HOT` UI 노출
+- [v] Star 개수 UI 노출
 - [] init 데이터 로딩 로직 리팩토링

@@ -1,6 +1,7 @@
-package nextstep.github
+package nextstep.github.ui
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,6 +11,9 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.launch
+import nextstep.github.GithubApplication
 import nextstep.github.ui.theme.GithubTheme
 
 class MainActivity : ComponentActivity() {
@@ -20,11 +24,18 @@ class MainActivity : ComponentActivity() {
                 // A surface container using the 'background' color from the theme
                 Surface(
                     modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colorScheme.background
+                    color = MaterialTheme.colorScheme.background,
                 ) {
                     Greeting("Android")
                 }
             }
+        }
+
+        val appContainer = (application as GithubApplication).appContainer
+        val repository = appContainer.githubRepository
+        lifecycleScope.launch {
+            val result = repository.getRepositories("next-step")
+            result.forEach { Log.d("jay", it.toString()) }
         }
     }
 }
@@ -33,7 +44,7 @@ class MainActivity : ComponentActivity() {
 fun Greeting(name: String, modifier: Modifier = Modifier) {
     Text(
         text = "Hello $name!",
-        modifier = modifier
+        modifier = modifier,
     )
 }
 

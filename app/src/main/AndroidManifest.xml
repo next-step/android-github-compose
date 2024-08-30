@@ -16,7 +16,7 @@
         android:theme="@style/Theme.Github"
         tools:targetApi="31">
         <activity
-            android:name=".MainActivity"
+            android:name=".ui.view.github.repository.GithubRepositoryListActivity"
             android:exported="true"
             android:label="@string/app_name"
             android:theme="@style/Theme.Github">

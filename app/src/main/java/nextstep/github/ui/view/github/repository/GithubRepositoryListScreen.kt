@@ -12,7 +12,21 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.model.GithubRepositoryDto
+
+@Composable
+fun GithubRepositoryListScreen(
+    modifier: Modifier = Modifier,
+    viewmodel: GithubRepositoryListViewModel = viewModel(factory = GithubRepositoryListViewModel.Factory),
+) {
+    val items = viewmodel.repositories.collectAsStateWithLifecycle()
+    GithubRepositoryListScreen(
+        items = items.value,
+        modifier = modifier,
+    )
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable

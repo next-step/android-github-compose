@@ -21,6 +21,7 @@ import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -35,6 +36,7 @@ import nextstep.github.ui.component.CircularLoading
 @Composable
 fun RepositoryList(
     uiState: RepositoryUiState,
+    errorState: RepositoryErrorState,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -58,8 +60,7 @@ fun RepositoryList(
         Box(modifier = Modifier.padding(innerPadding)) {
             when (uiState) {
                 is RepositoryUiState.Success -> {
-                    val repositories = uiState.repositories
-                    if (repositories.isNullOrEmpty()) {
+                    if (uiState.isEmpty) {
                         Box(
                             modifier = Modifier.fillMaxSize(),
                             contentAlignment = Alignment.Center
@@ -69,31 +70,29 @@ fun RepositoryList(
                                 style = MaterialTheme.typography.titleSmall,
                             )
                         }
-                        return@Box
                     }
                     LazyColumn {
-                        items(repositories) { repository ->
+                        items(uiState.repositories) { repository ->
                             RepositoryItem(repository = repository)
                             HorizontalDivider()
                         }
                     }
                 }
 
-                is RepositoryUiState.Error -> {
-                    coroutineScope.launch {
-                        val result = snackbarHostState.showSnackbar(
-                            message = uiState.message,
-                            actionLabel = "재시도"
-                        )
-                        if (result == SnackbarResult.ActionPerformed) {
-                            onRetry()
-                        }
-                    }
-
-                }
-
                 is RepositoryUiState.Loading -> {
                     CircularLoading()
+                }
+            }
+            if (errorState is RepositoryErrorState.Error) {
+                val context = LocalContext.current
+                coroutineScope.launch {
+                    val result = snackbarHostState.showSnackbar(
+                        message = errorState.message,
+                        actionLabel = context.getString(R.string.retry)
+                    )
+                    if (result == SnackbarResult.ActionPerformed) {
+                        onRetry()
+                    }
                 }
             }
         }
@@ -118,7 +117,6 @@ class RepositoryUiStateProvider : PreviewParameterProvider<RepositoryUiState> {
                 )
             )
         ),
-        RepositoryUiState.Error("예상치 못한 오류가 발생했습니다.")
     )
 }
 
@@ -127,6 +125,17 @@ class RepositoryUiStateProvider : PreviewParameterProvider<RepositoryUiState> {
 private fun RepositoryListPreview(@PreviewParameter(RepositoryUiStateProvider::class) uiState: RepositoryUiState) {
     RepositoryList(
         uiState = uiState,
+        errorState = RepositoryErrorState.None,
+        onRetry = { }
+    )
+}
+
+@Preview
+@Composable
+private fun RepositoryListErrorPreview(@PreviewParameter(RepositoryUiStateProvider::class) uiState: RepositoryUiState) {
+    RepositoryList(
+        uiState = uiState,
+        errorState = RepositoryErrorState.Error("예상치 못한에러"),
         onRetry = { }
     )
 }

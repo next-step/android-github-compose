@@ -3,6 +3,9 @@ package nextstep.github
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
+import com.google.common.truth.Truth.assertThat
+import nextstep.github.ui.home.RepositoryErrorState
 import nextstep.github.ui.home.RepositoryList
 import nextstep.github.ui.home.RepositoryUiState
 import org.junit.Rule
@@ -19,6 +22,7 @@ class RepositoryListTest {
         composeTestRule.setContent {
             RepositoryList(
                 uiState = RepositoryUiState.Success(emptyList()),
+                errorState = RepositoryErrorState.None,
                 onRetry = { }
             )
         }
@@ -32,18 +36,26 @@ class RepositoryListTest {
         // Given
         val errorMessage = "예상치 못한 오류가 발생했습니다."
         val actionLabel = "재시도"
-        val uiState = RepositoryUiState.Error(errorMessage)
+        val uiState = RepositoryUiState.Loading
+        val errorState = RepositoryErrorState.Error(errorMessage)
+        var retryClicked = false
 
         // When
         composeTestRule.setContent {
             RepositoryList(
                 uiState = uiState,
-                onRetry = { }
+                errorState = errorState,
+                onRetry = { retryClicked = true }
             )
         }
-
         // Then
         composeTestRule.onNodeWithText(errorMessage).assertIsDisplayed()
         composeTestRule.onNodeWithText(actionLabel).assertIsDisplayed()
+
+        // When
+        composeTestRule.onNodeWithText(actionLabel).performClick()
+        // Then
+        assertThat(retryClicked).isTrue()
+
     }
 }

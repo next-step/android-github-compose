@@ -6,6 +6,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
+import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -14,8 +15,12 @@ import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import nextstep.github.R
 import nextstep.github.data.RepositoryEntity
 import nextstep.github.ui.component.CircularLoading
 
@@ -28,16 +33,15 @@ fun RepositoryList(
     Scaffold(
         modifier = modifier,
         topBar = {
-            TopAppBar(title = {
-                Text(
-                    text = "NEXTSTEP Repositories",
-                    style = MaterialTheme.typography.titleLarge,
-                    modifier = Modifier.fillMaxWidth().background(MaterialTheme.colorScheme.surface),
-                    textAlign = TextAlign.Center
-
-                )
-            })
-
+            CenterAlignedTopAppBar(
+                title = {
+                    Text(
+                        text = stringResource(id = R.string.repository_title),
+                        style = MaterialTheme.typography.titleLarge,
+                        modifier = Modifier.background(MaterialTheme.colorScheme.surface),
+                    )
+                }
+            )
         }
     ) { innerPadding ->
         Box(modifier = Modifier.padding(innerPadding)) {
@@ -63,17 +67,10 @@ fun RepositoryList(
     }
 }
 
-@Preview
-@Composable
-private fun RepositoryListLoadingPreview() {
-    RepositoryList(uiState = RepositoryUiState.Loading)
-}
-
-@Preview
-@Composable
-private fun RepositoryListPreview() {
-    RepositoryList(
-        uiState = RepositoryUiState.Success(
+class RepositoryUiStateProvider : PreviewParameterProvider<RepositoryUiState> {
+    override val values = sequenceOf(
+        RepositoryUiState.Loading,
+        RepositoryUiState.Success(
             listOf(
                 RepositoryEntity(
                     "123",
@@ -84,13 +81,16 @@ private fun RepositoryListPreview() {
                     "456"
                 )
             )
-        )
+        ),
+        RepositoryUiState.Error("Error")
     )
 }
 
 @Preview
 @Composable
-private fun RepositoryListErrorPreview() {
-    RepositoryList(uiState = RepositoryUiState.Error("Error"))
+private fun RepositoryListPreview(@PreviewParameter(RepositoryUiStateProvider::class) uiState: RepositoryUiState) {
+    RepositoryList(
+        uiState = uiState
+    )
 }
 

@@ -26,10 +26,10 @@ class RepositoryListViewModel(
     private val _repositoryUiState = MutableStateFlow<RepositoryUiState>(RepositoryUiState.Loading)
     val repositoryUiState: StateFlow<RepositoryUiState> = _repositoryUiState
 
-    fun fetchRepositories(organization: String) {
+    fun fetchRepositories() {
         _repositoryUiState.value = RepositoryUiState.Loading
         viewModelScope.launch {
-            githubRepository.getRepositories(organization)
+            githubRepository.getRepositories()
                 .fold(
                     onSuccess = { repositories ->
                         _repositoryUiState.value = RepositoryUiState.Success(repositories)

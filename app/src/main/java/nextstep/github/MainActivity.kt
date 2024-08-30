@@ -18,7 +18,7 @@ class MainActivity : ComponentActivity() {
             GithubTheme {
                 val repositoryUiState by viewModel.repositoryUiState.collectAsStateWithLifecycle()
                 RepositoryList(repositoryUiState)
-                viewModel.fetchRepositories("next-step")
+                viewModel.fetchRepositories()
             }
         }
     }

@@ -33,6 +33,8 @@ import nextstep.github.ui.repo.component.GithubRepoCards
 import nextstep.github.ui.repo.component.LoadingScreen
 import nextstep.github.ui.theme.GithubTheme
 
+const val KEY_ORGANIZATION = "organization"
+
 @Composable
 fun GithubRepoRoute(
     modifier: Modifier = Modifier,

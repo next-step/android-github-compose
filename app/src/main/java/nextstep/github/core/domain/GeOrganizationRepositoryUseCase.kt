@@ -9,7 +9,7 @@ class GeOrganizationRepositoryUseCase(
 ) {
     suspend operator fun invoke(organization: Organization): Result<List<OrganizationRepository>> =
         githubRepository
-            .getRepositories(Organization.NEXT_STEP)
+            .getRepositories(organization)
             .map {
                 it.map { item ->
                     if (item.stars >= OrganizationRepository.HOT_STARS) {

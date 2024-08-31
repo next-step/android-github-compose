@@ -1,4 +1,4 @@
-package nextstep.github.ui.view.github.repository
+package nextstep.github.ui.view.github.repository.screen
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.padding

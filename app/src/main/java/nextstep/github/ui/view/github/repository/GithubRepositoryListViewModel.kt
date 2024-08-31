@@ -6,10 +6,13 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
 import nextstep.github.model.GithubRepositoryDto
@@ -17,13 +20,49 @@ import nextstep.github.model.GithubRepositoryDto
 class GithubRepositoryListViewModel(
     private val repository: GithubRepository,
 ) : ViewModel() {
-    val repositories: StateFlow<List<GithubRepositoryDto>> = flow {
-        emit(repository.getRepositories("next-step"))
+
+    private val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    private val repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
+
+    private val error: MutableStateFlow<Boolean> = MutableStateFlow(false)
+
+    val uiState: StateFlow<GithubRepositoryListUiState> = combine(
+        isLoading,
+        repositories,
+        error,
+    ) { isLoading, repositories, error ->
+        if (isLoading) {
+            GithubRepositoryListUiState.Loading
+        } else if (error) {
+            GithubRepositoryListUiState.Error
+        } else {
+            GithubRepositoryListUiState.Success(repositories)
+        }
     }.stateIn(
         viewModelScope,
         SharingStarted.WhileSubscribed(),
-        emptyList()
+        GithubRepositoryListUiState.Loading
     )
+
+    init {
+        fetchRepositories()
+    }
+
+    private fun fetchRepositories() {
+        viewModelScope.launch(CoroutineExceptionHandler { _, _ ->
+            error.value = true
+        }) {
+            error.value = false
+            isLoading.value = true
+            repositories.value = repository.getRepositories("next-step")
+            isLoading.value = false
+        }
+    }
+
+    fun retry() {
+        fetchRepositories()
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

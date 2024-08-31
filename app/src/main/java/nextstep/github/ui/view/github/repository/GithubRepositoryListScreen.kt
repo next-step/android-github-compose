@@ -30,7 +30,7 @@ fun GithubRepositoryListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun GithubRepositoryListScreen(
+private fun GithubRepositoryListScreen(
     items: List<GithubRepositoryDto>,
     modifier: Modifier = Modifier,
 ) {

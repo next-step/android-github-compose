@@ -1,12 +1,12 @@
 package nextstep.github.domain.impl
 
 import nextstep.github.data.GithubRepository
+import nextstep.github.domain.GetGithubRepositoriesUseCase
 import nextstep.github.domain.Repository
-import nextstep.github.domain.RepositoryUseCase
 
-class RepositoryUseCaseImpl(
+class GetGithubRepositoriesUseCaseImpl(
     private val repository: GithubRepository
-) : RepositoryUseCase {
+) : GetGithubRepositoriesUseCase {
     override suspend fun getRepositories(): Result<List<Repository>> {
         return repository.getRepositories().map { entities ->
             entities.map { entity ->

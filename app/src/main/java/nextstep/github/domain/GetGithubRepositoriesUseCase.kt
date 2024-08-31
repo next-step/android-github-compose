@@ -1,5 +1,5 @@
 package nextstep.github.domain
 
-interface RepositoryUseCase {
+interface GetGithubRepositoriesUseCase {
     suspend fun getRepositories(): Result<List<Repository>>
 }

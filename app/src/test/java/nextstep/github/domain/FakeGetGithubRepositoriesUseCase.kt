@@ -1,6 +1,6 @@
 package nextstep.github.domain
 
-class FakeRepositoryUseCase : RepositoryUseCase {
+class FakeGetGithubRepositoriesUseCase : GetGithubRepositoriesUseCase {
     override suspend fun getRepositories(): Result<List<Repository>> {
         return Result.success(
             listOf(

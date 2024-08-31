@@ -2,20 +2,16 @@ package nextstep.github.domain
 
 import com.google.common.truth.Truth.assertThat
 import kotlinx.coroutines.test.runTest
-import nextstep.github.data.FakeGithubRepository
-import nextstep.github.data.GithubRepository
-import nextstep.github.data.impl.GithubRepositoryImpl
-import nextstep.github.domain.impl.RepositoryUseCaseImpl
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 
-class RepositoryUseCaseTest {
-    private lateinit var useCase: RepositoryUseCase
+class GetGithubRepositoriesUseCaseTest {
+    private lateinit var useCase: GetGithubRepositoriesUseCase
 
     @Before
     fun setUp() {
-        useCase = FakeRepositoryUseCase()
+        useCase = FakeGetGithubRepositoriesUseCase()
     }
 
     @After

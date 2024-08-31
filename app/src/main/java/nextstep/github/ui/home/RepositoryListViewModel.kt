@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
+import nextstep.github.domain.GetGithubRepositoriesUseCase
 import nextstep.github.domain.Repository
-import nextstep.github.domain.RepositoryUseCase
 
 sealed interface RepositoryUiState {
     data object Loading : RepositoryUiState
@@ -29,12 +29,13 @@ sealed interface RepositoryErrorState {
 
 
 class RepositoryListViewModel(
-    private val repositoryUseCase: RepositoryUseCase
+    private val repositoryUseCase: GetGithubRepositoriesUseCase
 ) : ViewModel() {
     private val _repositoryUiState = MutableStateFlow<RepositoryUiState>(RepositoryUiState.Loading)
     val repositoryUiState: StateFlow<RepositoryUiState> = _repositoryUiState
 
-    private val _repositoryErrorState = MutableStateFlow<RepositoryErrorState>(RepositoryErrorState.None)
+    private val _repositoryErrorState =
+        MutableStateFlow<RepositoryErrorState>(RepositoryErrorState.None)
     val repositoryErrorState: StateFlow<RepositoryErrorState> = _repositoryErrorState
 
     fun fetchRepositories() {
@@ -47,7 +48,8 @@ class RepositoryListViewModel(
                         _repositoryUiState.value = RepositoryUiState.Success(repositories)
                     },
                     onFailure = { throwable ->
-                        _repositoryErrorState.value = RepositoryErrorState.Error(throwable.message ?: "Unknown error")
+                        _repositoryErrorState.value =
+                            RepositoryErrorState.Error(throwable.message ?: "Unknown error")
                     }
                 )
         }

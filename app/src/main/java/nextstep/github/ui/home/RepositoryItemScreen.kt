@@ -2,9 +2,12 @@ package nextstep.github.ui.home
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.material.icons.Icons
+import androidx.compose.material.icons.filled.Star
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -12,12 +15,16 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import nextstep.github.data.RepositoryEntity
+import nextstep.github.domain.Repository
+import nextstep.github.ui.component.TextWithIcon
 
 @Composable
 fun RepositoryItem(
-    repository: RepositoryEntity,
+    repository: Repository,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -29,14 +36,31 @@ fun RepositoryItem(
             ),
         verticalArrangement = Arrangement.Center
     ) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = if (repository.isHot) "HOT" else "",
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+                maxLines = 1,
+                overflow = TextOverflow.Ellipsis
+            )
+            TextWithIcon(
+                text = "${repository.star}",
+                icon = Icons.Default.Star
+            )
+        }
         Text(
-            text = repository.fullName ?: "",
+            text = repository.fullName,
             style = MaterialTheme.typography.titleLarge,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
         )
         Text(
-            text = repository.description ?: "",
+            text = repository.description,
             style = MaterialTheme.typography.titleMedium,
             maxLines = 1,
             overflow = TextOverflow.Ellipsis
@@ -44,13 +68,23 @@ fun RepositoryItem(
     }
 }
 
+class RepositoryItemProvider : PreviewParameterProvider<Repository> {
+    override val values = sequenceOf(
+        Repository(
+            "123123123123123123123123123123123123123",
+            "456456456456456456456456456456456456456456456456456",
+            0
+        ),
+        Repository(
+            "123123123123123123123123123123123123123",
+            "456456456456456456456456456456456456456456456456456",
+            50
+        ),
+    )
+}
+
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListPreview() {
-    RepositoryItem(
-        repository = RepositoryEntity(
-            "123123123123123123123123123123123123123",
-            "456456456456456456456456456456456456456456456456456"
-        )
-    )
+private fun RepositoryListPreview(@PreviewParameter(RepositoryItemProvider::class) repository: Repository) {
+    RepositoryItem(repository)
 }

@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import kotlinx.coroutines.launch
 import nextstep.github.R
-import nextstep.github.data.RepositoryEntity
+import nextstep.github.domain.Repository
 import nextstep.github.ui.component.CircularLoading
 
 @SuppressLint("CoroutineCreationDuringComposition")
@@ -107,11 +107,11 @@ class RepositoryUiStateProvider : PreviewParameterProvider<RepositoryUiState> {
         ),
         RepositoryUiState.Success(
             listOf(
-                RepositoryEntity(
+                Repository(
                     "123",
                     "456"
                 ),
-                RepositoryEntity(
+                Repository(
                     "123",
                     "456"
                 )

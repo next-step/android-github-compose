@@ -4,7 +4,7 @@ import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFact
 import kotlinx.serialization.json.Json
 import nextstep.github.core.data.GithubRepository
 import nextstep.github.core.data.GithubRepositoryImpl
-import nextstep.github.core.domain.GetNextStepRepositoryUseCase
+import nextstep.github.core.domain.GeOrganizationRepositoryUseCase
 import nextstep.github.core.network.ApiClient
 import nextstep.github.core.network.GithubApiClient
 import nextstep.github.core.network.service.GithubService
@@ -39,7 +39,7 @@ class AppContainer {
     val githubRepository: GithubRepository =
         GithubRepositoryImpl(apiClient)
 
-    val getNextStepRepositoryUseCase = GetNextStepRepositoryUseCase(githubRepository)
+    val geOrganizationRepositoryUseCase = GeOrganizationRepositoryUseCase(githubRepository)
 
     companion object {
         private const val CONTENT_TYPE = "application/json"

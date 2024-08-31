@@ -10,9 +10,9 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
 import nextstep.github.core.data.GithubRepository
-import nextstep.github.core.domain.GetNextStepRepositoryUseCase
-import nextstep.github.core.model.NextStepRepository
+import nextstep.github.core.domain.GeOrganizationRepositoryUseCase
 import nextstep.github.core.model.Organization
+import nextstep.github.core.model.OrganizationRepository
 import nextstep.github.core.model.RepositoryEntity
 import org.junit.Before
 import org.junit.Test
@@ -34,7 +34,7 @@ class GithubRepoViewModelTest : BaseTest() {
                     override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         Result.success(emptyList())
                 }
-            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
             val viewModel = GithubRepoViewModel(useCase)
 
             // then
@@ -54,15 +54,15 @@ class GithubRepoViewModelTest : BaseTest() {
                 )
             val nextStepRepositories =
                 listOf(
-                    NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
-                    NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
+                    OrganizationRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    OrganizationRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
             val fakeRepository =
                 object : GithubRepository {
                     override suspend fun getRepositories(organization: Organization): Result<List<RepositoryEntity>> =
                         Result.success(repositories)
                 }
-            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
             val viewModel = GithubRepoViewModel(useCase)
 
             // then
@@ -89,7 +89,7 @@ class GithubRepoViewModelTest : BaseTest() {
                         return Result.failure(Exception(errorMessage))
                     }
                 }
-            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
             val viewModel = GithubRepoViewModel(useCase)
 
             // then
@@ -113,8 +113,8 @@ class GithubRepoViewModelTest : BaseTest() {
                 )
             val nextStepRepositories =
                 listOf(
-                    NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
-                    NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
+                    OrganizationRepository.Hot("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    OrganizationRepository.Normal("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
             val fakeRepository =
                 object : GithubRepository {
@@ -128,7 +128,7 @@ class GithubRepoViewModelTest : BaseTest() {
                             Result.success(repositories)
                         }
                 }
-            val useCase = GetNextStepRepositoryUseCase(fakeRepository)
+            val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
             val viewModel = GithubRepoViewModel(useCase)
             viewModel.effect.test {
                 assertEquals(

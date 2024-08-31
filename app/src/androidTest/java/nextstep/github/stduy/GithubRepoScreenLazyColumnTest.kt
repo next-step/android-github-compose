@@ -7,7 +7,7 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import nextstep.github.core.model.NextStepRepository
+import nextstep.github.core.model.OrganizationRepository
 import nextstep.github.ui.repo.GithubRepoScreen
 import nextstep.github.ui.repo.GithubRepoUiState
 import org.junit.Rule
@@ -38,13 +38,13 @@ class GithubRepoScreenLazyColumnTest {
     @Test
     fun 깃헙_저장소_목록을_화면에_보여준다() {
         // given
-        val repositories = mutableListOf<NextStepRepository>()
+        val repositories = mutableListOf<OrganizationRepository>()
         (1..10).forEach { index ->
             repositories.add(
-                NextStepRepository.Hot("nextstep/compose", "갓뮤지님의 $index 강의", index),
+                OrganizationRepository.Hot("nextstep/compose", "갓뮤지님의 $index 강의", index),
             )
             repositories.add(
-                NextStepRepository.Normal("nextstep/kotlin-tdd", "Jason님의 $index 강의", index),
+                OrganizationRepository.Normal("nextstep/kotlin-tdd", "Jason님의 $index 강의", index),
             )
         }
 

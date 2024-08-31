@@ -1,6 +1,6 @@
 package nextstep.github.core.model
 
-sealed interface NextStepRepository {
+sealed interface OrganizationRepository {
     val fullName: String
     val description: String
     val stars: Int
@@ -9,13 +9,13 @@ sealed interface NextStepRepository {
         override val fullName: String,
         override val description: String,
         override val stars: Int,
-    ) : NextStepRepository
+    ) : OrganizationRepository
 
     data class Normal(
         override val fullName: String,
         override val description: String,
         override val stars: Int,
-    ) : NextStepRepository
+    ) : OrganizationRepository
 
     companion object {
         const val HOT_STARS = 50

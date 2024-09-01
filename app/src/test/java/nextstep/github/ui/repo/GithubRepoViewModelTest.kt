@@ -1,13 +1,11 @@
 package nextstep.github.ui.repo
 
-import androidx.lifecycle.SavedStateHandle
 import app.cash.turbine.test
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.BaseTest
@@ -20,17 +18,11 @@ import org.junit.Before
 import org.junit.Test
 
 class GithubRepoViewModelTest : BaseTest() {
-    private lateinit var savedStateHandle: SavedStateHandle
-
     @OptIn(ExperimentalCoroutinesApi::class)
     @Before
     fun setUp() {
         Dispatchers.setMain(UnconfinedTestDispatcher())
         mockLogClass()
-        savedStateHandle =
-            SavedStateHandle().apply {
-                set(KEY_ORGANIZATION, Organization.NEXT_STEP.value)
-            }
     }
 
     @Test
@@ -43,13 +35,8 @@ class GithubRepoViewModelTest : BaseTest() {
                         Result.success(emptyList())
                 }
             val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
+            val viewModel = GithubRepoViewModel(useCase)
 
-            val viewModel =
-                GithubRepoViewModel(
-                    savedStateHandle = savedStateHandle,
-                    geOrganizationRepositoryUseCase = useCase,
-                )
-            advanceUntilIdle()
             // then
             viewModel.uiState.test {
                 assertEquals(GithubRepoUiState.Empty, awaitItem())
@@ -76,11 +63,7 @@ class GithubRepoViewModelTest : BaseTest() {
                         Result.success(repositories)
                 }
             val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
-            val viewModel =
-                GithubRepoViewModel(
-                    savedStateHandle = savedStateHandle,
-                    geOrganizationRepositoryUseCase = useCase,
-                )
+            val viewModel = GithubRepoViewModel(useCase)
 
             // then
             viewModel.uiState.test {
@@ -107,12 +90,7 @@ class GithubRepoViewModelTest : BaseTest() {
                     }
                 }
             val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
-            val viewModel =
-                GithubRepoViewModel(
-                    savedStateHandle = savedStateHandle,
-                    geOrganizationRepositoryUseCase = useCase,
-                )
-            viewModel.uiState.test { assertEquals(GithubRepoUiState.Loading, awaitItem()) }
+            val viewModel = GithubRepoViewModel(useCase)
 
             // then
             viewModel.effect.test {
@@ -124,7 +102,6 @@ class GithubRepoViewModelTest : BaseTest() {
         }
 
     // 실패 후 재시도 성공
-    @OptIn(ExperimentalCoroutinesApi::class)
     @Test
     fun 데이터_로딩_실패_후_재시도_성공하여_SUCCESS_상태를_반환한다() =
         runTest {
@@ -152,27 +129,23 @@ class GithubRepoViewModelTest : BaseTest() {
                         }
                 }
             val useCase = GeOrganizationRepositoryUseCase(fakeRepository)
-            val viewModel =
-                GithubRepoViewModel(
-                    savedStateHandle = savedStateHandle,
-                    geOrganizationRepositoryUseCase = useCase,
-                )
-            viewModel.uiState.test { assertEquals(GithubRepoUiState.Loading, awaitItem()) }
+            val viewModel = GithubRepoViewModel(useCase)
             viewModel.effect.test {
                 assertEquals(
                     GithubRepoEffect.ShowErrorMessage("error"),
                     awaitItem(),
                 )
             }
+
             // when
             viewModel.retry()
-            advanceUntilIdle()
 
             // then
             viewModel.uiState.test {
+                val item = awaitItem()
                 assertEquals(
                     GithubRepoUiState.Success(nextStepRepositories),
-                    awaitItem(),
+                    item,
                 )
             }
         }

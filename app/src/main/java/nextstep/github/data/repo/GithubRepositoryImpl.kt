@@ -1,6 +1,5 @@
 package nextstep.github.data.repo
 
-import android.util.Log
 import nextstep.github.data.model.GithubReposResponse
 import nextstep.github.data.network.GithubService
 
@@ -12,8 +11,7 @@ class GithubRepositoryImpl(
             val result = githubService.getRepositories(organization)
             Result.success(result)
         } catch (e: Exception) {
-            Log.d("결과", "fetchRepos: $e")
-            Result.failure(Exception("오류 발생"))
+            Result.failure(Exception("$organization Repositories not found"))
         }
     }
 

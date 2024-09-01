@@ -8,7 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import androidx.test.platform.app.InstrumentationRegistry
 import nextstep.github.R
-import nextstep.github.core.model.OrganizationRepository
+import nextstep.github.core.model.RepositoryEntity
 import org.junit.Rule
 import org.junit.Test
 
@@ -66,8 +66,8 @@ class GithubRepoScreenTest {
         // given
         val repositories =
             listOf(
-                OrganizationRepository.Hot("nextstep/compose", "갓뮤지님의 강의", 100),
-                OrganizationRepository.Normal("nextstep/kotlin-tdd", "Jason님의 강의", 49),
+                RepositoryEntity("nextstep/compose", "갓뮤지님의 강의", 100),
+                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의", 49),
             )
         composeTestRule.setContent {
             GithubRepoScreen(

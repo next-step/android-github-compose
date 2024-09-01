@@ -1,6 +1,6 @@
 package nextstep.github.ui.repo
 
-import nextstep.github.core.model.OrganizationRepository
+import nextstep.github.core.model.RepositoryEntity
 
 sealed interface GithubRepoUiState {
     data object Loading : GithubRepoUiState
@@ -8,6 +8,6 @@ sealed interface GithubRepoUiState {
     data object Empty : GithubRepoUiState
 
     data class Success(
-        val repositories: List<OrganizationRepository>,
+        val repositories: List<RepositoryEntity>,
     ) : GithubRepoUiState
 }

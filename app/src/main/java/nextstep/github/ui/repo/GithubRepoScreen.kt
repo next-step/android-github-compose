@@ -27,7 +27,7 @@ import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameter
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.core.model.OrganizationRepository
+import nextstep.github.core.model.RepositoryEntity
 import nextstep.github.ui.repo.component.EmptyScreen
 import nextstep.github.ui.repo.component.GithubRepoCards
 import nextstep.github.ui.repo.component.LoadingScreen
@@ -168,12 +168,12 @@ private class GithubRepoScreenProvider :
                 GithubRepoUiState.Success(
                     repositories =
                         listOf(
-                            OrganizationRepository.Hot(
+                            RepositoryEntity(
                                 fullName = "nextstep/compose",
                                 description = "갓뮤지님의 강의",
                                 stars = 100,
                             ),
-                            OrganizationRepository.Normal(
+                            RepositoryEntity(
                                 fullName = "nextstep/kotlin-tdd",
                                 description = "Jason님의 강의",
                                 stars = 49,

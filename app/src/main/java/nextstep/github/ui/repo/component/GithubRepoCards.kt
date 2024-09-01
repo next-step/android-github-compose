@@ -26,7 +26,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.R
-import nextstep.github.core.model.OrganizationRepository
+import nextstep.github.core.model.RepositoryEntity
 import nextstep.github.ui.repo.GithubRepoUiState
 import nextstep.github.ui.theme.GithubTheme
 
@@ -41,7 +41,7 @@ internal fun GithubRepoCards(
         items(uiState.repositories) { item ->
             GithubRepoCard(
                 tag = {
-                    if (item is OrganizationRepository.Hot) {
+                    if (item.isHot) {
                         Text(
                             text = stringResource(id = R.string.hot_title),
                             style = MaterialTheme.typography.labelLarge,
@@ -137,8 +137,8 @@ private fun GithubRepoCardsPreview() {
             uiState =
                 GithubRepoUiState.Success(
                     listOf(
-                        OrganizationRepository.Hot("nextstep/compose", "갓뮤지님의 강의", 100),
-                        OrganizationRepository.Normal("nextstep/kotlin-tdd", "Jason님의 강의", 49),
+                        RepositoryEntity("nextstep/compose", "갓뮤지님의 강의", 100),
+                        RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의", 49),
                     ),
                 ),
             modifier = Modifier.fillMaxSize(),

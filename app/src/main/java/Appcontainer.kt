@@ -3,6 +3,8 @@ import kotlinx.serialization.json.Json
 import nextstep.github.data.GithubRepository
 import nextstep.github.data.GithubService
 import nextstep.github.data.impl.GithubRepositoryImpl
+import nextstep.github.domain.GetGithubRepositoriesUseCase
+import nextstep.github.domain.impl.GetGithubRepositoriesUseCaseImpl
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
@@ -18,7 +20,8 @@ class AppContainer {
     private val githubService = retrofit
         .create(GithubService::class.java)
 
-    val githubRepository: GithubRepository = GithubRepositoryImpl(githubService) // githubService 인스턴스를 활용하여 초기화
+    private val githubRepository: GithubRepository = GithubRepositoryImpl(githubService) // githubService 인스턴스를 활용하여 초기화
+    val githubRepositoryUseCase: GetGithubRepositoriesUseCase = GetGithubRepositoriesUseCaseImpl(githubRepository) //
 
     companion object {
         private const val CONTENT_TYPE = "application/json"

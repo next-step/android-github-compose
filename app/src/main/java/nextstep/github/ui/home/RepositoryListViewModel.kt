@@ -10,12 +10,12 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
-import nextstep.github.data.GithubRepository
-import nextstep.github.data.RepositoryEntity
+import nextstep.github.domain.GetGithubRepositoriesUseCase
+import nextstep.github.domain.Repository
 
 sealed interface RepositoryUiState {
     data object Loading : RepositoryUiState
-    data class Success(val repositories: List<RepositoryEntity>) : RepositoryUiState {
+    data class Success(val repositories: List<Repository>) : RepositoryUiState {
         val isEmpty: Boolean
             get() = repositories.isNullOrEmpty()
     }
@@ -29,25 +29,27 @@ sealed interface RepositoryErrorState {
 
 
 class RepositoryListViewModel(
-    private val githubRepository: GithubRepository
+    private val repositoryUseCase: GetGithubRepositoriesUseCase
 ) : ViewModel() {
     private val _repositoryUiState = MutableStateFlow<RepositoryUiState>(RepositoryUiState.Loading)
     val repositoryUiState: StateFlow<RepositoryUiState> = _repositoryUiState
 
-    private val _repositoryErrorState = MutableStateFlow<RepositoryErrorState>(RepositoryErrorState.None)
+    private val _repositoryErrorState =
+        MutableStateFlow<RepositoryErrorState>(RepositoryErrorState.None)
     val repositoryErrorState: StateFlow<RepositoryErrorState> = _repositoryErrorState
 
     fun fetchRepositories() {
         _repositoryUiState.value = RepositoryUiState.Loading
         _repositoryErrorState.value = RepositoryErrorState.None
         viewModelScope.launch {
-            githubRepository.getRepositories()
+            repositoryUseCase.getRepositories()
                 .fold(
                     onSuccess = { repositories ->
                         _repositoryUiState.value = RepositoryUiState.Success(repositories)
                     },
                     onFailure = { throwable ->
-                        _repositoryErrorState.value = RepositoryErrorState.Error(throwable.message ?: "Unknown error")
+                        _repositoryErrorState.value =
+                            RepositoryErrorState.Error(throwable.message ?: "Unknown error")
                     }
                 )
         }
@@ -58,7 +60,7 @@ class RepositoryListViewModel(
             initializer {
                 val githubRepository = (this[APPLICATION_KEY] as GithubApplication)
                     .appContainer
-                    .githubRepository
+                    .githubRepositoryUseCase
                 RepositoryListViewModel(githubRepository)
             }
         }

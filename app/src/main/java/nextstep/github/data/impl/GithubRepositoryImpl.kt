@@ -4,7 +4,7 @@ import nextstep.github.data.GithubRepository
 import nextstep.github.data.GithubService
 import nextstep.github.data.RepositoryEntity
 
-class GithubRepositoryImpl(
+internal class GithubRepositoryImpl(
     private val githubService: GithubService
 ) : GithubRepository {
     override suspend fun getRepositories(): Result<List<RepositoryEntity>> {

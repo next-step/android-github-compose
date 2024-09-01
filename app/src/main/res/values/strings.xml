@@ -3,5 +3,6 @@
     <string name="repository_title">NEXTSTEP Repositories</string>
     <string name="repository_empty">목록이 비었습니다.</string>
     <string name="retry">재시도</string>
+    <string name="hot">HOT</string>
 
 </resources>

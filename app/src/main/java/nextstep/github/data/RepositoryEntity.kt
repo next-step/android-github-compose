@@ -7,4 +7,5 @@ import kotlinx.serialization.Serializable
 data class RepositoryEntity(
     @SerialName("full_name") val fullName: String?,
     @SerialName("description") val description: String?,
+    @SerialName("stargazers_count") val stars: Int?,
 )

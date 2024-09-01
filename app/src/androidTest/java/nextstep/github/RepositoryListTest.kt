@@ -5,7 +5,9 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import com.google.common.truth.Truth.assertThat
+import nextstep.github.domain.Repository
 import nextstep.github.ui.home.RepositoryErrorState
+import nextstep.github.ui.home.RepositoryItem
 import nextstep.github.ui.home.RepositoryList
 import nextstep.github.ui.home.RepositoryUiState
 import org.junit.Rule
@@ -56,6 +58,39 @@ class RepositoryListTest {
         composeTestRule.onNodeWithText(actionLabel).performClick()
         // Then
         assertThat(retryClicked).isTrue()
+    }
 
+    @Test
+    fun 스타수가_50미만인경우_HOT_미노출() {
+        // given
+        composeTestRule.setContent {
+            RepositoryItem(
+                repository = Repository(
+                    fullName = "First",
+                    description = "안녕하세요",
+                    star = 49
+                )
+            )
+        }
+        // then
+        composeTestRule.onNodeWithText("HOT")
+            .assertDoesNotExist()
+    }
+
+    @Test
+    fun 스타수가_50이상인경우_HOT_노출() {
+        // given
+        composeTestRule.setContent {
+            RepositoryItem(
+                repository = Repository(
+                    fullName = "First",
+                    description = "안녕하세요",
+                    star = 50
+                )
+            )
+        }
+        // then
+        composeTestRule.onNodeWithText("HOT")
+            .assertIsDisplayed()
     }
 }

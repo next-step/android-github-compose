@@ -39,48 +39,37 @@ internal fun GithubRepoCards(
         modifier = modifier,
     ) {
         items(uiState.repositories) { item ->
-            val content: @Composable () -> Unit = {
-                GithubRepoCardContent(
-                    fullName = item.fullName,
-                    description = item.description,
-                )
-            }
-            val badge: @Composable (() -> Unit) = {
-                Row(
-                    verticalAlignment = Alignment.CenterVertically,
-                ) {
-                    Icon(
-                        imageVector = Icons.Default.Star,
-                        contentDescription = "StarBadge",
-                    )
-
-                    Text(
-                        text = "${item.stars}",
-                        style = MaterialTheme.typography.labelLarge,
-                        modifier = Modifier.testTag("StarCount"),
-                    )
-                }
-            }
-
-            if (item is OrganizationRepository.Hot) {
-                HotRepoCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    tag = {
+            GithubRepoCard(
+                tag = {
+                    if (item is OrganizationRepository.Hot) {
                         Text(
                             text = stringResource(id = R.string.hot_title),
                             style = MaterialTheme.typography.labelLarge,
                             color = MaterialTheme.colorScheme.primary,
                             modifier = Modifier.testTag("HotTitle"),
                         )
-                    },
-                    badge = badge,
-                    content = content,
-                )
-            } else {
-                NormalRepoCard(
-                    modifier = Modifier.fillMaxWidth(),
-                    badge = badge,
-                    content = content,
+                    }
+                },
+                badge = {
+                    Row(
+                        verticalAlignment = Alignment.CenterVertically,
+                    ) {
+                        Icon(
+                            imageVector = Icons.Default.Star,
+                            contentDescription = "StarBadge",
+                        )
+
+                        Text(
+                            text = "${item.stars}",
+                            style = MaterialTheme.typography.labelLarge,
+                            modifier = Modifier.testTag("StarCount"),
+                        )
+                    }
+                },
+            ) {
+                GithubRepoCardContent(
+                    fullName = item.fullName,
+                    description = item.description,
                 )
             }
         }
@@ -88,39 +77,11 @@ internal fun GithubRepoCards(
 }
 
 @Composable
-private fun HotRepoCard(
-    modifier: Modifier = Modifier,
-    tag: @Composable (() -> Unit),
-    badge: @Composable (() -> Unit),
-    content: @Composable () -> Unit,
-) {
-    GithubRepoCard(
-        tag = tag,
-        badge = badge,
-        content = content,
-        modifier = modifier,
-    )
-}
-
-@Composable
-private fun NormalRepoCard(
-    modifier: Modifier = Modifier,
-    badge: @Composable (() -> Unit),
-    content: @Composable () -> Unit,
-) {
-    GithubRepoCard(
-        badge = badge,
-        content = content,
-        modifier = modifier,
-    )
-}
-
-@Composable
 private fun GithubRepoCard(
     modifier: Modifier = Modifier,
-    contentPadding: PaddingValues = PaddingValues(16.dp),
     tag: @Composable (() -> Unit) = {},
-    badge: @Composable (() -> Unit) = {},
+    badge: @Composable () -> Unit = {},
+    contentPadding: PaddingValues = PaddingValues(16.dp),
     decoration: @Composable (BoxScope.() -> Unit) = {
         HorizontalDivider(
             color = MaterialTheme.colorScheme.outlineVariant,

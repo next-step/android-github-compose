@@ -25,7 +25,7 @@ class RepositoryListViewModel(
         setup()
     }
 
-    fun setup() {
+    private fun setup() {
         viewModelScope.launch {
             _repositories.value = repository.getRepositories(ORGANIZATION)
         }

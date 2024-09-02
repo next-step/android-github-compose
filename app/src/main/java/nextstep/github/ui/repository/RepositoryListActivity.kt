@@ -4,6 +4,7 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.viewModels
+import nextstep.github.ui.theme.GithubTheme
 
 class RepositoryListActivity : ComponentActivity() {
 
@@ -13,7 +14,9 @@ class RepositoryListActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
 
         setContent {
-            RepositoryListScreen(viewModel = viewModel)
+            GithubTheme {
+                RepositoryListScreen(viewModel = viewModel)
+            }
         }
     }
 

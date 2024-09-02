@@ -10,10 +10,13 @@ data class ResponseRepositoriesDto(
     val fullName: String?,
     @SerialName("description")
     val description: String?,
+    @SerialName("stargazers_count")
+    val stars: Int?,
 )
 
 fun ResponseRepositoriesDto.toEntity() =
     RepositoryEntity(
         fullName = fullName ?: "",
         description = description ?: "",
+        stars = stars ?: 0,
     )

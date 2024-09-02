@@ -66,8 +66,8 @@ class GithubRepoScreenTest {
         // given
         val repositories =
             listOf(
-                RepositoryEntity("nextstep/compose", "갓뮤지님의 강의"),
-                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의"),
+                RepositoryEntity("nextstep/compose", "갓뮤지님의 강의", 100),
+                RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 강의", 49),
             )
         composeTestRule.setContent {
             GithubRepoScreen(

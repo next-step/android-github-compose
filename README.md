@@ -10,22 +10,30 @@
 ## 🚀 2단계 - GitHub(UI 레이어)
 
 - [v] Repositories 화면 구현
-  - [v] `GithubRepoScreen` 생성
-  - [v] `GithubRepoScreen` UI test 구현
-  - [v] `GithubRepoScreen` 컴퍼넌트 상세 구현
+    - [v] `GithubRepoScreen` 생성
+    - [v] `GithubRepoScreen` UI test 구현
+    - [v] `GithubRepoScreen` 컴퍼넌트 상세 구현
 - [v] Repositories 화면에 필요한 데이터를 전달하는 ViewModel 구현
 
 ## 🚀 3단계 - GitHub(UI 상태)
+
 - [v] PR 리뷰 반영
-  - [v] Divider 추가
-  - [v] organization 선언 수정
-  - [v] `GithubRepoScreenTest`에 `study` package 이동
+    - [v] Divider 추가
+    - [v] organization 선언 수정
+    - [v] `GithubRepoScreenTest`에 `study` package 이동
 - [v] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UiState 생성
-  - [v] `GithubRepoUiState` 생성
-  - [v] `GithubRepoUiState`에 각 상태에 따른 데이터 추가
+    - [v] `GithubRepoUiState` 생성
+    - [v] `GithubRepoUiState`에 각 상태에 따른 데이터 추가
 - [v] Repositories 결과에 따른 각 상태(로딩, 에러, 빈 목록, 성공)에 따른 UI 처리
-  - [v] 각 상태에 따른 UI test 작성
-  - [v] 로딩 상태에 따른 UI 처리
-  - [v] 에러 상태에 따른 UI 처리
-  - [v] 빈 목록 상태에 따른 UI 처리
-  - [v] 성공 상태에 따른 UI 처리
+    - [v] 각 상태에 따른 UI test 작성
+    - [v] 로딩 상태에 따른 UI 처리
+    - [v] 에러 상태에 따른 UI 처리
+    - [v] 빈 목록 상태에 따른 UI 처리
+    - [v] 성공 상태에 따른 UI 처리
+
+## 🚀 4단계 - GitHub(인기 저장소)
+
+- [v] Star 개수 API 응답에 추가
+- [v] Entity 내 Start 개수 및 Hot 상태 추가
+- [v] Star 개수에 따른 `HOT` UI 노출
+- [v] Star 개수 UI 노출

@@ -46,8 +46,8 @@ class GithubRepoViewModelTest : BaseTest() {
             // given
             val repositories =
                 listOf(
-                    RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의"),
-                    RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의"),
+                    RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
             val fakeRepository =
                 object : GithubRepository {
@@ -71,7 +71,6 @@ class GithubRepoViewModelTest : BaseTest() {
     fun 데이터_로딩_중_에러가_발생하면_ERROR_상태를_반환한다() =
         runTest {
             // given
-            mockLogClass()
             val errorMessage = "error"
             val fakeRepository =
                 object : GithubRepository {
@@ -99,8 +98,8 @@ class GithubRepoViewModelTest : BaseTest() {
             // given
             val repositories =
                 listOf(
-                    RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의"),
-                    RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의"),
+                    RepositoryEntity("nextstep/compose", "갓뮤지님의 1 강의", 100),
+                    RepositoryEntity("nextstep/kotlin-tdd", "Jason님의 1 강의", 49),
                 )
             val fakeRepository =
                 object : GithubRepository {

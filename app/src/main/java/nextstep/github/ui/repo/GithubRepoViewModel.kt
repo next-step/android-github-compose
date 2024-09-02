@@ -60,8 +60,6 @@ class GithubRepoViewModel(
     companion object {
         private const val TAG = "GithubRepoViewModel"
 
-        private const val DEFAULT_REPOSITORY_ORGANIZATION = "next-step"
-
         val Factory: ViewModelProvider.Factory =
             viewModelFactory {
                 initializer {

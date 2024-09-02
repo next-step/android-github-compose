@@ -63,7 +63,7 @@ internal class GithubRepositoryTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = githubRepository.getRepositories("org")
+        val result = githubRepository.getNextStepRepositories()
 
         // Then
         val repositories = result.getOrNull()
@@ -91,7 +91,7 @@ internal class GithubRepositoryTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = githubRepository.getRepositories("invalid-org")
+        val result = githubRepository.getNextStepRepositories()
 
         // Then
         assertTrue(result.isFailure)

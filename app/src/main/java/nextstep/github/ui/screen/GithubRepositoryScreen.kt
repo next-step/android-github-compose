@@ -2,23 +2,47 @@ package nextstep.github.ui.screen
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.SideEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
+import nextstep.github.data.response.RepositoryResponse
 import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun GithubRepositoryScreen(
+fun GithubRepositoryRoute(
     modifier: Modifier = Modifier,
+    viewModel: GithubRepositoryViewModel = viewModel(factory = GithubRepositoryViewModel.Factory),
+) {
+    val state by viewModel.state.collectAsStateWithLifecycle()
+
+    SideEffect {
+        viewModel.handleEvent(GithubEvent.Init)
+    }
+
+    GithubRepositoryScreen(
+        modifier = modifier,
+        repositoryItems = state.repositories
+    )
+}
+
+@Composable
+private fun GithubRepositoryScreen(
+    modifier: Modifier = Modifier,
+    repositoryItems: List<RepositoryResponse>
 ) {
     Scaffold(
         modifier = modifier,
@@ -29,11 +53,11 @@ fun GithubRepositoryScreen(
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
         ) {
-            items(100) {
+            items(repositoryItems) {
                 GithubRepositoryItem(
                     modifier = Modifier.padding(16.dp),
-                    fullName = "$it next-step/nextstep-docs",
-                    description = "$it nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                    fullName = it.fullName,
+                    description = it.description
                 )
             }
         }
@@ -58,6 +82,13 @@ private fun GithubRepositoryTopAppBar() {
 @Preview
 private fun GithubRepositoryScreenPreview() {
     GithubTheme {
-        GithubRepositoryScreen()
+        GithubRepositoryScreen(
+            repositoryItems = List(5) {
+                RepositoryResponse(
+                    fullName = "next-step/nextstep-docs",
+                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                )
+            }
+        )
     }
 }

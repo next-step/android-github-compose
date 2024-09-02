@@ -12,4 +12,4 @@
 - [x] step1 리뷰 반영 (테스트 코드 변경)
 - [x] Github Repository Column 아이템 UI 구현
 - [x] Item LazyColumn 연결
-- [ ] ViewModel 데이터 추가 및 Factory 연결
+- [x] ViewModel 데이터 추가 및 Factory 연결

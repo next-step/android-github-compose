@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen
+package nextstep.github.ui.screen.repo
 
 import nextstep.github.data.response.RepositoryResponse
 

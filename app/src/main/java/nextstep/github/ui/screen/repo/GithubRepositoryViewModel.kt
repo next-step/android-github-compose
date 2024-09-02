@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen
+package nextstep.github.ui.screen.repo
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

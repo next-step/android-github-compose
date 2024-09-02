@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen
+package nextstep.github.ui.screen.repo
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn

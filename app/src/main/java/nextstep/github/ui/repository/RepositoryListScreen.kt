@@ -3,22 +3,30 @@ package nextstep.github.ui.repository
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import nextstep.github.R
 import nextstep.github.model.RepositoryEntity
-import nextstep.github.ui.repository.component.RepositoryListItem
+import nextstep.github.ui.repository.component.EmptyRepositoryListScreen
 import nextstep.github.ui.repository.component.RepositoryListTopBar
+import nextstep.github.ui.repository.component.SuccessRepositoryListScreen
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -26,10 +34,11 @@ fun RepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory),
 ) {
-    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     RepositoryListScreen(
-        items = repositories,
+        uiState = uiState,
+        onClickRetry = { viewModel.fetchRepositories() },
         modifier = modifier,
     )
 }
@@ -37,26 +46,43 @@ fun RepositoryListScreen(
 @Composable
 private fun RepositoryListScreen(
     modifier: Modifier = Modifier,
-    items: List<RepositoryEntity>,
+    onClickRetry: () -> Unit,
+    uiState: RepositoryListUiState,
 ) {
-    Scaffold(topBar = { RepositoryListTopBar() }) { innerPadding ->
+    val context = LocalContext.current
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(uiState) {
+        if (uiState is RepositoryListUiState.Error) {
+            val result = snackbarHostState.showSnackbar(
+                message = context.getString(R.string.unknown_error_occurred),
+                actionLabel = context.getString(R.string.retry),
+            )
+
+            if (result == SnackbarResult.ActionPerformed) {
+                onClickRetry()
+            }
+        }
+    }
+
+    Scaffold(
+        topBar = { RepositoryListTopBar() },
+        snackbarHost = { SnackbarHost(snackbarHostState) },
+    ) { innerPadding ->
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding),
+                .padding(innerPadding)
+                .background(color = MaterialTheme.colorScheme.surface),
         ) {
-            LazyColumn(
-                modifier = modifier
-                    .fillMaxSize()
-                    .background(color = MaterialTheme.colorScheme.surface),
-            ) {
-                items(items) { item ->
-                    RepositoryListItem(
-                        item = item,
-                        modifier = Modifier.fillMaxWidth(),
-                    )
-                    HorizontalDivider()
-                }
+            when (val uiState = uiState) {
+                RepositoryListUiState.Loading,
+                RepositoryListUiState.Error -> CircularProgressIndicator(
+                    modifier = Modifier.align(Alignment.Center),
+                )
+
+                RepositoryListUiState.Empty -> EmptyRepositoryListScreen()
+                is RepositoryListUiState.Success -> SuccessRepositoryListScreen(uiState = uiState)
             }
         }
     }
@@ -64,10 +90,27 @@ private fun RepositoryListScreen(
 
 @Preview
 @Composable
-private fun RepositoryListScreenPreview() {
+private fun RepositoryListScreenPreview(
+    @PreviewParameter(
+        RepositoryListScreenPreviewParameterProvider::class
+    ) param: RepositoryListUiState,
+) {
     GithubTheme {
         RepositoryListScreen(
-            items = listOf(
+            uiState = param,
+            onClickRetry = {},
+        )
+    }
+}
+
+private class RepositoryListScreenPreviewParameterProvider :
+    PreviewParameterProvider<RepositoryListUiState> {
+    override val values: Sequence<RepositoryListUiState> = sequenceOf(
+        RepositoryListUiState.Loading,
+        RepositoryListUiState.Error,
+        RepositoryListUiState.Empty,
+        RepositoryListUiState.Success(
+            listOf(
                 RepositoryEntity(
                     fullName = "nextstep/nextstep-docs",
                     description = "nextstep-docs description",
@@ -76,7 +119,8 @@ private fun RepositoryListScreenPreview() {
                     fullName = "nextstep/java-racingcar",
                     description = "java-racingcar description",
                 ),
-            ),
-        )
-    }
+            )
+        ),
+    )
+
 }

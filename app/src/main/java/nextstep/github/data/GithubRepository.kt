@@ -4,5 +4,5 @@ import nextstep.github.model.RepositoryEntity
 
 interface GithubRepository {
 
-    suspend fun getRepositories(organization: String): List<RepositoryEntity>
+    suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>>
 }

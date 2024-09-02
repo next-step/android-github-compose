@@ -12,10 +12,24 @@ import kotlinx.coroutines.launch
 import nextstep.github.App
 import nextstep.github.data.repo.GithubRepository
 import nextstep.github.ui.home.model.GithubRepo
+import java.util.UUID
 
 sealed interface HomeUiState {
-    data class NoRepos(val errorMessage: String = "") : HomeUiState
-    data class HasRepos(val githubRepos: List<GithubRepo>) : HomeUiState
+
+    val isLoading: Boolean
+    val errorMessage: String
+
+    data class HasRepos(
+        val githubRepos: List<GithubRepo>,
+        override val isLoading: Boolean = false,
+        override val errorMessage: String = "",
+    ) : HomeUiState
+
+    data class NoRepos(
+        override val isLoading: Boolean = true,
+        override val errorMessage: String = "",
+    ) : HomeUiState
+
 }
 
 class HomeViewModel(
@@ -25,15 +39,26 @@ class HomeViewModel(
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.NoRepos())
     val homeUiState = _homeUiState.asStateFlow()
 
+    init {
+        fetchRepos("next-step")
+    }
+
     fun fetchRepos(organization: String) {
         viewModelScope.launch {
             githubRepository.fetchRepos(organization)
                 .fold(
                     onSuccess = { result ->
-                        _homeUiState.value = HomeUiState.HasRepos(GithubRepo.fromResponse(result))
+                        if (result.isEmpty()) {
+                            _homeUiState.value = HomeUiState.NoRepos(errorMessage = "", isLoading = false)
+                        } else {
+                            _homeUiState.value = HomeUiState.HasRepos(GithubRepo.fromResponse(result))
+                        }
                     },
                     onFailure = { error ->
-                        _homeUiState.value = HomeUiState.NoRepos(errorMessage = error.message ?: "$organization not found")
+                        _homeUiState.value = HomeUiState.NoRepos(
+                            errorMessage = (UUID.randomUUID().toString() + error.message),
+                            isLoading = true
+                        )
                     }
                 )
         }

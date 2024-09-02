@@ -12,22 +12,29 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
-import nextstep.github.model.RepositoryEntity
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
 ) : ViewModel() {
 
-    private val _repositories = MutableStateFlow<List<RepositoryEntity>>(listOf())
-    val repositories: StateFlow<List<RepositoryEntity>> = _repositories.asStateFlow()
+    private val _uiState = MutableStateFlow<RepositoryListUiState>(RepositoryListUiState.Loading)
+    val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
 
     init {
-        setup()
+        fetchRepositories()
     }
 
-    private fun setup() {
+    fun fetchRepositories() {
+        _uiState.value = RepositoryListUiState.Loading
+
         viewModelScope.launch {
-            _repositories.value = repository.getRepositories(ORGANIZATION)
+            repository
+                .getRepositories(ORGANIZATION)
+                .onSuccess {
+                    _uiState.value = if (it.isEmpty()) RepositoryListUiState.Empty
+                    else RepositoryListUiState.Success(it)
+                }
+                .onFailure { _uiState.value = RepositoryListUiState.Error }
         }
     }
 

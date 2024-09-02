@@ -7,7 +7,7 @@ class GithubRepositoryImpl(
     private val githubRemoteDataSource: GithubRemoteDataSource,
 ) : GithubRepository {
 
-    override suspend fun getRepositories(organization: String): List<RepositoryEntity> =
+    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
         githubRemoteDataSource.getRepositories(organization)
 
 }

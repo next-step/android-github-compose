@@ -7,14 +7,28 @@ import nextstep.github.core.data.GithubRepositoryImpl
 import nextstep.github.core.network.GithubService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
+import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import java.util.concurrent.TimeUnit
 
 class AppContainer {
 
     private val serialization = Json { ignoreUnknownKeys = true }
+    private val httpLoggingInterceptor = HttpLoggingInterceptor().apply {
+        level = HttpLoggingInterceptor.Level.BODY
+    }
+
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)
-        .client(OkHttpClient.Builder().build())
+        .client(
+            OkHttpClient
+                .Builder()
+                .addInterceptor(httpLoggingInterceptor)
+                .connectTimeout(10, TimeUnit.SECONDS)
+                .readTimeout(10, TimeUnit.SECONDS)
+                .writeTimeout(10, TimeUnit.SECONDS)
+                .build()
+        )
         .addConverterFactory(serialization.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
 

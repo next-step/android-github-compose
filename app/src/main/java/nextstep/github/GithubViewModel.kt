@@ -6,6 +6,7 @@ import androidx.lifecycle.viewModelScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import nextstep.github.core.data.GithubRepository
+import nextstep.github.core.network.ApiResult
 
 class GithubViewModel(
     private val githubRepository: GithubRepository
@@ -13,8 +14,19 @@ class GithubViewModel(
 
     fun getRepositories(organization: String) {
         viewModelScope.launch(Dispatchers.IO) {
-            val result = githubRepository.getRepositories(organization)
-            Log.d("TAG", "getRepositories: $result")
+            try {
+                when (val result = githubRepository.getRepositories(organization)) {
+                    is ApiResult.Success -> {
+                        Log.d("GithubViewModel", "Success: ${result.value}")
+                    }
+
+                    is ApiResult.Error -> {
+                        Log.e("GithubViewModel", "Error1: ${result.code} ${result.exception}")
+                    }
+                }
+            } catch (e: Exception) {
+                Log.e("GithubViewModel", "Error2: ${e.message}")
+            }
         }
     }
 }

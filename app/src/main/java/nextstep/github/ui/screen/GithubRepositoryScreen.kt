@@ -11,10 +11,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
 import nextstep.github.R
+import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
-@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubRepositoryScreen(
     modifier: Modifier = Modifier,
@@ -28,7 +29,13 @@ fun GithubRepositoryScreen(
         LazyColumn(
             modifier = Modifier.padding(innerPadding)
         ) {
-
+            items(100) {
+                GithubRepositoryItem(
+                    modifier = Modifier.padding(16.dp),
+                    fullName = "$it next-step/nextstep-docs",
+                    description = "$it nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                )
+            }
         }
     }
 }

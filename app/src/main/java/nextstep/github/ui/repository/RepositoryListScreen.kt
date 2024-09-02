@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -18,8 +19,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.model.RepositoryEntity
 import nextstep.github.ui.repository.component.RepositoryListItem
 import nextstep.github.ui.repository.component.RepositoryListTopBar
-import nextstep.github.ui.theme.OUTLINE_VARIANT
-import nextstep.github.ui.theme.SURFACE
+import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryListScreen(
@@ -43,19 +43,19 @@ private fun RepositoryListScreen(
         Box(
             modifier = modifier
                 .fillMaxSize()
-                .padding(innerPadding)
+                .padding(innerPadding),
         ) {
             LazyColumn(
                 modifier = modifier
                     .fillMaxSize()
-                    .background(color = SURFACE),
+                    .background(color = MaterialTheme.colorScheme.surface),
             ) {
                 items(items) { item ->
                     RepositoryListItem(
                         item = item,
                         modifier = Modifier.fillMaxWidth(),
                     )
-                    HorizontalDivider(color = OUTLINE_VARIANT)
+                    HorizontalDivider()
                 }
             }
         }
@@ -65,16 +65,18 @@ private fun RepositoryListScreen(
 @Preview
 @Composable
 private fun RepositoryListScreenPreview() {
-    RepositoryListScreen(
-        items = listOf(
-            RepositoryEntity(
-                fullName = "nextstep/nextstep-docs",
-                description = "nextstep-docs description",
+    GithubTheme {
+        RepositoryListScreen(
+            items = listOf(
+                RepositoryEntity(
+                    fullName = "nextstep/nextstep-docs",
+                    description = "nextstep-docs description",
+                ),
+                RepositoryEntity(
+                    fullName = "nextstep/java-racingcar",
+                    description = "java-racingcar description",
+                ),
             ),
-            RepositoryEntity(
-                fullName = "nextstep/java-racingcar",
-                description = "java-racingcar description",
-            ),
-        ),
-    )
+        )
+    }
 }

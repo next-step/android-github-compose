@@ -1,7 +1,6 @@
 package nextstep.github.ui.home
 
 import android.annotation.SuppressLint
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -22,7 +21,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -34,6 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
+import nextstep.github.ui.components.EmptyListScreen
 import nextstep.github.ui.components.GithubTopBar
 import nextstep.github.ui.home.model.dummyData
 import nextstep.github.ui.theme.GithubTheme
@@ -57,10 +56,27 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
+    modifier: Modifier = Modifier,
     onRetry: () -> Unit,
-    modifier: Modifier = Modifier
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
+
+    val errorMessageText: String = stringResource(R.string.snack_bar_title)
+    val retryMessageText = stringResource(id = R.string.retry)
+
+    LaunchedEffect(homeUiState) {
+        if (homeUiState is HomeUiState.Error) {
+            val result = snackbarHostState
+                .showSnackbar(
+                    message = errorMessageText,
+                    actionLabel = retryMessageText,
+                    duration = SnackbarDuration.Indefinite
+                )
+            if (result == SnackbarResult.ActionPerformed) {
+                onRetry()
+            }
+        }
+    }
 
     Scaffold(
         snackbarHost = {
@@ -73,85 +89,44 @@ fun HomeScreen(
         },
         modifier = modifier
     ) { innerPadding ->
-        LoadingContent(
-            empty = when (homeUiState) {
-                is HomeUiState.HasRepos -> false
-                is HomeUiState.NoRepos -> homeUiState.isLoading
-            },
-            emptyContent = { FullScreenLoading() },
-        ) {
-            when (homeUiState) {
-                is HomeUiState.NoRepos -> {
-                    if (homeUiState.errorMessage.isEmpty()) {
+        when (homeUiState) {
+            HomeUiState.Loading -> {
+                FullScreenLoading()
+            }
+
+            is HomeUiState.HasRepos -> {
+                LazyColumn(
+                    modifier = Modifier.padding(innerPadding)
+                ) {
+                    items(homeUiState.githubRepos) { githubRepo ->
                         Column(
-                            modifier = Modifier.fillMaxSize(),
-                            verticalArrangement = Arrangement.Center,
-                            horizontalAlignment = Alignment.CenterHorizontally
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .padding(16.dp)
                         ) {
                             Text(
-                                text = stringResource(id = R.string.empty_repos),
-                                style = MaterialTheme.typography.headlineSmall
+                                text = githubRepo.fullName,
+                                style = MaterialTheme.typography.titleLarge
+                            )
+                            Text(
+                                text = githubRepo.description,
+                                style = MaterialTheme.typography.bodyMedium
                             )
                         }
-                    }
-                }
-
-                is HomeUiState.HasRepos -> {
-                    LazyColumn(
-                        modifier = Modifier.padding(innerPadding)
-                    ) {
-                        items(homeUiState.githubRepos) { githubRepo ->
-                            Column(
-                                modifier = Modifier
-                                    .fillMaxWidth()
-                                    .padding(16.dp)
-                            ) {
-                                Text(
-                                    text = githubRepo.fullName,
-                                    style = MaterialTheme.typography.titleLarge
-                                )
-                                Text(
-                                    text = githubRepo.description,
-                                    style = MaterialTheme.typography.bodyMedium
-                                )
-                            }
-                            HorizontalDivider()
-                        }
+                        HorizontalDivider()
                     }
                 }
             }
-        }
-        if (homeUiState.errorMessage.isNotEmpty()) {
-            val errorMessage = remember(homeUiState) { homeUiState.errorMessage }
-            val errorMessageText: String = stringResource(R.string.snack_bar_title)
-            val retryMessageText = stringResource(id = R.string.retry)
-            LaunchedEffect(errorMessage) {
-                val result = snackbarHostState
-                    .showSnackbar(
-                        message = errorMessageText,
-                        actionLabel = retryMessageText,
-                        duration = SnackbarDuration.Indefinite
-                    )
-                if (result == SnackbarResult.ActionPerformed) {
-                    onRetry()
-                }
+
+            HomeUiState.Empty -> {
+                EmptyListScreen()
             }
+
+            HomeUiState.Error -> {
+
+            }
+
         }
-
-
-    }
-}
-
-@Composable
-private fun LoadingContent(
-    empty: Boolean,
-    emptyContent: @Composable () -> Unit,
-    content: @Composable () -> Unit
-) {
-    if (empty) {
-        emptyContent()
-    } else {
-        content()
     }
 }
 
@@ -168,8 +143,10 @@ private fun FullScreenLoading() {
 
 class HomeScreenProvider : PreviewParameterProvider<HomeUiState> {
     override val values: Sequence<HomeUiState> = sequenceOf(
+        HomeUiState.Loading,
         HomeUiState.HasRepos(dummyData),
-        HomeUiState.NoRepos(errorMessage = "", isLoading = false)
+        HomeUiState.Empty,
+        HomeUiState.Error
     )
 }
 

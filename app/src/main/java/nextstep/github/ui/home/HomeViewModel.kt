@@ -12,23 +12,13 @@ import kotlinx.coroutines.launch
 import nextstep.github.App
 import nextstep.github.data.repo.GithubRepository
 import nextstep.github.ui.home.model.GithubRepo
-import java.util.UUID
 
 sealed interface HomeUiState {
 
-    val isLoading: Boolean
-    val errorMessage: String
-
-    data class HasRepos(
-        val githubRepos: List<GithubRepo>,
-        override val isLoading: Boolean = false,
-        override val errorMessage: String = "",
-    ) : HomeUiState
-
-    data class NoRepos(
-        override val isLoading: Boolean = true,
-        override val errorMessage: String = "",
-    ) : HomeUiState
+    data object Loading: HomeUiState
+    data class HasRepos(val githubRepos: List<GithubRepo>) : HomeUiState
+    data object Empty: HomeUiState
+    data object Error: HomeUiState
 
 }
 
@@ -36,7 +26,7 @@ class HomeViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.NoRepos())
+    private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
     val homeUiState = _homeUiState.asStateFlow()
 
     init {
@@ -44,21 +34,19 @@ class HomeViewModel(
     }
 
     fun fetchRepos(organization: String) {
+        _homeUiState.value = HomeUiState.Loading
         viewModelScope.launch {
             githubRepository.fetchRepos(organization)
                 .fold(
                     onSuccess = { result ->
                         if (result.isEmpty()) {
-                            _homeUiState.value = HomeUiState.NoRepos(errorMessage = "", isLoading = false)
+                            _homeUiState.value = HomeUiState.Empty
                         } else {
                             _homeUiState.value = HomeUiState.HasRepos(GithubRepo.fromResponse(result))
                         }
                     },
-                    onFailure = { error ->
-                        _homeUiState.value = HomeUiState.NoRepos(
-                            errorMessage = (UUID.randomUUID().toString() + error.message),
-                            isLoading = true
-                        )
+                    onFailure = {
+                        _homeUiState.value = HomeUiState.Error
                     }
                 )
         }

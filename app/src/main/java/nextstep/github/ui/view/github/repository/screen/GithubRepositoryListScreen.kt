@@ -12,10 +12,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
+import nextstep.github.R
 import nextstep.github.model.GithubRepositoryDto
 import nextstep.github.ui.view.github.repository.GithubRepositoryListUiState
 import nextstep.github.ui.view.github.repository.GithubRepositoryListViewModel
@@ -40,14 +43,15 @@ private fun GithubRepositoryListScreen(
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
+    val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
     LaunchedEffect(key1 = uiState) {
         if (uiState == GithubRepositoryListUiState.Error) {
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(
-                    message = "예상치 못한 오류가 발생했습니다.",
-                    actionLabel = "재시도"
+                    message = context.getString(R.string.error_message),
+                    actionLabel = context.getString(R.string.error_retry)
                 )
 
                 if (result == SnackbarResult.ActionPerformed) {
@@ -60,7 +64,7 @@ private fun GithubRepositoryListScreen(
         modifier = modifier,
         topBar = {
             CenterAlignedTopAppBar(title = {
-                Text(text = "NEXTSTEP Repositories")
+                Text(text = stringResource(R.string.github_repository_title))
             })
         },
         snackbarHost = {

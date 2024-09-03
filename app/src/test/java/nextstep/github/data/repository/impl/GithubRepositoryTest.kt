@@ -7,6 +7,7 @@ import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.runBlocking
 import kotlinx.serialization.json.Json
 import nextstep.github.data.repository.GithubRepository
+import nextstep.github.data.response.RepositoryResponse
 import nextstep.github.data.service.GithubService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
@@ -62,15 +63,24 @@ internal class GithubRepositoryTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = githubRepository.getRepositories("org")
+        val result = githubRepository.getNextStepRepositories()
 
         // Then
-        assertTrue(result.isSuccess)
         val repositories = result.getOrNull()
+        val expectedRepository = listOf(
+            RepositoryResponse(
+                fullName = "org/Repo1",
+                description = "Repo1"
+            ),
+            RepositoryResponse(
+                fullName = "org/Repo2",
+                description = "Repo2"
+            )
+        )
+        assertTrue(result.isSuccess)
         assertNotNull(repositories)
         assertEquals(2, repositories?.size)
-        assertEquals("Repo1", repositories?.get(0)?.description)
-        assertEquals("Repo2", repositories?.get(1)?.description)
+        assertEquals(expectedRepository, repositories)
     }
 
     @Test
@@ -81,7 +91,7 @@ internal class GithubRepositoryTest {
         mockWebServer.enqueue(mockResponse)
 
         // When
-        val result = githubRepository.getRepositories("invalid-org")
+        val result = githubRepository.getNextStepRepositories()
 
         // Then
         assertTrue(result.isFailure)

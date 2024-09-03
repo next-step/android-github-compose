@@ -8,10 +8,8 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
@@ -21,29 +19,14 @@ class GithubRepositoryListViewModel(
     private val repository: GithubRepository,
 ) : ViewModel() {
 
-    private val isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
+    private val _repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
+    val repositories: StateFlow<List<GithubRepositoryDto>> = _repositories.asStateFlow()
 
-    private val error: MutableStateFlow<Boolean> = MutableStateFlow(false)
-
-    val uiState: StateFlow<GithubRepositoryListUiState> = combine(
-        isLoading,
-        repositories,
-        error,
-    ) { isLoading, repositories, error ->
-        if (isLoading) {
-            GithubRepositoryListUiState.Loading
-        } else if (error) {
-            GithubRepositoryListUiState.Error
-        } else {
-            GithubRepositoryListUiState.Success(repositories)
-        }
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        GithubRepositoryListUiState.Loading
-    )
+    private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val error: StateFlow<Boolean> = _error.asStateFlow()
 
     init {
         fetchRepositories()
@@ -51,12 +34,12 @@ class GithubRepositoryListViewModel(
 
     private fun fetchRepositories() {
         viewModelScope.launch(CoroutineExceptionHandler { _, _ ->
-            error.value = true
+            _error.value = true
         }) {
-            error.value = false
-            isLoading.value = true
-            repositories.value = repository.getRepositories("next-step")
-            isLoading.value = false
+            _error.value = false
+            _isLoading.value = true
+            _repositories.value = repository.getRepositories("next-step")
+            _isLoading.value = false
         }
     }
 

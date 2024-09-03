@@ -10,6 +10,7 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -20,7 +21,6 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import nextstep.github.R
 import nextstep.github.model.GithubRepositoryDto
-import nextstep.github.ui.view.github.repository.GithubRepositoryListUiState
 import nextstep.github.ui.view.github.repository.GithubRepositoryListViewModel
 
 @Composable
@@ -28,10 +28,14 @@ fun GithubRepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: GithubRepositoryListViewModel = viewModel(factory = GithubRepositoryListViewModel.Factory),
 ) {
-    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val items by viewModel.repositories.collectAsStateWithLifecycle()
+    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val isError by viewModel.error.collectAsStateWithLifecycle()
     GithubRepositoryListScreen(
         modifier = modifier,
-        uiState = uiState.value,
+        items = items,
+        isLoading = isLoading,
+        isError = isError,
         onRetry = viewModel::retry
     )
 }
@@ -39,15 +43,17 @@ fun GithubRepositoryListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun GithubRepositoryListScreen(
-    uiState: GithubRepositoryListUiState,
+    items: List<GithubRepositoryDto>,
+    isLoading: Boolean,
+    isError: Boolean,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val context = LocalContext.current
     val coroutineScope = rememberCoroutineScope()
     val snackbarHostState = SnackbarHostState()
-    LaunchedEffect(key1 = uiState) {
-        if (uiState == GithubRepositoryListUiState.Error) {
+    LaunchedEffect(key1 = isError) {
+        if (isError) {
             coroutineScope.launch {
                 val result = snackbarHostState.showSnackbar(
                     message = context.getString(R.string.error_message),
@@ -71,20 +77,15 @@ private fun GithubRepositoryListScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { paddingValues ->
-        when (uiState) {
-            is GithubRepositoryListUiState.Loading,
-            is GithubRepositoryListUiState.Error -> {
-                GithubRepositoryListLoadingScreen(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
+        GithubRepositoryListSuccessScreen(
+            modifier = Modifier.padding(paddingValues),
+            items = items,
+        )
 
-            is GithubRepositoryListUiState.Success -> {
-                GithubRepositoryListSuccessScreen(
-                    modifier = Modifier.padding(paddingValues),
-                    uiState = uiState
-                )
-            }
+        if (isLoading) {
+            GithubRepositoryListLoadingScreen(
+                modifier = Modifier.padding(paddingValues)
+            )
         }
     }
 }
@@ -93,14 +94,14 @@ private fun GithubRepositoryListScreen(
 @Composable
 private fun GithubRepositoryListScreenPreviewSuccess() {
     GithubRepositoryListScreen(
-        uiState = GithubRepositoryListUiState.Success(
-            repositories = List(10) {
-                GithubRepositoryDto(
-                    fullName = "next-step/nextstep-docs",
-                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
-                )
-            }
-        ),
+        items = List(10) {
+            GithubRepositoryDto(
+                fullName = "next-step/nextstep-docs",
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+            )
+        },
+        isLoading = false,
+        isError = false,
         onRetry = {},
     )
 }
@@ -109,16 +110,9 @@ private fun GithubRepositoryListScreenPreviewSuccess() {
 @Composable
 private fun GithubRepositoryListScreenPreviewLoading() {
     GithubRepositoryListScreen(
-        uiState = GithubRepositoryListUiState.Loading,
-        onRetry = {},
-    )
-}
-
-@Preview(showBackground = true)
-@Composable
-private fun GithubRepositoryListScreenPreviewError() {
-    GithubRepositoryListScreen(
-        uiState = GithubRepositoryListUiState.Error,
+        items = emptyList(),
+        isLoading = true,
+        isError = false,
         onRetry = {},
     )
 }

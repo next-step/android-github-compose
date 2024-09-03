@@ -42,7 +42,7 @@ fun GithubRepositoryListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GithubRepositoryListScreen(
+fun GithubRepositoryListScreen(
     items: List<GithubRepositoryDto>,
     isLoading: Boolean,
     isError: Boolean,

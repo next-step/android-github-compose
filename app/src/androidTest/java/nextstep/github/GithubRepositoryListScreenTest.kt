@@ -58,4 +58,20 @@ class GithubRepositoryListScreenTest {
         // Then
         assertEquals(isError.value, false)
     }
+
+    @Test
+    fun 응답_결과가_비어있는경우_결과_없음_노출() {
+        // Given
+        composeTestRule.setContent {
+            GithubRepositoryListScreen(
+                uiState = GithubRepositoryListUiState.NotFound,
+                isError = false,
+                onRetry = {},
+            )
+        }
+
+        // Then
+        composeTestRule.onNodeWithText("목록이 비었습니다.")
+            .assertExists()
+    }
 }

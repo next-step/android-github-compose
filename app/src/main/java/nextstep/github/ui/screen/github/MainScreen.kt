@@ -1,33 +1,32 @@
-package nextstep.github.ui.screen.github.list
+package nextstep.github.ui.screen.github
 
-import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.layout.padding
+import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.core.data.GithubRepositoryInfo
-import nextstep.github.ui.screen.github.list.component.RepositoryColumn
+import nextstep.github.ui.screen.github.component.MainTopBar
+import nextstep.github.ui.screen.github.list.GithubRepositoryList
 
 @Composable
-fun GithubRepositoryList(
-    githubRepositoryInfoList: List<GithubRepositoryInfo>,
-    modifier: Modifier = Modifier
+fun MainScreen(
+    githubRepositoryInfoList: List<GithubRepositoryInfo>
 ) {
-    LazyColumn(
-        modifier = modifier.fillMaxWidth()
-    ) {
-        items(githubRepositoryInfoList.size) {
-            RepositoryColumn(
-                repositoryInfo = githubRepositoryInfoList[it],
-                modifier = Modifier
-            )
-        }
+    Scaffold(
+        topBar = { MainTopBar() }
+    )
+    { paddingValues ->
+        GithubRepositoryList(
+            githubRepositoryInfoList = githubRepositoryInfoList,
+            modifier = Modifier.padding(paddingValues)
+        )
     }
 }
 
-@Preview(showBackground = true)
+@Preview
 @Composable
-private fun GithubRepositoryListPreview() {
+private fun MainScreenPreview() {
     val githubRepositoryList = listOf(
         GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
@@ -47,8 +46,7 @@ private fun GithubRepositoryListPreview() {
         )
     )
 
-    GithubRepositoryList(
-        githubRepositoryInfoList = githubRepositoryList,
-        modifier = Modifier
+    MainScreen(
+        githubRepositoryInfoList = githubRepositoryList
     )
 }

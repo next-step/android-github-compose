@@ -6,10 +6,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.CoroutineExceptionHandler
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
 import nextstep.github.model.GithubRepositoryDto
@@ -17,13 +18,34 @@ import nextstep.github.model.GithubRepositoryDto
 class GithubRepositoryListViewModel(
     private val repository: GithubRepository,
 ) : ViewModel() {
-    val repositories: StateFlow<List<GithubRepositoryDto>> = flow {
-        emit(repository.getRepositories("next-step"))
-    }.stateIn(
-        viewModelScope,
-        SharingStarted.WhileSubscribed(),
-        emptyList()
-    )
+
+    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
+
+    private val _repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
+    val repositories: StateFlow<List<GithubRepositoryDto>> = _repositories.asStateFlow()
+
+    private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
+    val error: StateFlow<Boolean> = _error.asStateFlow()
+
+    init {
+        fetchRepositories()
+    }
+
+    private fun fetchRepositories() {
+        viewModelScope.launch(CoroutineExceptionHandler { _, _ ->
+            _error.value = true
+        }) {
+            _error.value = false
+            _isLoading.value = true
+            _repositories.value = repository.getRepositories("next-step")
+            _isLoading.value = false
+        }
+    }
+
+    fun retry() {
+        fetchRepositories()
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

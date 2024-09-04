@@ -8,8 +8,11 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
@@ -20,14 +23,28 @@ class GithubRepositoryListViewModel(
     private val repository: GithubRepository,
 ) : ViewModel() {
 
-    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _repositories: MutableStateFlow<List<GithubRepositoryModel>> = MutableStateFlow(emptyList())
-    val repositories: StateFlow<List<GithubRepositoryModel>> = _repositories.asStateFlow()
+    private val repositories: MutableStateFlow<List<GithubRepositoryModel>?> = MutableStateFlow(null)
 
     private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val error: StateFlow<Boolean> = _error.asStateFlow()
+
+    val uiState: StateFlow<GithubRepositoryListUiState> = repositories.map {
+        when {
+            it == null -> {
+                GithubRepositoryListUiState.Loading
+            }
+            it.isEmpty() -> {
+                GithubRepositoryListUiState.NotFound
+            }
+            else -> {
+                GithubRepositoryListUiState.Found(repositories = it)
+            }
+        }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        GithubRepositoryListUiState.Loading,
+    )
 
     init {
         fetchRepositories()
@@ -38,10 +55,8 @@ class GithubRepositoryListViewModel(
             _error.value = true
         }) {
             _error.value = false
-            _isLoading.value = true
-            _repositories.value = repository.getRepositories("next-step")
+            repositories.value = repository.getRepositories("next-step")
                 .map { it.toUiModel() }
-            _isLoading.value = false
         }
     }
 

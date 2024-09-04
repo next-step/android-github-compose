@@ -1,12 +1,11 @@
 package nextstep.github
 
-import androidx.compose.runtime.State
 import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import junit.framework.TestCase.assertEquals
+import nextstep.github.ui.view.github.repository.GithubRepositoryListUiState
 import nextstep.github.ui.view.github.repository.screen.GithubRepositoryListScreen
 import org.junit.Rule
 import org.junit.Test
@@ -22,8 +21,7 @@ class GithubRepositoryListScreenTest {
         val isError = mutableStateOf(false)
         composeTestRule.setContent {
             GithubRepositoryListScreen(
-                items = emptyList(),
-                isLoading = false,
+                uiState = GithubRepositoryListUiState.Loading,
                 isError = isError.value,
                 onRetry = {},
             )
@@ -45,8 +43,7 @@ class GithubRepositoryListScreenTest {
         val isError = mutableStateOf(true)
         composeTestRule.setContent {
             GithubRepositoryListScreen(
-                items = emptyList(),
-                isLoading = false,
+                uiState = GithubRepositoryListUiState.Loading,
                 isError = isError.value,
                 onRetry = { isError.value = false },
             )

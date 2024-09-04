@@ -7,11 +7,18 @@ data class GithubRepo(
     val isHotRepo: Boolean
 )
 
-val dummyData = listOf(
+val dummyGithubRepo1 =
     GithubRepo(
         fullName = "next-step/android-github-compose",
         description = "권장 앱 아키텍처",
         stars = 50,
         isHotRepo = true
     )
-)
+
+val dummyGithubRepo2 =
+    GithubRepo(
+        fullName = "next-step/android-github-compose",
+        description = "권장 앱 아키텍처",
+        stars = 49,
+        isHotRepo = false
+    )

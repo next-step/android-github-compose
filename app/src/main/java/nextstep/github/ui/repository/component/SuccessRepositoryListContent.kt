@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import nextstep.github.ui.repository.RepositoryListUiState
 
 @Composable
-fun SuccessRepositoryListScreen(
+fun SuccessRepositoryListContent(
     modifier: Modifier = Modifier,
     uiState: RepositoryListUiState.Success,
 ) {

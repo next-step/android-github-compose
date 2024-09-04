@@ -11,12 +11,12 @@ import androidx.compose.ui.res.stringResource
 import nextstep.github.R
 
 @Composable
-fun EmptyRepositoryListScreen(modifier: Modifier = Modifier) {
+fun EmptyRepositoryListContent(modifier: Modifier = Modifier) {
     Box(modifier = modifier.fillMaxSize()) {
         Text(
             text = stringResource(id = R.string.empty_repository),
             style = MaterialTheme.typography.headlineSmall,
-            modifier = Modifier.Companion.align(Alignment.Center),
+            modifier = Modifier.align(Alignment.Center),
         )
     }
 }

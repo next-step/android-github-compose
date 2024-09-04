@@ -10,8 +10,8 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.App
-import nextstep.github.data.repo.GithubRepository
-import nextstep.github.ui.home.model.GithubRepo
+import nextstep.github.domain.GetOrganizationReposUseCase
+import nextstep.github.domain.model.GithubRepo
 
 sealed interface HomeUiState {
 
@@ -23,7 +23,7 @@ sealed interface HomeUiState {
 }
 
 class HomeViewModel(
-    private val githubRepository: GithubRepository
+    private val getOrganizationReposUseCase: GetOrganizationReposUseCase
 ) : ViewModel() {
 
     private val _homeUiState: MutableStateFlow<HomeUiState> = MutableStateFlow(HomeUiState.Loading)
@@ -36,13 +36,13 @@ class HomeViewModel(
     fun fetchRepos(organization: String) {
         _homeUiState.value = HomeUiState.Loading
         viewModelScope.launch {
-            githubRepository.fetchRepos(organization)
+            getOrganizationReposUseCase(organization)
                 .fold(
                     onSuccess = { result ->
                         if (result.isEmpty()) {
                             _homeUiState.value = HomeUiState.Empty
                         } else {
-                            _homeUiState.value = HomeUiState.HasRepos(GithubRepo.fromResponse(result))
+                            _homeUiState.value = HomeUiState.HasRepos(result)
                         }
                     },
                     onFailure = {
@@ -58,7 +58,7 @@ class HomeViewModel(
                 val githubRepository = (this[APPLICATION_KEY] as App)
                     .appContainer
                     .githubRepository
-                HomeViewModel(githubRepository)
+                HomeViewModel(GetOrganizationReposUseCase(githubRepository))
             }
         }
     }

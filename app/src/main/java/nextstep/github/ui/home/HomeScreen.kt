@@ -32,9 +32,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
+import nextstep.github.domain.model.dummyData
 import nextstep.github.ui.components.EmptyListScreen
 import nextstep.github.ui.components.GithubTopBar
-import nextstep.github.ui.home.model.dummyData
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -77,7 +77,6 @@ fun HomeScreen(
             }
         }
     }
-
     Scaffold(
         snackbarHost = {
             SnackbarHost(hostState = snackbarHostState)
@@ -99,20 +98,7 @@ fun HomeScreen(
                     modifier = Modifier.padding(innerPadding)
                 ) {
                     items(homeUiState.githubRepos) { githubRepo ->
-                        Column(
-                            modifier = Modifier
-                                .fillMaxWidth()
-                                .padding(16.dp)
-                        ) {
-                            Text(
-                                text = githubRepo.fullName,
-                                style = MaterialTheme.typography.titleLarge
-                            )
-                            Text(
-                                text = githubRepo.description,
-                                style = MaterialTheme.typography.bodyMedium
-                            )
-                        }
+                        GithubRepoInfo(githubRepo)
                         HorizontalDivider()
                     }
                 }

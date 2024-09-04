@@ -24,6 +24,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.model.RepositoryEntity
+import nextstep.github.ui.model.UiRepository
 import nextstep.github.ui.repository.component.EmptyRepositoryListContent
 import nextstep.github.ui.repository.component.RepositoryListTopBar
 import nextstep.github.ui.repository.component.SuccessRepositoryListContent
@@ -111,13 +112,15 @@ private class RepositoryListScreenPreviewParameterProvider :
         RepositoryListUiState.Empty,
         RepositoryListUiState.Success(
             listOf(
-                RepositoryEntity(
+                UiRepository(
                     fullName = "nextstep/nextstep-docs",
                     description = "nextstep-docs description",
+                    stars = 100,
                 ),
-                RepositoryEntity(
+                UiRepository(
                     fullName = "nextstep/java-racingcar",
                     description = "java-racingcar description",
+                    stars = 20,
                 ),
             )
         ),

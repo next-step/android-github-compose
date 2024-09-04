@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
+import nextstep.github.ui.model.toUiModel
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
@@ -30,9 +31,9 @@ class RepositoryListViewModel(
         viewModelScope.launch {
             repository
                 .getRepositories(ORGANIZATION)
-                .onSuccess {
-                    _uiState.value = if (it.isEmpty()) RepositoryListUiState.Empty
-                    else RepositoryListUiState.Success(it)
+                .onSuccess { result ->
+                    _uiState.value = if (result.isEmpty()) RepositoryListUiState.Empty
+                    else RepositoryListUiState.Success(result.map { it.toUiModel() })
                 }
                 .onFailure { _uiState.value = RepositoryListUiState.Error }
         }

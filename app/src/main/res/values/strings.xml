@@ -4,4 +4,6 @@
     <string name="unknown_error_occurred">예상치 못한 오류가 발생했습니다</string>
     <string name="retry">재시도</string>
     <string name="empty_repository">목록이 비었습니다</string>
+    <string name="hot">HOT</string>
+    <string name="number_format">%,d</string>
 </resources>

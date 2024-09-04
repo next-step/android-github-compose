@@ -6,7 +6,7 @@ import nextstep.github.data.repository.GithubRepositoryImpl
 import nextstep.github.data.repository.GithubRepository
 import nextstep.github.data.service.GithubService
 import nextstep.github.data.source.GithubDataSource
-import nextstep.github.data.source.GithubDataSourceImpl
+import nextstep.github.data.source.GithubRemoteDataSource
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -29,7 +29,7 @@ class AppContainer {
         .build()
 
     private val githubApiService: GithubService = retrofit.create(GithubService::class.java)
-    private val githubDataSource: GithubDataSource = GithubDataSourceImpl(githubApiService)
+    private val githubDataSource: GithubDataSource = GithubRemoteDataSource(githubApiService)
     val githubRepository: GithubRepository = GithubRepositoryImpl(githubDataSource)
 
     companion object {

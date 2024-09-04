@@ -21,6 +21,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import nextstep.github.R
 import nextstep.github.model.GithubRepositoryDto
+import nextstep.github.ui.model.GithubRepositoryModel
 import nextstep.github.ui.view.github.repository.GithubRepositoryListViewModel
 
 @Composable
@@ -43,7 +44,7 @@ fun GithubRepositoryListScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubRepositoryListScreen(
-    items: List<GithubRepositoryDto>,
+    items: List<GithubRepositoryModel>,
     isLoading: Boolean,
     isError: Boolean,
     onRetry: () -> Unit,
@@ -95,9 +96,11 @@ fun GithubRepositoryListScreen(
 private fun GithubRepositoryListScreenPreviewSuccess() {
     GithubRepositoryListScreen(
         items = List(10) {
-            GithubRepositoryDto(
+            GithubRepositoryModel(
                 fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                stars = 0,
+                isHot = false,
             )
         },
         isLoading = false,

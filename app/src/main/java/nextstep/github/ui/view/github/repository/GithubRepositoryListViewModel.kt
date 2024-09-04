@@ -13,7 +13,8 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
-import nextstep.github.model.GithubRepositoryDto
+import nextstep.github.ui.model.GithubRepositoryModel
+import nextstep.github.ui.model.toUiModel
 
 class GithubRepositoryListViewModel(
     private val repository: GithubRepository,
@@ -22,8 +23,8 @@ class GithubRepositoryListViewModel(
     private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
 
-    private val _repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
-    val repositories: StateFlow<List<GithubRepositoryDto>> = _repositories.asStateFlow()
+    private val _repositories: MutableStateFlow<List<GithubRepositoryModel>> = MutableStateFlow(emptyList())
+    val repositories: StateFlow<List<GithubRepositoryModel>> = _repositories.asStateFlow()
 
     private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val error: StateFlow<Boolean> = _error.asStateFlow()
@@ -39,6 +40,7 @@ class GithubRepositoryListViewModel(
             _error.value = false
             _isLoading.value = true
             _repositories.value = repository.getRepositories("next-step")
+                .map { it.toUiModel() }
             _isLoading.value = false
         }
     }

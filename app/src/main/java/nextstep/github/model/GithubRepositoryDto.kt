@@ -9,4 +9,6 @@ data class GithubRepositoryDto(
     val fullName: String,
     @SerialName("description")
     val description: String?,
+    @SerialName("stargazers_count")
+    val stars: Int?,
 )

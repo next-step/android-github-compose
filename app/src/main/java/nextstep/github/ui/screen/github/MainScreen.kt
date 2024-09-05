@@ -4,17 +4,21 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import nextstep.github.R
 import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.ui.screen.github.component.MainTopBar
 import nextstep.github.ui.screen.github.list.GithubRepositoryEmpty
 import nextstep.github.ui.screen.github.list.GithubRepositoryList
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.LoadingProgress
+import nextstep.github.ui.screen.github.list.component.ErrorSnackbar
 
 @Composable
 fun MainScreen(
-    uiState: GithubRepositoryUiState = GithubRepositoryUiState.Loading
+    uiState: GithubRepositoryUiState = GithubRepositoryUiState.Loading,
+    onClickSnackBar: () -> Unit = {}
 ) {
     Scaffold(
         topBar = { MainTopBar() }
@@ -30,6 +34,17 @@ fun MainScreen(
 
             is GithubRepositoryUiState.Error -> {
                 // 에러 화면
+                LoadingProgress(
+                    modifier = Modifier.padding(paddingValues),
+                    snackBar = {
+                        ErrorSnackbar(
+                            errorMessage = stringResource(id = R.string.text_snackbar_network_error),
+                            actionString = stringResource(id = R.string.text_snackbar_action_retry),
+                            modifier = Modifier.padding(paddingValues),
+                            onClickAction = { onClickSnackBar() }
+                        )
+                    }
+                )
             }
 
             is GithubRepositoryUiState.Empty -> {

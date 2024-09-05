@@ -51,6 +51,7 @@ class GithubViewModel(
                     }
                 }
             } catch (e: Exception) {
+                _uiState.value = GithubRepositoryUiState.Error
                 Log.e("GithubViewModel", "Error: ${e.message}")
             }
         }

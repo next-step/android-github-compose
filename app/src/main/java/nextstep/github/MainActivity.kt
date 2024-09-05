@@ -27,9 +27,9 @@ class MainActivity : ComponentActivity() {
                     color = MaterialTheme.colorScheme.background
                 ) {
                     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-
                     MainScreen(
-                        uiState = uiState
+                        uiState = uiState,
+                        onClickSnackBar = { viewModel.getRepositories("next-step") }
                     )
                 }
             }

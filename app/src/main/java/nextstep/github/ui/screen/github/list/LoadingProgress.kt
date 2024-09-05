@@ -10,7 +10,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoadingProgress(modifier: Modifier = Modifier) {
+fun LoadingProgress(
+    modifier: Modifier = Modifier,
+    snackBar: @Composable () -> Unit = {}
+) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center
@@ -21,7 +24,12 @@ fun LoadingProgress(modifier: Modifier = Modifier) {
             trackColor = MaterialTheme.colorScheme.surfaceVariant,
         )
     }
-
+    Box(
+        modifier = modifier.fillMaxSize(),
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        snackBar()
+    }
 }
 
 @Preview(showBackground = true)

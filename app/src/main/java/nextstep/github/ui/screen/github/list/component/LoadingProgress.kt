@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen.github.list
+package nextstep.github.ui.screen.github.list.component
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize

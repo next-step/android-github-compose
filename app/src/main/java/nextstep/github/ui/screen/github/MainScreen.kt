@@ -9,10 +9,10 @@ import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.R
 import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.ui.screen.github.component.MainTopBar
-import nextstep.github.ui.screen.github.list.GithubRepositoryEmpty
-import nextstep.github.ui.screen.github.list.GithubRepositoryList
+import nextstep.github.ui.screen.github.list.component.GithubRepositoryEmpty
+import nextstep.github.ui.screen.github.list.component.GithubRepositoryList
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
-import nextstep.github.ui.screen.github.list.LoadingProgress
+import nextstep.github.ui.screen.github.list.component.LoadingProgress
 import nextstep.github.ui.screen.github.list.component.ErrorSnackbar
 
 @Composable

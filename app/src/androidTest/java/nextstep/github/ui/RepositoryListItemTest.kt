@@ -46,4 +46,22 @@ class RepositoryListItemTest {
             .assertExists()
     }
 
+    @Test
+    fun `stars가_50_이상이면_HOT이_표시되어야_한다`() {
+        // given
+        val item = UiRepository(
+            fullName = "",
+            description = null,
+            stars = 50,
+        )
+
+        // when
+        this.item.value = item
+
+        // then
+        composeTestRule
+            .onNodeWithText("HOT")
+            .assertExists()
+    }
+
 }

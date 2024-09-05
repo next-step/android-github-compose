@@ -26,10 +26,10 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val repositoryInfoList by viewModel.githubRepositoryInfoList.collectAsStateWithLifecycle()
+                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
                     MainScreen(
-                        githubRepositoryInfoList = repositoryInfoList
+                        uiState = uiState
                     )
                 }
             }

@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.R
 import nextstep.github.domain.model.GithubRepo
-import nextstep.github.domain.model.dummyGithubRepo1
+import nextstep.github.domain.model.dummyDefaultGithubRepo
 
 @Composable
 fun GithubRepoInfo(
@@ -70,5 +70,5 @@ fun GithubRepoInfo(
 @Preview
 @Composable
 private fun GithubRepoInfoPreview() {
-    GithubRepoInfo(githubRepo = dummyGithubRepo1)
+    GithubRepoInfo(githubRepo = dummyDefaultGithubRepo)
 }

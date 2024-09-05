@@ -14,8 +14,7 @@ class GetOrganizationReposUseCase(
                     GithubRepo(
                         fullName = it.fullName ?: "",
                         description = it.description ?: "",
-                        stars = it.stars ?: 0,
-                        isHotRepo = (it.stars ?: 0) >= 50
+                        stars = it.stars ?: 0
                     )
                 }
             Result.success(result)

@@ -8,8 +8,9 @@ import androidx.compose.ui.test.assertIsNotDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import nextstep.github.domain.model.dummyGithubRepo1
-import nextstep.github.domain.model.dummyGithubRepo2
+import nextstep.github.domain.model.dummyDefaultGithubRepo
+import nextstep.github.domain.model.dummyGithubRepoHot
+import nextstep.github.domain.model.dummyGithubRepoNonHot
 import nextstep.github.ui.home.HomeScreen
 import nextstep.github.ui.home.HomeUiState
 import org.junit.Before
@@ -43,15 +44,15 @@ class HomeScreenTest {
 
     @Test
     fun 데이터를_정상적으로_받으면_리스트에_노출된다() {
-        homeUiState = HomeUiState.HasRepos(listOf( dummyGithubRepo1))
+        homeUiState = HomeUiState.HasRepos(listOf(dummyDefaultGithubRepo))
         composeTestRule
-            .onNodeWithText(dummyGithubRepo1.fullName)
+            .onNodeWithText(dummyDefaultGithubRepo.fullName)
             .assertIsDisplayed()
     }
 
     @Test
     fun 저장소의_star_개수가_50개_이상이면_HOT_텍스트를_노출한다() {
-        homeUiState = HomeUiState.HasRepos(listOf(dummyGithubRepo1))
+        homeUiState = HomeUiState.HasRepos(listOf(dummyGithubRepoHot))
         composeTestRule
             .onNodeWithText("HOT")
             .assertIsDisplayed()
@@ -59,7 +60,7 @@ class HomeScreenTest {
 
     @Test
     fun 저장소의_star_개수가_50개_미만이면_HOT_텍스트를_노출하지_않는다() {
-        homeUiState = HomeUiState.HasRepos(listOf(dummyGithubRepo2))
+        homeUiState = HomeUiState.HasRepos(listOf(dummyGithubRepoNonHot))
         composeTestRule
             .onNodeWithText("HOT")
             .assertIsNotDisplayed()

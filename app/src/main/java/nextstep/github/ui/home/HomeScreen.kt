@@ -28,7 +28,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.domain.model.dummyGithubRepo1
+import nextstep.github.domain.model.dummyDefaultGithubRepo
 import nextstep.github.ui.components.EmptyListScreen
 import nextstep.github.ui.components.GithubTopBar
 import nextstep.github.ui.theme.GithubTheme
@@ -52,8 +52,8 @@ fun HomeScreen(
 @Composable
 fun HomeScreen(
     homeUiState: HomeUiState,
-    modifier: Modifier = Modifier,
     onRetry: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -127,7 +127,7 @@ private fun FullScreenLoading() {
 class HomeScreenProvider : PreviewParameterProvider<HomeUiState> {
     override val values: Sequence<HomeUiState> = sequenceOf(
         HomeUiState.Loading,
-        HomeUiState.HasRepos(listOf(dummyGithubRepo1)),
+        HomeUiState.HasRepos(listOf(dummyDefaultGithubRepo)),
         HomeUiState.Empty,
         HomeUiState.Error
     )

@@ -35,11 +35,14 @@ class GithubViewModel(
                                 description = it.description ?: ""
                             )
                         }
-
-                        _uiState.value =
-                            GithubRepositoryUiState.Success(
-                                githubRepositories = githubRepositories
-                            )
+                        if (githubRepositories.isEmpty()) {
+                            _uiState.value = GithubRepositoryUiState.Empty
+                        } else {
+                            _uiState.value =
+                                GithubRepositoryUiState.Success(
+                                    githubRepositories = githubRepositories
+                                )
+                        }
                     }
 
                     is ApiResult.Error -> {

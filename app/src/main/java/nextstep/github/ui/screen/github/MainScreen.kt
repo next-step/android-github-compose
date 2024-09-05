@@ -7,6 +7,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.ui.screen.github.component.MainTopBar
+import nextstep.github.ui.screen.github.list.GithubRepositoryEmpty
 import nextstep.github.ui.screen.github.list.GithubRepositoryList
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.LoadingProgress
@@ -20,15 +21,21 @@ fun MainScreen(
     )
     { paddingValues ->
         when (uiState) {
-            GithubRepositoryUiState.Loading -> {
+            is GithubRepositoryUiState.Loading -> {
                 // 로딩 화면
                 LoadingProgress(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
-            GithubRepositoryUiState.Error -> {
+            is GithubRepositoryUiState.Error -> {
                 // 에러 화면
+            }
+
+            is GithubRepositoryUiState.Empty -> {
+                GithubRepositoryEmpty(
+                    modifier = Modifier.padding(paddingValues)
+                )
             }
 
             is GithubRepositoryUiState.Success -> {
@@ -37,6 +44,8 @@ fun MainScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
+
+
         }
     }
 }
@@ -46,6 +55,14 @@ fun MainScreen(
 private fun LoadingMainScreenPreview() {
     MainScreen(
         uiState = GithubRepositoryUiState.Loading
+    )
+}
+
+@Preview
+@Composable
+private fun EmptyMainScreenPreview() {
+    MainScreen(
+        uiState = GithubRepositoryUiState.Empty
     )
 }
 

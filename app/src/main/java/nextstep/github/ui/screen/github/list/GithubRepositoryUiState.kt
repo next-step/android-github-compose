@@ -8,6 +8,8 @@ sealed class GithubRepositoryUiState {
 
     data object Loading : GithubRepositoryUiState()
 
+    data object Empty : GithubRepositoryUiState()
+
     data class Success(val githubRepositories: List<GithubRepositoryInfo>) :
         GithubRepositoryUiState()
 }

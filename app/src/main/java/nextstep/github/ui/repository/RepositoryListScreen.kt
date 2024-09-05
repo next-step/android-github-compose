@@ -24,9 +24,10 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.model.RepositoryEntity
-import nextstep.github.ui.repository.component.EmptyRepositoryListScreen
+import nextstep.github.ui.model.UiRepository
+import nextstep.github.ui.repository.component.EmptyRepositoryListContent
 import nextstep.github.ui.repository.component.RepositoryListTopBar
-import nextstep.github.ui.repository.component.SuccessRepositoryListScreen
+import nextstep.github.ui.repository.component.SuccessRepositoryListContent
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -46,8 +47,8 @@ fun RepositoryListScreen(
 @Composable
 private fun RepositoryListScreen(
     modifier: Modifier = Modifier,
-    onClickRetry: () -> Unit,
     uiState: RepositoryListUiState,
+    onClickRetry: () -> Unit,
 ) {
     val context = LocalContext.current
     val snackbarHostState = remember { SnackbarHostState() }
@@ -81,8 +82,8 @@ private fun RepositoryListScreen(
                     modifier = Modifier.align(Alignment.Center),
                 )
 
-                RepositoryListUiState.Empty -> EmptyRepositoryListScreen()
-                is RepositoryListUiState.Success -> SuccessRepositoryListScreen(uiState = uiState)
+                RepositoryListUiState.Empty -> EmptyRepositoryListContent()
+                is RepositoryListUiState.Success -> SuccessRepositoryListContent(uiState = uiState)
             }
         }
     }
@@ -111,13 +112,15 @@ private class RepositoryListScreenPreviewParameterProvider :
         RepositoryListUiState.Empty,
         RepositoryListUiState.Success(
             listOf(
-                RepositoryEntity(
+                UiRepository(
                     fullName = "nextstep/nextstep-docs",
                     description = "nextstep-docs description",
+                    stars = 100,
                 ),
-                RepositoryEntity(
+                UiRepository(
                     fullName = "nextstep/java-racingcar",
                     description = "java-racingcar description",
+                    stars = 20,
                 ),
             )
         ),

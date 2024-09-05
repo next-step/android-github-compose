@@ -7,12 +7,7 @@ class GithubRemoteDataSourceImpl(
     private val githubService: GithubService,
 ) : GithubRemoteDataSource {
 
-    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> {
-        return try {
-            Result.success(githubService.getRepositories(organization))
-        } catch (e: Exception) {
-            Result.failure(e)
-        }
-    }
+    override suspend fun getRepositories(organization: String): Result<List<RepositoryEntity>> =
+        runCatching { githubService.getRepositories(organization) }
 
 }

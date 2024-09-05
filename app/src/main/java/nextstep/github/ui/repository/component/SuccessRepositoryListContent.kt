@@ -9,9 +9,9 @@ import androidx.compose.ui.Modifier
 import nextstep.github.ui.repository.RepositoryListUiState
 
 @Composable
-fun SuccessRepositoryListScreen(
-    modifier: Modifier = Modifier,
+fun SuccessRepositoryListContent(
     uiState: RepositoryListUiState.Success,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         items(uiState.repositories) { item ->

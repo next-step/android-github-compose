@@ -22,8 +22,8 @@ import nextstep.github.ui.model.UiRepository
 
 @Composable
 fun RepositoryListItem(
-    modifier: Modifier = Modifier,
     item: UiRepository,
+    modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.padding(16.dp)) {
         Box(
@@ -66,7 +66,6 @@ private fun Star(
         Text(
             text = stringResource(id = R.string.number_format, stars),
             style = MaterialTheme.typography.labelLarge,
-            modifier = Modifier,
         )
     }
 }

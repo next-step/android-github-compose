@@ -10,8 +10,8 @@ import nextstep.github.ui.repository.RepositoryListUiState
 
 @Composable
 fun SuccessRepositoryListContent(
-    modifier: Modifier = Modifier,
     uiState: RepositoryListUiState.Success,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier) {
         items(uiState.repositories) { item ->

@@ -10,4 +10,5 @@ data class GithubState(
 
 sealed interface GithubEvent {
     data object Init : GithubEvent
+    data object OnRetryClick : GithubEvent
 }

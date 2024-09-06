@@ -1,5 +1,6 @@
 package nextstep.github.ui.screen.repo
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -20,7 +21,8 @@ class GithubRepositoryScreenTest : BaseComposeTest() {
         composeTestRule.setContent {
             GithubRepositoryScreen(
                 repositoryItems = state.value.repositories,
-                isLoading = state.value.loading
+                isLoading = state.value.loading,
+                snackbarHostState = SnackbarHostState()
             )
         }
     }

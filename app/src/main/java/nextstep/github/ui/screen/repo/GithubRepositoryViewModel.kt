@@ -1,5 +1,6 @@
 package nextstep.github.ui.screen.repo
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -22,25 +23,29 @@ class GithubRepositoryViewModel(
 
     fun handleEvent(event: GithubEvent) {
         when (event) {
-            GithubEvent.Init -> getNextStepRepositories()
+            GithubEvent.Init -> loadNextStepRepositories()
+            GithubEvent.OnRetryClick -> loadNextStepRepositories()
         }
     }
 
-    private fun getNextStepRepositories() {
+    private fun loadNextStepRepositories() {
+        Log.d("koni", "loadNextStepRepositories")
         viewModelScope.launch {
-            githubRepository.loadNextStepRepositories()
+            githubRepository.getNextStepRepositories()
                 .onSuccess { repositories ->
+                    Log.d("koni", "get $repositories")
                     _state.update {
                         it.copy(
                             repositories = repositories,
-                            loading = false
+                            loading = false,
+                            exception = null
                         )
                     }
                 }
                 .onFailure { error ->
+                    Log.d("koni", "error $error")
                     _state.update {
                         it.copy(
-                            loading = false,
                             exception = error,
                         )
                     }

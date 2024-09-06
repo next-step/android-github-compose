@@ -1,6 +1,5 @@
 package nextstep.github.ui.screen.repo
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -22,7 +21,8 @@ class GithubRepositoryScreenTest : BaseComposeTest() {
             GithubRepositoryScreen(
                 repositoryItems = state.value.repositories,
                 isLoading = state.value.loading,
-                snackbarHostState = SnackbarHostState()
+                isError = state.value.exception != null,
+                eventSink = {}
             )
         }
     }
@@ -64,6 +64,22 @@ class GithubRepositoryScreenTest : BaseComposeTest() {
         composeTestRule.onNodeWithContentDescription(
             resourceTestRule.getString(R.string.loading_content_description)
         ).assertIsNotDisplayed()
+    }
+
+    @Test
+    fun 에러가_발생하면_재시도_스낵바가_보여야한다() {
+        state.value = GithubState(exception = Exception("fail"))
+
+        composeTestRule.onNodeWithText(
+            resourceTestRule.getString(R.string.common_not_found_error)
+        ).assertIsDisplayed()
+
+        composeTestRule.onNodeWithText(
+            resourceTestRule.getString(R.string.common_retry)
+        ).assertIsDisplayed()
+        composeTestRule.onNodeWithText(
+            resourceTestRule.getString(R.string.common_not_found_error)
+        ).assertIsDisplayed()
     }
 }
 

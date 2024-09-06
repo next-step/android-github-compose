@@ -14,7 +14,6 @@ import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.SideEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -37,15 +36,33 @@ fun GithubRepositoryRoute(
     viewModel: GithubRepositoryViewModel = viewModel(factory = GithubRepositoryViewModel.Factory),
 ) {
     val state by viewModel.state.collectAsStateWithLifecycle()
-    val snackbarHostState = remember { SnackbarHostState() }
-    val context = LocalContext.current
 
     LaunchedEffect(Unit) {
         viewModel.handleEvent(GithubEvent.Init)
     }
 
-    LaunchedEffect(state.exception) {
-        if (state.exception != null) {
+    GithubRepositoryScreen(
+        modifier = modifier,
+        repositoryItems = state.repositories,
+        isLoading = state.loading,
+        isError = state.exception != null,
+        eventSink = viewModel::handleEvent
+    )
+}
+
+@Composable
+internal fun GithubRepositoryScreen(
+    repositoryItems: List<RepositoryResponse>,
+    isLoading: Boolean,
+    isError: Boolean,
+    eventSink: (GithubEvent) -> Unit,
+    modifier: Modifier = Modifier,
+) {
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    LaunchedEffect(isError) {
+        if (isError) {
             val result = snackbarHostState.showSnackbar(
                 message = context.getString(R.string.common_not_found_error),
                 actionLabel = context.getString(R.string.common_retry),
@@ -55,27 +72,12 @@ fun GithubRepositoryRoute(
             when (result) {
                 SnackbarResult.Dismissed -> Unit
                 SnackbarResult.ActionPerformed -> {
-                    viewModel.handleEvent(GithubEvent.OnRetryClick)
+                    eventSink(GithubEvent.OnRetryClick)
                 }
             }
         }
     }
 
-    GithubRepositoryScreen(
-        modifier = modifier,
-        repositoryItems = state.repositories,
-        isLoading = state.loading,
-        snackbarHostState = snackbarHostState,
-    )
-}
-
-@Composable
-internal fun GithubRepositoryScreen(
-    modifier: Modifier = Modifier,
-    repositoryItems: List<RepositoryResponse>,
-    isLoading: Boolean,
-    snackbarHostState: SnackbarHostState,
-) {
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -143,7 +145,8 @@ private fun GithubRepositoryScreenPreview() {
                 )
             },
             isLoading = false,
-            snackbarHostState = SnackbarHostState()
+            isError = false,
+            eventSink = {}
         )
     }
 }
@@ -155,7 +158,8 @@ private fun GithubRepositoryLoadingScreenPreview() {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
             isLoading = true,
-            snackbarHostState = SnackbarHostState()
+            isError = false,
+            eventSink = {}
         )
     }
 }
@@ -167,7 +171,8 @@ private fun GithubRepositoryEmptyScreenPreview() {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
             isLoading = false,
-            snackbarHostState = SnackbarHostState()
+            isError = false,
+            eventSink = {}
         )
     }
 }

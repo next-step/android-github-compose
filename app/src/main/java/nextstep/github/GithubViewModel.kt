@@ -25,6 +25,8 @@ class GithubViewModel(
     val uiState: StateFlow<GithubRepositoryUiState> = _uiState
 
     fun getRepositories(organization: String) {
+        _uiState.value = GithubRepositoryUiState.Loading
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = githubRepository.getRepositories(organization)) {

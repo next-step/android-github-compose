@@ -4,5 +4,5 @@ import nextstep.github.data.response.RepositoryResponse
 
 interface GithubRepository {
 
-    suspend fun getNextStepRepositories(): Result<List<RepositoryResponse>>
+    suspend fun loadNextStepRepositories(): Result<List<RepositoryResponse>>
 }

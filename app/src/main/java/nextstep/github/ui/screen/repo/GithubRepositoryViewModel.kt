@@ -28,7 +28,7 @@ class GithubRepositoryViewModel(
 
     private fun getNextStepRepositories() {
         viewModelScope.launch {
-            githubRepository.getNextStepRepositories()
+            githubRepository.loadNextStepRepositories()
                 .onSuccess { repositories ->
                     _state.update {
                         it.copy(

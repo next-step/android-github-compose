@@ -2,22 +2,25 @@ package nextstep.github.ui.screen.github
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.R
 import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.ui.screen.github.component.MainTopBar
+import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
+import nextstep.github.ui.screen.github.list.component.ErrorSnackbar
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryEmpty
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryList
-import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.component.LoadingProgress
-import nextstep.github.ui.screen.github.list.component.ErrorSnackbar
 
 @Composable
 fun MainScreen(
     uiState: GithubRepositoryUiState = GithubRepositoryUiState.Loading,
+    snackbarHostState: SnackbarHostState,
     onClickSnackBar: () -> Unit = {}
 ) {
     Scaffold(
@@ -40,6 +43,7 @@ fun MainScreen(
                         ErrorSnackbar(
                             errorMessage = stringResource(id = R.string.text_snackbar_network_error),
                             actionString = stringResource(id = R.string.text_snackbar_action_retry),
+                            snackbarHostState = snackbarHostState,
                             modifier = Modifier.padding(paddingValues),
                             onClickAction = { onClickSnackBar() }
                         )
@@ -69,7 +73,8 @@ fun MainScreen(
 @Composable
 private fun LoadingMainScreenPreview() {
     MainScreen(
-        uiState = GithubRepositoryUiState.Loading
+        uiState = GithubRepositoryUiState.Loading,
+        snackbarHostState = remember { SnackbarHostState() }
     )
 }
 
@@ -77,7 +82,8 @@ private fun LoadingMainScreenPreview() {
 @Composable
 private fun EmptyMainScreenPreview() {
     MainScreen(
-        uiState = GithubRepositoryUiState.Empty
+        uiState = GithubRepositoryUiState.Empty,
+        snackbarHostState = remember { SnackbarHostState() }
     )
 }
 
@@ -104,6 +110,7 @@ private fun SuccessMainScreenPreview() {
     )
 
     MainScreen(
-        uiState = GithubRepositoryUiState.Success(githubRepositoryList)
+        uiState = GithubRepositoryUiState.Success(githubRepositoryList),
+        snackbarHostState = remember { SnackbarHostState() }
     )
 }

@@ -18,10 +18,18 @@ import androidx.compose.ui.tooling.preview.Preview
 fun ErrorSnackbar(
     errorMessage: String,
     actionString: String,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     onClickAction: () -> Unit
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
+    Box(
+        modifier = modifier,
+        contentAlignment = Alignment.BottomCenter
+    ) {
+        SnackbarHost(
+            hostState = snackbarHostState,
+        )
+    }
 
     LaunchedEffect(snackbarHostState) {
         val result = snackbarHostState.showSnackbar(
@@ -40,22 +48,17 @@ fun ErrorSnackbar(
             }
         }
     }
-    Box(
-        modifier = modifier,
-        contentAlignment = Alignment.BottomCenter
-    ) {
-        SnackbarHost(
-            hostState = snackbarHostState,
-        )
-    }
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun ErrorSnackbarPreview() {
+    val snackbarHostState = remember { SnackbarHostState() }
+
     ErrorSnackbar(
         errorMessage = "Error",
         actionString = "Retry",
+        snackbarHostState = snackbarHostState,
         modifier = Modifier,
         onClickAction = {}
     )

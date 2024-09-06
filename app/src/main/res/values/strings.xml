@@ -4,4 +4,6 @@
     <string name="empty_repos">목록이 비었습니다.</string>
     <string name="snack_bar_title">예상치 못한 오류가 발생했습니다.</string>
     <string name="retry">재시도</string>
+    <string name="repo_hot">HOT</string>
+    <string name="repo_star_icon_description">star</string>
 </resources>

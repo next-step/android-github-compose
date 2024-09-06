@@ -20,6 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.data.response.RepositoryResponse
 import nextstep.github.ui.component.GithubRepositoryItem
+import nextstep.github.ui.component.LoadingSection
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -35,14 +36,16 @@ fun GithubRepositoryRoute(
 
     GithubRepositoryScreen(
         modifier = modifier,
-        repositoryItems = state.repositories
+        repositoryItems = state.repositories,
+        isLoading = state.loading
     )
 }
 
 @Composable
 private fun GithubRepositoryScreen(
     modifier: Modifier = Modifier,
-    repositoryItems: List<RepositoryResponse>
+    repositoryItems: List<RepositoryResponse>,
+    isLoading: Boolean,
 ) {
     Scaffold(
         modifier = modifier,
@@ -50,15 +53,19 @@ private fun GithubRepositoryScreen(
             GithubRepositoryTopAppBar()
         }
     ) { innerPadding ->
-        LazyColumn(
-            modifier = Modifier.padding(innerPadding)
-        ) {
-            items(repositoryItems) {
-                GithubRepositoryItem(
-                    modifier = Modifier.padding(16.dp),
-                    fullName = it.fullName,
-                    description = it.description
-                )
+        if (isLoading) {
+            LoadingSection(modifier = Modifier.padding(innerPadding))
+        } else {
+            LazyColumn(
+                modifier = Modifier.padding(innerPadding)
+            ) {
+                items(repositoryItems) {
+                    GithubRepositoryItem(
+                        modifier = Modifier.padding(16.dp),
+                        fullName = it.fullName,
+                        description = it.description
+                    )
+                }
             }
         }
     }
@@ -88,7 +95,19 @@ private fun GithubRepositoryScreenPreview() {
                     fullName = "next-step/nextstep-docs",
                     description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
                 )
-            }
+            },
+            isLoading = false
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun GithubRepositoryLoadingScreenPreview() {
+    GithubTheme {
+        GithubRepositoryScreen(
+            repositoryItems = emptyList(),
+            isLoading = true
         )
     }
 }

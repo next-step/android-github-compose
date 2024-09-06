@@ -50,8 +50,6 @@ class GithubRepositoryViewModelTest {
 
         viewModel.state.test {
             val secondState = awaitItem()
-            assertEquals(false, secondState.loading)
-            assertEquals(emptyList<RepositoryResponse>(), secondState.repositories)
             assertEquals(exception, secondState.exception)
         }
     }

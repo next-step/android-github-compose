@@ -1,6 +1,5 @@
 package nextstep.github.ui.screen.repo
 
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -44,7 +43,7 @@ fun GithubRepositoryRoute(
 }
 
 @Composable
-private fun GithubRepositoryScreen(
+internal fun GithubRepositoryScreen(
     modifier: Modifier = Modifier,
     repositoryItems: List<RepositoryResponse>,
     isLoading: Boolean,
@@ -55,23 +54,27 @@ private fun GithubRepositoryScreen(
             GithubRepositoryTopAppBar()
         }
     ) { innerPadding ->
+        val innerPaddingModifier = Modifier.padding(innerPadding)
         if (isLoading) {
-            LoadingContent(modifier = Modifier.padding(innerPadding))
+            LoadingContent(modifier = innerPaddingModifier)
         } else if (repositoryItems.isEmpty()) {
-            EmptyContent()
+            EmptyContent(modifier = innerPaddingModifier)
         } else {
-            RepositoryContent(innerPadding, repositoryItems)
+            RepositoryContent(
+                repositoryItems = repositoryItems,
+                modifier = innerPaddingModifier,
+            )
         }
     }
 }
 
 @Composable
 private fun RepositoryContent(
-    innerPadding: PaddingValues,
-    repositoryItems: List<RepositoryResponse>
+    repositoryItems: List<RepositoryResponse>,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = Modifier.padding(innerPadding)
+        modifier = modifier
     ) {
         items(repositoryItems) {
             GithubRepositoryItem(

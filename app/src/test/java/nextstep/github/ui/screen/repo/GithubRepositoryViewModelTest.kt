@@ -30,7 +30,7 @@ class GithubRepositoryViewModelTest {
     @Test
     fun 레포목록_가져오기_성공_하면_로딩이끝나고_레포목록이_업데이트된다() = runTest {
         val mockRepositories = listOf(RepositoryResponse("TestRepo"))
-        coEvery { mockGithubRepository.loadNextStepRepositories() } returns Result.success(mockRepositories)
+        coEvery { mockGithubRepository.getNextStepRepositories() } returns Result.success(mockRepositories)
 
         viewModel.handleEvent(GithubEvent.Init)
 
@@ -44,7 +44,7 @@ class GithubRepositoryViewModelTest {
     @Test
     fun 레포목록_가져오기_실패_하면_로딩이끝나고_exception이_업데이트된다() = runTest {
         val exception = Exception("Failed")
-        coEvery { mockGithubRepository.loadNextStepRepositories() } returns Result.failure(exception)
+        coEvery { mockGithubRepository.getNextStepRepositories() } returns Result.failure(exception)
 
         viewModel.handleEvent(GithubEvent.Init)
 

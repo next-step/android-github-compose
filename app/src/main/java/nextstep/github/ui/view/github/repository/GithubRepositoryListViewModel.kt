@@ -16,11 +16,12 @@ import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
+import nextstep.github.domain.GetRepositoriesUseCase
 import nextstep.github.ui.model.GithubRepositoryModel
 import nextstep.github.ui.model.toUiModel
 
 class GithubRepositoryListViewModel(
-    private val repository: GithubRepository,
+    private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
 
     private val repositories: MutableStateFlow<List<GithubRepositoryModel>?> = MutableStateFlow(null)
@@ -55,7 +56,7 @@ class GithubRepositoryListViewModel(
             _error.value = true
         }) {
             _error.value = false
-            repositories.value = repository.getRepositories("next-step")
+            repositories.value = getRepositoriesUseCase("next-step")
                 .map { it.toUiModel() }
         }
     }
@@ -67,9 +68,9 @@ class GithubRepositoryListViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as GithubApplication).appContainer.githubRepository
+                val getRepositoriesUseCase = (this[APPLICATION_KEY] as GithubApplication).appContainer.getRepositoriesUseCase
                 GithubRepositoryListViewModel(
-                    repository = githubRepository
+                    getRepositoriesUseCase = getRepositoriesUseCase,
                 )
             }
         }

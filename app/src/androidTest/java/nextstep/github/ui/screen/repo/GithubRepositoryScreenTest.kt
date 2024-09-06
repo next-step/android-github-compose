@@ -11,7 +11,7 @@ import nextstep.github.data.response.RepositoryResponse
 import org.junit.Before
 import org.junit.Test
 
-class GithubRepositoryScreenTest : BaseComposeTest() {
+internal class GithubRepositoryScreenTest : BaseComposeTest() {
 
     private var state = mutableStateOf(GithubState())
 

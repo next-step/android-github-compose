@@ -15,7 +15,7 @@ import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-class GithubRepositoryViewModelTest {
+internal class GithubRepositoryViewModelTest {
 
     private val mockGithubRepository = mockk<GithubRepository>()
     private val testDispatcher = UnconfinedTestDispatcher()

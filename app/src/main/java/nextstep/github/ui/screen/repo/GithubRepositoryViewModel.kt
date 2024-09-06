@@ -37,8 +37,13 @@ class GithubRepositoryViewModel(
                         )
                     }
                 }
-                .onFailure {
-                    _state.update { it.copy(loading = false) }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            loading = false,
+                            exception = error,
+                        )
+                    }
                 }
         }
     }

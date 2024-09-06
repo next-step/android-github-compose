@@ -135,7 +135,7 @@ private fun GithubRepositoryTopAppBar() {
 
 @Composable
 @Preview
-private fun GithubRepositoryScreenPreview() {
+private fun ScreenPreview_정상케이스() {
     GithubTheme {
         GithubRepositoryScreen(
             repositoryItems = List(5) {
@@ -153,7 +153,7 @@ private fun GithubRepositoryScreenPreview() {
 
 @Composable
 @Preview
-private fun GithubRepositoryLoadingScreenPreview() {
+private fun ScreenPreview_로딩() {
     GithubTheme {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
@@ -166,12 +166,25 @@ private fun GithubRepositoryLoadingScreenPreview() {
 
 @Composable
 @Preview
-private fun GithubRepositoryEmptyScreenPreview() {
+private fun ScreenPreview_빈화면() {
     GithubTheme {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
             isLoading = false,
             isError = false,
+            eventSink = {}
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun ScreenPreview_에러() {
+    GithubTheme {
+        GithubRepositoryScreen(
+            repositoryItems = emptyList(),
+            isLoading = false,
+            isError = true,
             eventSink = {}
         )
     }

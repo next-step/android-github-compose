@@ -1,5 +1,6 @@
 package nextstep.github.ui.screen.repo
 
+import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -19,6 +20,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.ui.component.EmptySection
 import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.component.LoadingSection
 import nextstep.github.ui.theme.GithubTheme
@@ -55,18 +57,28 @@ private fun GithubRepositoryScreen(
     ) { innerPadding ->
         if (isLoading) {
             LoadingSection(modifier = Modifier.padding(innerPadding))
+        } else if (repositoryItems.isEmpty()) {
+            EmptySection()
         } else {
-            LazyColumn(
-                modifier = Modifier.padding(innerPadding)
-            ) {
-                items(repositoryItems) {
-                    GithubRepositoryItem(
-                        modifier = Modifier.padding(16.dp),
-                        fullName = it.fullName,
-                        description = it.description
-                    )
-                }
-            }
+            RepositorySection(innerPadding, repositoryItems)
+        }
+    }
+}
+
+@Composable
+private fun RepositorySection(
+    innerPadding: PaddingValues,
+    repositoryItems: List<RepositoryResponse>
+) {
+    LazyColumn(
+        modifier = Modifier.padding(innerPadding)
+    ) {
+        items(repositoryItems) {
+            GithubRepositoryItem(
+                modifier = Modifier.padding(16.dp),
+                fullName = it.fullName,
+                description = it.description
+            )
         }
     }
 }
@@ -108,6 +120,17 @@ private fun GithubRepositoryLoadingScreenPreview() {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
             isLoading = true
+        )
+    }
+}
+
+@Composable
+@Preview
+private fun GithubRepositoryEmptyScreenPreview() {
+    GithubTheme {
+        GithubRepositoryScreen(
+            repositoryItems = emptyList(),
+            isLoading = false
         )
     }
 }

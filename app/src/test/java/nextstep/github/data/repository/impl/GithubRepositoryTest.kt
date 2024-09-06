@@ -79,7 +79,6 @@ internal class GithubRepositoryTest {
         )
         assertTrue(result.isSuccess)
         assertNotNull(repositories)
-        assertEquals(2, repositories?.size)
         assertEquals(expectedRepository, repositories)
     }
 

@@ -17,7 +17,7 @@ class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<GithubState>(GithubState())
+    private val _state = MutableStateFlow<GithubState>(GithubState.Initial)
     val state = _state.asStateFlow()
 
     fun handleEvent(event: GithubEvent) {

@@ -64,7 +64,7 @@ class GithubRepositoryListScreenTest {
         // Given
         composeTestRule.setContent {
             GithubRepositoryListScreen(
-                uiState = GithubRepositoryListUiState.NotFound,
+                uiState = GithubRepositoryListUiState.Empty,
                 isError = false,
                 onRetry = {},
             )

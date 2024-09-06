@@ -82,14 +82,14 @@ fun GithubRepositoryListScreen(
                 )
             }
 
-            GithubRepositoryListUiState.NotFound -> {
-                GithubRepositoryListNotFoundScreen(
+            GithubRepositoryListUiState.Empty -> {
+                GithubRepositoryListEmptyScreen(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
-            is GithubRepositoryListUiState.Found -> {
-                GithubRepositoryListFoundScreen(
+            is GithubRepositoryListUiState.Repositories -> {
+                GithubRepositoryListRepositoriesScreen(
                     modifier = Modifier.padding(paddingValues),
                     items = uiState.repositories,
                 )
@@ -102,7 +102,7 @@ fun GithubRepositoryListScreen(
 @Composable
 private fun GithubRepositoryListScreenPreviewSuccess() {
     GithubRepositoryListScreen(
-        uiState = GithubRepositoryListUiState.Found(
+        uiState = GithubRepositoryListUiState.Repositories(
             repositories = List(10) {
                 GithubRepositoryModel(
                     fullName = "next-step/nextstep-docs",

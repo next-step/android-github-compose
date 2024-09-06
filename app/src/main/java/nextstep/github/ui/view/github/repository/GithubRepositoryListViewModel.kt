@@ -34,10 +34,10 @@ class GithubRepositoryListViewModel(
                 GithubRepositoryListUiState.Loading
             }
             it.isEmpty() -> {
-                GithubRepositoryListUiState.NotFound
+                GithubRepositoryListUiState.Empty
             }
             else -> {
-                GithubRepositoryListUiState.Found(repositories = it)
+                GithubRepositoryListUiState.Repositories(repositories = it)
             }
         }
     }.stateIn(

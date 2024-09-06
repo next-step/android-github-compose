@@ -12,7 +12,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.R
 
 @Composable
-fun GithubRepositoryListNotFoundScreen(
+fun GithubRepositoryListEmptyScreen(
     modifier: Modifier = Modifier,
 ) {
     Box(
@@ -20,7 +20,7 @@ fun GithubRepositoryListNotFoundScreen(
         contentAlignment = Alignment.Center
     ) {
         Text(
-            text = stringResource(R.string.result_not_found),
+            text = stringResource(R.string.result_empty),
             style = MaterialTheme.typography.titleLarge
         )
     }
@@ -28,6 +28,6 @@ fun GithubRepositoryListNotFoundScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun GithubRepositoryListNotFoundScreenPreview() {
-    GithubRepositoryListNotFoundScreen()
+private fun GithubRepositoryListEmptyScreenPreview() {
+    GithubRepositoryListEmptyScreen()
 }

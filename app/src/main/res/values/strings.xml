@@ -3,5 +3,5 @@
     <string name="error_message">예상치 못한 오류가 발생했습니다.</string>
     <string name="error_retry">재시도</string>
     <string name="github_repository_title">NEXTSTEP Repositories</string>
-    <string name="result_not_found">목록이 비었습니다.</string>
+    <string name="result_empty">목록이 비었습니다.</string>
 </resources>

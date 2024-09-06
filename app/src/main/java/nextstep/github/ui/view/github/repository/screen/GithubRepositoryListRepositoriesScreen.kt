@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.ui.model.GithubRepositoryModel
 
 @Composable
-fun GithubRepositoryListFoundScreen(
+fun GithubRepositoryListRepositoriesScreen(
     items: List<GithubRepositoryModel>,
     modifier: Modifier = Modifier,
 ) {
@@ -31,8 +31,8 @@ fun GithubRepositoryListFoundScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun GithubRepositoryListFoundScreenPreview() {
-    GithubRepositoryListFoundScreen(
+private fun GithubRepositoryListRepositoriesScreenPreview() {
+    GithubRepositoryListRepositoriesScreen(
         items = List(10) {
             GithubRepositoryModel(
                 fullName = "next-step/nextstep-docs",

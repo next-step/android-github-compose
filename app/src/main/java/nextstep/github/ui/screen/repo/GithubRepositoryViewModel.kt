@@ -30,7 +30,15 @@ class GithubRepositoryViewModel(
         viewModelScope.launch {
             githubRepository.getNextStepRepositories()
                 .onSuccess { repositories ->
-                    _state.update { it.copy(repositories = repositories) }
+                    _state.update {
+                        it.copy(
+                            repositories = repositories,
+                            loading = false
+                        )
+                    }
+                }
+                .onFailure {
+                    _state.update { it.copy(loading = false) }
                 }
         }
     }

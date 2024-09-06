@@ -51,9 +51,21 @@ fun GithubRepositoryListItem(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Hot이 아닌 것")
 @Composable
-private fun GithubRepositoryListItemPreview() {
+private fun GithubRepositoryListItemPreview1() {
+    GithubRepositoryListItem(
+        fullName = "next-step/nextstep-docs",
+        description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+        stars = 0,
+        isHot = false,
+    )
+}
+
+
+@Preview(showBackground = true, name = "Hot 인 것")
+@Composable
+private fun GithubRepositoryListItemPreview2() {
     GithubRepositoryListItem(
         fullName = "next-step/nextstep-docs",
         description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",

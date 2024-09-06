@@ -20,9 +20,9 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.data.response.RepositoryResponse
-import nextstep.github.ui.component.EmptySection
+import nextstep.github.ui.component.EmptyContent
 import nextstep.github.ui.component.GithubRepositoryItem
-import nextstep.github.ui.component.LoadingSection
+import nextstep.github.ui.component.LoadingContent
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -56,17 +56,17 @@ private fun GithubRepositoryScreen(
         }
     ) { innerPadding ->
         if (isLoading) {
-            LoadingSection(modifier = Modifier.padding(innerPadding))
+            LoadingContent(modifier = Modifier.padding(innerPadding))
         } else if (repositoryItems.isEmpty()) {
-            EmptySection()
+            EmptyContent()
         } else {
-            RepositorySection(innerPadding, repositoryItems)
+            RepositoryContent(innerPadding, repositoryItems)
         }
     }
 }
 
 @Composable
-private fun RepositorySection(
+private fun RepositoryContent(
     innerPadding: PaddingValues,
     repositoryItems: List<RepositoryResponse>
 ) {

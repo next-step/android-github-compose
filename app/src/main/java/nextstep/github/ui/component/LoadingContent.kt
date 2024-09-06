@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 
 @Composable
-fun LoadingSection(
+fun LoadingContent(
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -22,6 +22,6 @@ fun LoadingSection(
 
 @Preview(showBackground = true)
 @Composable
-private fun LoadingSectionPreview() {
-    LoadingSection()
+private fun LoadingContentPreview() {
+    LoadingContent()
 }

@@ -76,4 +76,5 @@ dependencies {
     implementation(libs.okhttp3)
 
     testImplementation(libs.mockwebserver)
+    testImplementation(libs.mockk)
 }

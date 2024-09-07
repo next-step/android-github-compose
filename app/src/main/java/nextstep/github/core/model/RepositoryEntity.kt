@@ -8,9 +8,11 @@ import nextstep.github.core.data.GithubRepositoryInfo
 data class RepositoryEntity(
     @SerialName("full_name") val fullName: String?,
     @SerialName("description") val description: String?,
+    @SerialName("stargazers_count") val stars: Int?,
 ) {
     fun RepositoryEntity.toRepositoryInfo() = GithubRepositoryInfo(
         fullName = fullName ?: "",
-        description = description ?: ""
+        description = description ?: "",
+        stars = stars ?: 0
     )
 }

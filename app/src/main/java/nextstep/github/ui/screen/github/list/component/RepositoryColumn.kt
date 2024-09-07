@@ -46,7 +46,8 @@ private fun RepositoryColumnPreview() {
     RepositoryColumn(
         repositoryInfo = GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 3
         )
     )
 }

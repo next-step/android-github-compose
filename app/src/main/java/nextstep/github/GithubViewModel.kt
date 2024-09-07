@@ -34,7 +34,8 @@ class GithubViewModel(
                         val githubRepositories = result.value.map {
                             GithubRepositoryInfo(
                                 fullName = it.fullName ?: "",
-                                description = it.description ?: ""
+                                description = it.description ?: "",
+                                stars = it.stars ?: 0
                             )
                         }
                         if (githubRepositories.isEmpty()) {

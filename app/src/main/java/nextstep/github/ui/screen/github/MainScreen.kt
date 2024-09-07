@@ -118,19 +118,23 @@ private fun SuccessMainScreenPreview() {
     val githubRepositoryList = listOf(
         GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 2
         ),
         GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 20
         ),
         GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 2
         ),
         GithubRepositoryInfo(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 3
         )
     )
 

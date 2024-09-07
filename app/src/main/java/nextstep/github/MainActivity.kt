@@ -6,12 +6,8 @@ import androidx.activity.compose.setContent
 import androidx.activity.viewModels
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Surface
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import nextstep.github.ui.screen.github.MainScreen
 import nextstep.github.ui.theme.GithubTheme
 
@@ -28,12 +24,8 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
-                    val snackbarHostState = remember { SnackbarHostState() }
                     MainScreen(
-                        uiState = uiState,
-                        snackbarHostState = snackbarHostState,
-                        onClickSnackBar = { viewModel.getRepositories("next-step") }
+                        viewModel = viewModel
                     )
                 }
             }

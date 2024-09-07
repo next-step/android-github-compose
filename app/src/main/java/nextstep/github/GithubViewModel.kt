@@ -14,35 +14,47 @@ import kotlinx.coroutines.launch
 import nextstep.github.core.data.GithubRepository
 import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.core.network.ApiResult
+import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 
 class GithubViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val _githubRepositoryInfoList =
-        MutableStateFlow<List<GithubRepositoryInfo>>(emptyList())
-    val githubRepositoryInfoList: StateFlow<List<GithubRepositoryInfo>> = _githubRepositoryInfoList
+    private val _uiState =
+        MutableStateFlow<GithubRepositoryUiState>(GithubRepositoryUiState.Loading)
+    val uiState: StateFlow<GithubRepositoryUiState> = _uiState
 
     fun getRepositories(organization: String) {
+        _uiState.value = GithubRepositoryUiState.Loading
+
         viewModelScope.launch(Dispatchers.IO) {
             try {
                 when (val result = githubRepository.getRepositories(organization)) {
                     is ApiResult.Success -> {
-                        _githubRepositoryInfoList.value = result.value.map {
+                        val githubRepositories = result.value.map {
                             GithubRepositoryInfo(
                                 fullName = it.fullName ?: "",
                                 description = it.description ?: ""
                             )
                         }
-                        Log.d("GithubViewModel", "Success: ${result.value}")
+                        if (githubRepositories.isEmpty()) {
+                            _uiState.value = GithubRepositoryUiState.Empty
+                        } else {
+                            _uiState.value =
+                                GithubRepositoryUiState.Success(
+                                    githubRepositories = githubRepositories
+                                )
+                        }
                     }
 
                     is ApiResult.Error -> {
-                        Log.e("GithubViewModel", "Error1: ${result.code} ${result.exception}")
+                        _uiState.value = GithubRepositoryUiState.Error
+                        Log.e("GithubViewModel", "Error: ${result.code} ${result.exception}")
                     }
                 }
             } catch (e: Exception) {
-                Log.e("GithubViewModel", "Error2: ${e.message}")
+                _uiState.value = GithubRepositoryUiState.Error
+                Log.e("GithubViewModel", "Error: ${e.message}")
             }
         }
     }

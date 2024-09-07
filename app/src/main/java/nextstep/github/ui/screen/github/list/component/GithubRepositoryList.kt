@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen.github.list
+package nextstep.github.ui.screen.github.list.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.lazy.LazyColumn
@@ -6,7 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.core.data.GithubRepositoryInfo
-import nextstep.github.ui.screen.github.list.component.RepositoryColumn
 
 @Composable
 fun GithubRepositoryList(

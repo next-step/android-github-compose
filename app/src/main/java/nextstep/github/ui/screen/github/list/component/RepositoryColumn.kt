@@ -32,7 +32,7 @@ fun RepositoryColumn(repositoryInfo: GithubRepositoryInfo, modifier: Modifier = 
             text = repositoryInfo.description,
             style = MaterialTheme.typography.bodyMedium,
             modifier = Modifier
-                .padding(horizontal = 16.dp,)
+                .padding(horizontal = 16.dp)
                 .background(MaterialTheme.colorScheme.surface)
                 .fillMaxWidth()
         )

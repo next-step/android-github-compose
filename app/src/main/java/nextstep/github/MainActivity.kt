@@ -7,7 +7,6 @@ import androidx.activity.compose.setContent
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.lifecycle.repeatOnLifecycle
-import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import nextstep.github.data.repository.GithubRepository
 import nextstep.github.ui.theme.GithubTheme
@@ -27,13 +26,17 @@ class MainActivity : ComponentActivity() {
     private fun initObservers(repository : GithubRepository){
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED){
-                repository.getRepositories("next-step")
-                    .catch { e ->
-                        Log.e("MainActivity",e.toString())
-                    }.collect { repositories ->
-                        Log.d("MainActivity",repositories.joinToString("\n"))
-                    }
+                getRepositories(repository)
             }
+        }
+    }
+
+    private suspend fun getRepositories(repository : GithubRepository){
+        try {
+            val repositories = repository.getRepositories("next-step")
+            Log.d("MainActivity",repositories.joinToString("\n"))
+        }catch (e: Exception){
+            Log.d("MainActivity",e.toString())
         }
     }
 }

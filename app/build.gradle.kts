@@ -74,4 +74,6 @@ dependencies {
     implementation(libs.retrofit2.kotlinx.serialization.converter) // "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:1.0.0"
     implementation(libs.retrofit2)
     implementation(libs.okhttp3)
+
+    testImplementation(libs.mockwebserver)
 }

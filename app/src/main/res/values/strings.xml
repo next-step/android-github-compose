@@ -1,4 +1,8 @@
 <resources>
     <string name="app_name">GitHub</string>
     <string name="github_repository_top_app_bar">NEXTSTEP Repositories</string>
+    <string name="empty_section_title">목록이 비었습니다.</string>
+    <string name="loading_content_description">로딩 중입니다.</string>
+    <string name="common_not_found_error">예상치 못한 오류가 발생했습니다.</string>
+    <string name="common_retry">재시도</string>
 </resources>

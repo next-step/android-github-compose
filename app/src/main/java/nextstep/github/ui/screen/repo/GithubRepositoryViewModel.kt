@@ -17,20 +17,34 @@ class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<GithubState>(GithubState())
+    private val _state = MutableStateFlow<GithubState>(GithubState.Initial)
     val state = _state.asStateFlow()
 
     fun handleEvent(event: GithubEvent) {
         when (event) {
-            GithubEvent.Init -> getNextStepRepositories()
+            GithubEvent.Init -> loadNextStepRepositories()
+            GithubEvent.OnRetryClick -> loadNextStepRepositories()
         }
     }
 
-    private fun getNextStepRepositories() {
+    private fun loadNextStepRepositories() {
         viewModelScope.launch {
             githubRepository.getNextStepRepositories()
                 .onSuccess { repositories ->
-                    _state.update { it.copy(repositories = repositories) }
+                    _state.update {
+                        it.copy(
+                            repositories = repositories,
+                            loading = false,
+                            exception = null
+                        )
+                    }
+                }
+                .onFailure { error ->
+                    _state.update {
+                        it.copy(
+                            exception = error,
+                        )
+                    }
                 }
         }
     }

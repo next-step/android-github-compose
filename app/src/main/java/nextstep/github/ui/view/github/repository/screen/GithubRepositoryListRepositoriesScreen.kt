@@ -8,11 +8,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.model.GithubRepositoryDto
+import nextstep.github.ui.model.GithubRepositoryModel
 
 @Composable
-fun GithubRepositoryListSuccessScreen(
-    items: List<GithubRepositoryDto>,
+fun GithubRepositoryListRepositoriesScreen(
+    items: List<GithubRepositoryModel>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(modifier = modifier.fillMaxSize()) {
@@ -21,6 +21,8 @@ fun GithubRepositoryListSuccessScreen(
                 modifier = Modifier.fillMaxWidth(),
                 fullName = it.fullName,
                 description = it.description,
+                stars = it.stars,
+                isHot = it.isHot
             )
             HorizontalDivider()
         }
@@ -29,12 +31,14 @@ fun GithubRepositoryListSuccessScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun GithubRepositoryListSuccessScreenPreview() {
-    GithubRepositoryListSuccessScreen(
+private fun GithubRepositoryListRepositoriesScreenPreview() {
+    GithubRepositoryListRepositoriesScreen(
         items = List(10) {
-            GithubRepositoryDto(
+            GithubRepositoryModel(
                 fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                stars = 0,
+                isHot = false,
             )
         }
     )

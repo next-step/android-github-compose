@@ -1,9 +1,11 @@
 package nextstep.github
 
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performClick
 import junit.framework.TestCase.assertEquals
+import nextstep.github.ui.view.github.repository.GithubRepositoryListUiState
 import nextstep.github.ui.view.github.repository.screen.GithubRepositoryListScreen
 import org.junit.Rule
 import org.junit.Test
@@ -16,14 +18,19 @@ class GithubRepositoryListScreenTest {
     @Test
     fun 에러_발생시_스낵바_노출() {
         // Given
+        val isError = mutableStateOf(false)
         composeTestRule.setContent {
             GithubRepositoryListScreen(
-                items = emptyList(),
-                isLoading = false,
-                isError = true,
+                uiState = GithubRepositoryListUiState.Loading,
+                isError = isError.value,
                 onRetry = {},
             )
         }
+
+        // when
+        composeTestRule.onNodeWithText("예상치 못한 오류가 발생했습니다.")
+            .assertDoesNotExist()
+        isError.value = true
 
         // Then
         composeTestRule.onNodeWithText("예상치 못한 오류가 발생했습니다.")
@@ -32,22 +39,39 @@ class GithubRepositoryListScreenTest {
 
     @Test
     fun 에러_발생시_스낵바_재시도_클릭하면_재시도_실행() {
-        var isError = true
         // Given
+        val isError = mutableStateOf(true)
         composeTestRule.setContent {
             GithubRepositoryListScreen(
-                items = emptyList(),
-                isLoading = false,
-                isError = true,
-                onRetry = { isError = false },
+                uiState = GithubRepositoryListUiState.Loading,
+                isError = isError.value,
+                onRetry = { isError.value = false },
             )
         }
 
         // When
+        composeTestRule.onNodeWithText("예상치 못한 오류가 발생했습니다.")
+            .assertExists()
         composeTestRule.onNodeWithText("재시도")
             .performClick()
 
         // Then
-        assertEquals(isError, false)
+        assertEquals(isError.value, false)
+    }
+
+    @Test
+    fun 응답_결과가_비어있는경우_결과_없음_노출() {
+        // Given
+        composeTestRule.setContent {
+            GithubRepositoryListScreen(
+                uiState = GithubRepositoryListUiState.Empty,
+                isError = false,
+                onRetry = {},
+            )
+        }
+
+        // Then
+        composeTestRule.onNodeWithText("목록이 비었습니다.")
+            .assertExists()
     }
 }

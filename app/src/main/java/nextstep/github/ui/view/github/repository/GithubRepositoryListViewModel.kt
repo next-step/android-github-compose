@@ -8,25 +8,44 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.CoroutineExceptionHandler
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
-import nextstep.github.model.GithubRepositoryDto
+import nextstep.github.domain.GetRepositoriesUseCase
+import nextstep.github.ui.model.GithubRepositoryModel
+import nextstep.github.ui.model.toUiModel
 
 class GithubRepositoryListViewModel(
-    private val repository: GithubRepository,
+    private val getRepositoriesUseCase: GetRepositoriesUseCase,
 ) : ViewModel() {
 
-    private val _isLoading: MutableStateFlow<Boolean> = MutableStateFlow(false)
-    val isLoading: StateFlow<Boolean> = _isLoading.asStateFlow()
-
-    private val _repositories: MutableStateFlow<List<GithubRepositoryDto>> = MutableStateFlow(emptyList())
-    val repositories: StateFlow<List<GithubRepositoryDto>> = _repositories.asStateFlow()
+    private val repositories: MutableStateFlow<List<GithubRepositoryModel>?> = MutableStateFlow(null)
 
     private val _error: MutableStateFlow<Boolean> = MutableStateFlow(false)
     val error: StateFlow<Boolean> = _error.asStateFlow()
+
+    val uiState: StateFlow<GithubRepositoryListUiState> = repositories.map {
+        when {
+            it == null -> {
+                GithubRepositoryListUiState.Loading
+            }
+            it.isEmpty() -> {
+                GithubRepositoryListUiState.Empty
+            }
+            else -> {
+                GithubRepositoryListUiState.Repositories(repositories = it)
+            }
+        }
+    }.stateIn(
+        viewModelScope,
+        SharingStarted.WhileSubscribed(),
+        GithubRepositoryListUiState.Loading,
+    )
 
     init {
         fetchRepositories()
@@ -37,9 +56,8 @@ class GithubRepositoryListViewModel(
             _error.value = true
         }) {
             _error.value = false
-            _isLoading.value = true
-            _repositories.value = repository.getRepositories("next-step")
-            _isLoading.value = false
+            repositories.value = getRepositoriesUseCase("next-step")
+                .map { it.toUiModel() }
         }
     }
 
@@ -50,9 +68,9 @@ class GithubRepositoryListViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as GithubApplication).appContainer.githubRepository
+                val getRepositoriesUseCase = (this[APPLICATION_KEY] as GithubApplication).appContainer.getRepositoriesUseCase
                 GithubRepositoryListViewModel(
-                    repository = githubRepository
+                    getRepositoriesUseCase = getRepositoriesUseCase,
                 )
             }
         }

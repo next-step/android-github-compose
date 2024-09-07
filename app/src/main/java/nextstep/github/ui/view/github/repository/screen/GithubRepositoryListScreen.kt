@@ -20,7 +20,8 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.launch
 import nextstep.github.R
-import nextstep.github.model.GithubRepositoryDto
+import nextstep.github.ui.model.GithubRepositoryModel
+import nextstep.github.ui.view.github.repository.GithubRepositoryListUiState
 import nextstep.github.ui.view.github.repository.GithubRepositoryListViewModel
 
 @Composable
@@ -28,23 +29,20 @@ fun GithubRepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: GithubRepositoryListViewModel = viewModel(factory = GithubRepositoryListViewModel.Factory),
 ) {
-    val items by viewModel.repositories.collectAsStateWithLifecycle()
-    val isLoading by viewModel.isLoading.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
     val isError by viewModel.error.collectAsStateWithLifecycle()
     GithubRepositoryListScreen(
-        modifier = modifier,
-        items = items,
-        isLoading = isLoading,
+        uiState = uiState,
         isError = isError,
-        onRetry = viewModel::retry
+        onRetry = viewModel::retry,
+        modifier = modifier
     )
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubRepositoryListScreen(
-    items: List<GithubRepositoryDto>,
-    isLoading: Boolean,
+    uiState: GithubRepositoryListUiState,
     isError: Boolean,
     onRetry: () -> Unit,
     modifier: Modifier = Modifier,
@@ -77,15 +75,25 @@ fun GithubRepositoryListScreen(
             SnackbarHost(hostState = snackbarHostState)
         },
     ) { paddingValues ->
-        GithubRepositoryListSuccessScreen(
-            modifier = Modifier.padding(paddingValues),
-            items = items,
-        )
+        when (uiState) {
+            GithubRepositoryListUiState.Loading -> {
+                GithubRepositoryListLoadingScreen(
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
 
-        if (isLoading) {
-            GithubRepositoryListLoadingScreen(
-                modifier = Modifier.padding(paddingValues)
-            )
+            GithubRepositoryListUiState.Empty -> {
+                GithubRepositoryListEmptyScreen(
+                    modifier = Modifier.padding(paddingValues)
+                )
+            }
+
+            is GithubRepositoryListUiState.Repositories -> {
+                GithubRepositoryListRepositoriesScreen(
+                    modifier = Modifier.padding(paddingValues),
+                    items = uiState.repositories,
+                )
+            }
         }
     }
 }
@@ -94,13 +102,16 @@ fun GithubRepositoryListScreen(
 @Composable
 private fun GithubRepositoryListScreenPreviewSuccess() {
     GithubRepositoryListScreen(
-        items = List(10) {
-            GithubRepositoryDto(
-                fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
-            )
-        },
-        isLoading = false,
+        uiState = GithubRepositoryListUiState.Repositories(
+            repositories = List(10) {
+                GithubRepositoryModel(
+                    fullName = "next-step/nextstep-docs",
+                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                    stars = 0,
+                    isHot = false,
+                )
+            }
+        ),
         isError = false,
         onRetry = {},
     )
@@ -110,8 +121,7 @@ private fun GithubRepositoryListScreenPreviewSuccess() {
 @Composable
 private fun GithubRepositoryListScreenPreviewLoading() {
     GithubRepositoryListScreen(
-        items = emptyList(),
-        isLoading = true,
+        uiState = GithubRepositoryListUiState.Loading,
         isError = false,
         onRetry = {},
     )

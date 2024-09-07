@@ -7,6 +7,7 @@ import nextstep.github.data.GithubRepositoryImpl
 import nextstep.github.data.remote.GithubRemoteDataSource
 import nextstep.github.data.remote.GithubRemoteDataSourceImpl
 import nextstep.github.data.remote.api.GithubApiService
+import nextstep.github.domain.GetRepositoriesUseCase
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,7 +22,8 @@ class AppContainer {
 
     private val githubApiService: GithubApiService = retrofit.create(GithubApiService::class.java)
     private val githubRemoteDataSource: GithubRemoteDataSource = GithubRemoteDataSourceImpl(githubApiService)
-    val githubRepository: GithubRepository = GithubRepositoryImpl(githubRemoteDataSource)
+    private val githubRepository: GithubRepository = GithubRepositoryImpl(githubRemoteDataSource)
+    val getRepositoriesUseCase: GetRepositoriesUseCase = GetRepositoriesUseCase(githubRepository)
 
     companion object {
         private const val CONTENT_TYPE = "application/json"

@@ -10,11 +10,22 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.lifecycleScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import nextstep.github.ui.theme.GithubTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+
+        val appContainer = (application as GitHubApplication).appContainer
+        val repository = appContainer.nextStepRepository
+
+        lifecycleScope.launch(Dispatchers.IO) {
+            println(repository.getRepositories("next-step"))
+        }
+
         setContent {
             GithubTheme {
                 // A surface container using the 'background' color from the theme

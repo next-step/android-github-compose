@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
+import nextstep.github.ui.screen.github.GithubViewModel
 import nextstep.github.ui.screen.github.MainScreen
 import nextstep.github.ui.theme.GithubTheme
 

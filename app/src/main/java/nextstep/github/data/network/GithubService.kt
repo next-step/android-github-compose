@@ -1,6 +1,6 @@
-package nextstep.github.core.network
+package nextstep.github.data.network
 
-import nextstep.github.core.model.GithubRepositoryData
+import nextstep.github.data.model.GithubRepositoryData
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path

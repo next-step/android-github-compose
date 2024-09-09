@@ -1,6 +1,6 @@
-package nextstep.github.core.data
+package nextstep.github.data.repository
 
-import nextstep.github.core.model.GithubRepositoryData
+import nextstep.github.data.model.GithubRepositoryData
 import retrofit2.Response
 
 

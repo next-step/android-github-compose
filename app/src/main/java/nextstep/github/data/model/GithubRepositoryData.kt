@@ -1,4 +1,4 @@
-package nextstep.github.core.model
+package nextstep.github.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui.screen.github
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,7 +11,8 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import nextstep.github.core.network.ApiResult
+import nextstep.github.di.MainApplication
+import nextstep.github.data.network.ApiResult
 import nextstep.github.domain.usecase.GetGithubRepoUseCase
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 

@@ -1,7 +1,6 @@
-package nextstep.github
+package nextstep.github.di
 
 import android.app.Application
-import nextstep.github.core.di.AppContainer
 
 class MainApplication : Application() {
 

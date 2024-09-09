@@ -1,8 +1,8 @@
 package nextstep.github.domain.usecase
 
-import nextstep.github.core.data.GithubRepository
+import nextstep.github.data.repository.GithubRepository
 import nextstep.github.domain.entity.RepositoryEntity
-import nextstep.github.core.network.ApiResult
+import nextstep.github.data.network.ApiResult
 
 class GetGithubRepoUseCase(
     private val githubRepository: GithubRepository

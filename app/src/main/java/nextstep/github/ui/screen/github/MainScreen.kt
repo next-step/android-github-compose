@@ -14,7 +14,6 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import nextstep.github.GithubViewModel
 import nextstep.github.R
 import nextstep.github.domain.entity.RepositoryEntity
 import nextstep.github.ui.screen.github.component.MainTopBar

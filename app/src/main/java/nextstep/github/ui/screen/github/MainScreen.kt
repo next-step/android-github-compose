@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.domain.entity.RepositoryEntity
-import nextstep.github.ui.screen.github.component.MainTopBar
+import nextstep.github.ui.screen.github.list.component.MainTopBar
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryEmpty
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryList

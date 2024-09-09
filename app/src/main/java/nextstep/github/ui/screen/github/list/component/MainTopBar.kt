@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen.github.component
+package nextstep.github.ui.screen.github.list.component
 
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.ExperimentalMaterial3Api

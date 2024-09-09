@@ -1,6 +1,6 @@
-package nextstep.github.core.data
+package nextstep.github.domain.entity
 
-data class GithubRepositoryInfo(
+data class RepositoryEntity(
     val fullName: String,
     val description: String,
     val stars: Int

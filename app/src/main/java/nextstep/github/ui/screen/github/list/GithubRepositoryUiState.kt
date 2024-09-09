@@ -1,6 +1,6 @@
 package nextstep.github.ui.screen.github.list
 
-import nextstep.github.core.data.GithubRepositoryInfo
+import nextstep.github.domain.entity.RepositoryEntity
 
 sealed class GithubRepositoryUiState {
 
@@ -10,6 +10,6 @@ sealed class GithubRepositoryUiState {
 
     data object Empty : GithubRepositoryUiState()
 
-    data class Success(val githubRepositories: List<GithubRepositoryInfo>) :
+    data class Success(val githubRepositories: List<RepositoryEntity>) :
         GithubRepositoryUiState()
 }

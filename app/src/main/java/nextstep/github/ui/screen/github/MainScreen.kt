@@ -16,7 +16,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.GithubViewModel
 import nextstep.github.R
-import nextstep.github.core.data.GithubRepositoryInfo
+import nextstep.github.domain.entity.RepositoryEntity
 import nextstep.github.ui.screen.github.component.MainTopBar
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryEmpty
@@ -83,7 +83,7 @@ fun MainScreen(
 
             is GithubRepositoryUiState.Success -> {
                 GithubRepositoryList(
-                    githubRepositoryInfoList = uiState.githubRepositories,
+                    repositoryEntityList = uiState.githubRepositories,
                     modifier = Modifier.padding(paddingValues)
                 )
             }
@@ -116,22 +116,22 @@ private fun EmptyMainScreenPreview() {
 @Composable
 private fun SuccessMainScreenPreview() {
     val githubRepositoryList = listOf(
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "코드숨과 함께하는 NextStep",
             stars = 2
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "코드숨과 함께하는 NextStep",
             stars = 20
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "코드숨과 함께하는 NextStep",
             stars = 2
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "코드숨과 함께하는 NextStep",
             stars = 3

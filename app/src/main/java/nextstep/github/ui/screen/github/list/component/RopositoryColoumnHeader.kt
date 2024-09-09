@@ -15,11 +15,11 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.R
-import nextstep.github.core.data.GithubRepositoryInfo
+import nextstep.github.domain.entity.RepositoryEntity
 
 @Composable
 fun RepositoryColumnHeader(
-    repositoryInfo: GithubRepositoryInfo,
+    repositoryInfo: RepositoryEntity,
     modifier: Modifier = Modifier
 ) {
     Row(
@@ -53,7 +53,7 @@ fun RepositoryColumnHeader(
 @Composable
 private fun RepositoryColumnHeaderPreview() {
     RepositoryColumnHeader(
-        repositoryInfo = GithubRepositoryInfo(
+        repositoryInfo = RepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "코드숨과 함께하는 NextStep",
             stars = 32

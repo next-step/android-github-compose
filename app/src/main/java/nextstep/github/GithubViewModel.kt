@@ -11,13 +11,12 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import nextstep.github.core.data.GithubRepository
-import nextstep.github.core.data.GithubRepositoryInfo
 import nextstep.github.core.network.ApiResult
+import nextstep.github.domain.usecase.GetGithubRepoUseCase
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 
 class GithubViewModel(
-    private val githubRepository: GithubRepository
+    private val getGithubRepoUseCase: GetGithubRepoUseCase
 ) : ViewModel() {
 
     private val _uiState =
@@ -29,21 +28,14 @@ class GithubViewModel(
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
-                when (val result = githubRepository.getRepositories(organization)) {
+                when (val result = getGithubRepoUseCase(organization)) {
                     is ApiResult.Success -> {
-                        val githubRepositories = result.value.map {
-                            GithubRepositoryInfo(
-                                fullName = it.fullName ?: "",
-                                description = it.description ?: "",
-                                stars = it.stars ?: 0
-                            )
-                        }
-                        if (githubRepositories.isEmpty()) {
+                        if (result.value.isEmpty()) {
                             _uiState.value = GithubRepositoryUiState.Empty
                         } else {
                             _uiState.value =
                                 GithubRepositoryUiState.Success(
-                                    githubRepositories = githubRepositories
+                                    githubRepositories = result.value
                                 )
                         }
                     }
@@ -68,7 +60,9 @@ class GithubViewModel(
                     .appContainer
                     .githubRepository
 
-                GithubViewModel(githubRepository)
+                val getGithubRepoUseCase = GetGithubRepoUseCase(githubRepository)
+
+                GithubViewModel(getGithubRepoUseCase)
             }
         }
     }

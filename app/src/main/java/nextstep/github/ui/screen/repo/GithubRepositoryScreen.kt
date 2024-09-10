@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.GithubRepositoryModel
 import nextstep.github.ui.component.EmptyContent
 import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.component.LoadingContent
@@ -52,7 +52,7 @@ fun GithubRepositoryRoute(
 
 @Composable
 internal fun GithubRepositoryScreen(
-    repositoryItems: List<RepositoryResponse>,
+    repositoryItems: List<GithubRepositoryModel>,
     isLoading: Boolean,
     isError: Boolean,
     eventSink: (GithubEvent) -> Unit,
@@ -103,7 +103,7 @@ internal fun GithubRepositoryScreen(
 
 @Composable
 private fun RepositoryContent(
-    repositoryItems: List<RepositoryResponse>,
+    repositoryItems: List<GithubRepositoryModel>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -114,7 +114,8 @@ private fun RepositoryContent(
                 modifier = Modifier.padding(16.dp),
                 fullName = it.fullName,
                 description = it.description,
-                startCount = it.stars
+                startCount = it.stars,
+                isHot = it.isHot
             )
         }
     }
@@ -140,7 +141,7 @@ private fun ScreenPreview_정상케이스() {
     GithubTheme {
         GithubRepositoryScreen(
             repositoryItems = List(5) { index ->
-                RepositoryResponse(
+                GithubRepositoryModel(
                     fullName = "next-step/nextstep-docs",
                     description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
                     stars = index * 15

@@ -26,6 +26,7 @@ fun GithubRepositoryItem(
     fullName: String,
     description: String,
     startCount: Int,
+    isHot: Boolean,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -34,7 +35,7 @@ fun GithubRepositoryItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            if (startCount > 50) {
+            if (isHot) {
                 Text(
                     text = stringResource(R.string.repository_hot_item),
                     color = MaterialTheme.colorScheme.primary,
@@ -69,23 +70,24 @@ fun GithubRepositoryItem(
     }
 }
 
-private class GithubRepositoryItemProvider : PreviewParameterProvider<Pair<String, String>> {
-    override val values: Sequence<Pair<String, String>> = sequenceOf(
-        "next-step/nextstep-docs" to "nextstep 매뉴얼 및 문서를 관리하는 저장소",
-        "next-step/nextstep-docs" to "nextstep 매뉴얼 및 문서를 관리하는 저장소 nextstep 매뉴얼 및 문서를 관리하는 저장소 ",
+private class GithubRepositoryItemProvider : PreviewParameterProvider<Triple<String, String, Int>> {
+    override val values: Sequence<Triple<String, String, Int>> = sequenceOf(
+        Triple("next-step/nextstep-docs", "nextstep 매뉴얼 및 문서를 관리하는 저장소", 30),
+        Triple("next-step/nextstep-docs", "nextstep 매뉴얼 및 문서를 관리하는 저장소 nextstep 매뉴얼 및 문서를 관리하는 저장소", 60)
     )
 }
 
 @Preview(showBackground = true)
 @Composable
 private fun GithubRepositoryItemPreview(
-    @PreviewParameter(GithubRepositoryItemProvider::class) repository: Pair<String, String>,
+    @PreviewParameter(GithubRepositoryItemProvider::class) repository: Triple<String, String, Int>,
 ) {
     GithubTheme {
         GithubRepositoryItem(
             fullName = repository.first,
             description = repository.second,
-            startCount = 100
+            startCount = repository.third,
+            isHot = repository.third >= 50
         )
     }
 }

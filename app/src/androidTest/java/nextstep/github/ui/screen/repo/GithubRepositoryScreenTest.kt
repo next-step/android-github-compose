@@ -8,6 +8,7 @@ import androidx.compose.ui.test.onNodeWithText
 import nextstep.github.BaseComposeTest
 import nextstep.github.R
 import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.GithubRepositoryModel
 import org.junit.Before
 import org.junit.Test
 
@@ -56,7 +57,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
 
     @Test
     fun 보여줄_레포지토리가_존재한다면_로딩과_빈화면이_보이지_않아야_한다() {
-        state.value = GithubState(repositories = listOf(RepositoryResponse()), loading = false)
+        state.value = GithubState(repositories = listOf(GithubRepositoryModel()), loading = false)
 
         composeTestRule.onNodeWithText(
             resourceTestRule.getString(R.string.empty_section_title),
@@ -84,7 +85,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
 
     @Test
     fun Star가_50개_이상이면_HOT_텍스트가_보여야한다() {
-        state.value = GithubState(repositories = listOf(RepositoryResponse(stars = 50)), loading = false)
+        state.value = GithubState(repositories = listOf(GithubRepositoryModel(stars = 50)), loading = false)
 
         composeTestRule.onNodeWithText(
             resourceTestRule.getString(R.string.repository_hot_item)

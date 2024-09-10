@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepository
+import nextstep.github.domain.model.toModel
 
 class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository
@@ -33,7 +34,7 @@ class GithubRepositoryViewModel(
                 .onSuccess { repositories ->
                     _state.update {
                         it.copy(
-                            repositories = repositories,
+                            repositories = repositories.map { repo -> repo.toModel() },
                             loading = false,
                             exception = null
                         )

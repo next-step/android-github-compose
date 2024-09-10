@@ -1,14 +1,12 @@
 package nextstep.github.ui.screen.repo
 
-import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.GithubRepositoryModel
 
 data class GithubState(
-    val repositories: List<RepositoryResponse> = emptyList(),
+    val repositories: List<GithubRepositoryModel> = emptyList(),
     val loading: Boolean = true,
     val exception: Throwable? = null,
 ) {
-
-    val isHot = repositories.any { it.stars >= 50 }
 
     companion object {
         val Initial = GithubState(

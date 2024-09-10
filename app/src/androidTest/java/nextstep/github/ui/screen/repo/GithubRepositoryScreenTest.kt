@@ -81,6 +81,15 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
             resourceTestRule.getString(R.string.common_not_found_error)
         ).assertIsDisplayed()
     }
+
+    @Test
+    fun Star가_50개_이상이면_HOT_텍스트가_보여야한다() {
+        state.value = GithubState(repositories = listOf(RepositoryResponse(stars = 50)), loading = false)
+
+        composeTestRule.onNodeWithText(
+            resourceTestRule.getString(R.string.repository_hot_item)
+        ).assertIsNotDisplayed()
+    }
 }
 
 

@@ -34,7 +34,14 @@ fun GithubRepositoryItem(
         Row(
             verticalAlignment = Alignment.CenterVertically,
         ) {
-            Spacer(modifier = Modifier.weight(1f))
+            if (startCount > 50) {
+                Text(
+                    text = stringResource(R.string.repository_hot_item),
+                    color = MaterialTheme.colorScheme.primary,
+                    style = MaterialTheme.typography.labelLarge
+                )
+            }
+            Spacer(Modifier.weight(1f))
             Icon(
                 imageVector = Icons.Filled.Star,
                 contentDescription = stringResource(R.string.repository_start_count, fullName, startCount),

@@ -55,7 +55,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
     }
 
     @Test
-    fun 보여줄_레포지토리가_로딩과_빈화면이_보이지_않아야_한다() {
+    fun 보여줄_레포지토리가_존재한다면_로딩과_빈화면이_보이지_않아야_한다() {
         state.value = GithubState(repositories = listOf(RepositoryResponse()), loading = false)
 
         composeTestRule.onNodeWithText(

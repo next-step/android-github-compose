@@ -17,13 +17,14 @@ import org.junit.Test
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GithubRepositoryViewModelTest {
 
-    private val mockGithubRepository = mockk<GithubRepository>()
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var viewModel: GithubRepositoryViewModel
+    private lateinit var mockGithubRepository: GithubRepository
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        mockGithubRepository = mockk<GithubRepository>()
         viewModel = GithubRepositoryViewModel(mockGithubRepository)
     }
 

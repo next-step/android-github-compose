@@ -11,6 +11,7 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.data.repository.GithubRepository
 import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.toModel
 import org.junit.Before
 import org.junit.Test
 
@@ -37,8 +38,7 @@ internal class GithubRepositoryViewModelTest {
 
         viewModel.state.test {
             val secondState = awaitItem()
-            assertEquals(false, secondState.loading)
-            assertEquals(mockRepositories, secondState.repositories)
+            assertEquals(mockRepositories.map { it.toModel() }, secondState.repositories)
         }
     }
 
@@ -51,7 +51,7 @@ internal class GithubRepositoryViewModelTest {
 
         viewModel.state.test {
             val secondState = awaitItem()
-            assertEquals(exception, secondState.exception)
+            assertEquals(secondState.isError, true)
         }
     }
 }

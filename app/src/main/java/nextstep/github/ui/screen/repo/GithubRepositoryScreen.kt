@@ -27,7 +27,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.domain.model.GithubRepositoryModel
-import nextstep.github.ui.component.EmptyContent
+import nextstep.github.ui.component.EmptyRepositoryContent
 import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.component.LoadingContent
 import nextstep.github.ui.theme.GithubTheme
@@ -93,7 +93,7 @@ internal fun GithubRepositoryScreen(
         if (isLoading) {
             LoadingContent(modifier = innerPaddingModifier)
         } else if (repositoryItems.isEmpty()) {
-            EmptyContent(modifier = innerPaddingModifier)
+            EmptyRepositoryContent(modifier = innerPaddingModifier)
         } else {
             RepositoryContent(
                 repositoryItems = repositoryItems,

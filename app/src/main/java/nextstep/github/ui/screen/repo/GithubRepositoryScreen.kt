@@ -113,7 +113,8 @@ private fun RepositoryContent(
             GithubRepositoryItem(
                 modifier = Modifier.padding(16.dp),
                 fullName = it.fullName,
-                description = it.description
+                description = it.description,
+                startCount = it.stars
             )
         }
     }

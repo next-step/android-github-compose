@@ -25,7 +25,7 @@
 
 ## step4
 
-- [ ] Github ResponseEntity에 `stargazers_count`을 추가한다.
+- [x] Github ResponseEntity에 `stargazers_count`을 추가한다.
 - [ ] Github Repo 아이템에 Star 부분을 추가한다.
 - [ ] Star를 UI에 적용한다.
 - [ ] Star 개수가 50개 이상이면 HOT 텍스트 노출하는 로직 추가

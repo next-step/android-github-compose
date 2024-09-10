@@ -55,8 +55,8 @@ internal class GithubRepositoryTest {
             .setBody(
                 """
                 [
-                    {"description": "Repo1", "full_name": "org/Repo1"},
-                    {"description": "Repo2", "full_name": "org/Repo2"}
+                    {"description": "Repo1", "full_name": "org/Repo1", "stargazers_count": 10},
+                    {"description": "Repo2", "full_name": "org/Repo2", "stargazers_count": 20}
                 ]
             """.trimIndent()
             )
@@ -70,11 +70,13 @@ internal class GithubRepositoryTest {
         val expectedRepository = listOf(
             RepositoryResponse(
                 fullName = "org/Repo1",
-                description = "Repo1"
+                description = "Repo1",
+                stars = 10,
             ),
             RepositoryResponse(
                 fullName = "org/Repo2",
-                description = "Repo2"
+                description = "Repo2",
+                stars = 20,
             )
         )
         assertTrue(result.isSuccess)

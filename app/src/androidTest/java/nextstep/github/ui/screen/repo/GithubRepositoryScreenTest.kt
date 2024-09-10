@@ -7,7 +7,6 @@ import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import nextstep.github.BaseComposeTest
 import nextstep.github.R
-import nextstep.github.data.response.RepositoryResponse
 import nextstep.github.domain.model.GithubRepositoryModel
 import org.junit.Before
 import org.junit.Test
@@ -22,7 +21,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
             GithubRepositoryScreen(
                 repositoryItems = state.value.repositories,
                 isLoading = state.value.loading,
-                isError = state.value.exception != null,
+                isError = state.value.isError,
                 eventSink = {}
             )
         }
@@ -69,7 +68,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
 
     @Test
     fun 에러가_발생하면_재시도_스낵바가_보여야한다() {
-        state.value = GithubState(exception = Exception("fail"))
+        state.value = GithubState(isError = true)
 
         composeTestRule.onNodeWithText(
             resourceTestRule.getString(R.string.common_not_found_error)

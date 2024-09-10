@@ -47,7 +47,7 @@ fun GithubRepositoryRoute(
         modifier = modifier,
         repositoryItems = state.repositories,
         isLoading = state.loading,
-        isError = state.exception != null,
+        isError = state.isError,
         eventSink = viewModel::handleEvent
     )
 }

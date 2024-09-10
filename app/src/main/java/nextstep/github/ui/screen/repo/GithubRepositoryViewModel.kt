@@ -36,14 +36,14 @@ class GithubRepositoryViewModel(
                         it.copy(
                             repositories = repositories.map { repo -> repo.toModel() },
                             loading = false,
-                            exception = null
+                            isError = false
                         )
                     }
                 }
-                .onFailure { error ->
+                .onFailure {
                     _state.update {
                         it.copy(
-                            exception = error,
+                            isError = true,
                         )
                     }
                 }

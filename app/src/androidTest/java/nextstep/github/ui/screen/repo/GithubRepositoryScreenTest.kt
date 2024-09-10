@@ -88,7 +88,7 @@ internal class GithubRepositoryScreenTest : BaseComposeTest() {
 
         composeTestRule.onNodeWithText(
             resourceTestRule.getString(R.string.repository_hot_item)
-        ).assertIsNotDisplayed()
+        ).assertIsDisplayed()
     }
 }
 

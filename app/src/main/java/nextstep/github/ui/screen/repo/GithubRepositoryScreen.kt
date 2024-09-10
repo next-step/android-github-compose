@@ -142,7 +142,8 @@ private fun ScreenPreview_정상케이스() {
             repositoryItems = List(5) {
                 RepositoryResponse(
                     fullName = "next-step/nextstep-docs",
-                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                    stars = 50
                 )
             },
             isLoading = false,

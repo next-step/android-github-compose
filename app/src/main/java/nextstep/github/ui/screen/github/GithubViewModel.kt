@@ -8,11 +8,12 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.launch
-import nextstep.github.di.MainApplication
 import nextstep.github.data.network.ApiResult
+import nextstep.github.di.MainApplication
 import nextstep.github.domain.usecase.GetGithubRepoUseCase
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 
@@ -25,10 +26,11 @@ class GithubViewModel(
     val uiState: StateFlow<GithubRepositoryUiState> = _uiState
 
     fun getRepositories(organization: String) {
-        _uiState.value = GithubRepositoryUiState.Loading
 
         viewModelScope.launch(Dispatchers.IO) {
             try {
+                _uiState.value = GithubRepositoryUiState.Loading
+                delay(300)
                 when (val result = getGithubRepoUseCase(organization)) {
                     is ApiResult.Success -> {
                         if (result.value.isEmpty()) {
@@ -53,6 +55,9 @@ class GithubViewModel(
         }
     }
 
+    fun setLoadingUiState() {
+        _uiState.value = GithubRepositoryUiState.Loading
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {

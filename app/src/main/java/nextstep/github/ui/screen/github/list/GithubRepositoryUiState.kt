@@ -1,15 +1,14 @@
 package nextstep.github.ui.screen.github.list
 
-import nextstep.github.core.data.GithubRepositoryInfo
+import nextstep.github.domain.entity.RepositoryEntity
 
 sealed class GithubRepositoryUiState {
-
-    data object Error : GithubRepositoryUiState()
-
     data object Loading : GithubRepositoryUiState()
-
-    data object Empty : GithubRepositoryUiState()
-
-    data class Success(val githubRepositories: List<GithubRepositoryInfo>) :
-        GithubRepositoryUiState()
+    data class Ready(
+        val githubRepositories: List<RepositoryEntity>,
+        val isError: Boolean = false
+    ) : GithubRepositoryUiState() {
+        val isEmpty: Boolean
+            get() = githubRepositories.isEmpty()
+    }
 }

@@ -5,19 +5,19 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.core.data.GithubRepositoryInfo
+import nextstep.github.domain.entity.RepositoryEntity
 
 @Composable
 fun GithubRepositoryList(
-    githubRepositoryInfoList: List<GithubRepositoryInfo>,
+    repositoryEntityList: List<RepositoryEntity>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
         modifier = modifier.fillMaxWidth()
     ) {
-        items(githubRepositoryInfoList.size) {
+        items(repositoryEntityList.size) {
             RepositoryColumn(
-                repositoryInfo = githubRepositoryInfoList[it],
+                repositoryInfo = repositoryEntityList[it],
                 modifier = Modifier
             )
         }
@@ -28,26 +28,30 @@ fun GithubRepositoryList(
 @Composable
 private fun GithubRepositoryListPreview() {
     val githubRepositoryList = listOf(
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 3
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 2
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 20
         ),
-        GithubRepositoryInfo(
+        RepositoryEntity(
             fullName = "next-step/nextstep-study",
-            description = "코드숨과 함께하는 NextStep"
+            description = "코드숨과 함께하는 NextStep",
+            stars = 2
         )
     )
 
     GithubRepositoryList(
-        githubRepositoryInfoList = githubRepositoryList,
+        repositoryEntityList = githubRepositoryList,
         modifier = Modifier
     )
 }

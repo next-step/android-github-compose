@@ -4,4 +4,6 @@
     <string name="text_empty_list_comment">목록이 비었습니다.</string>
     <string name="text_snackbar_network_error">예상치 못한 오류가 발생했습니다</string>
     <string name="text_snackbar_action_retry">재시도</string>
+    <string name="text_hot">HOT</string>
+    <string name="text_description_repository_star_icon">NEW</string>
 </resources>

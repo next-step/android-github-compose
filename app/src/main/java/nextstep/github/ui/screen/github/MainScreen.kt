@@ -33,7 +33,7 @@ fun MainScreen(
     MainScreen(
         uiState = uiState,
         snackbarHostState = snackbarHostState,
-        onClickSnackBar = { viewModel.getRepositories("next-step") }
+        onRetry = { viewModel.getRepositories("next-step") }
     )
 }
 
@@ -41,7 +41,7 @@ fun MainScreen(
 fun MainScreen(
     uiState: GithubRepositoryUiState = GithubRepositoryUiState.Loading,
     snackbarHostState: SnackbarHostState,
-    onClickSnackBar: () -> Unit = {}
+    onRetry: () -> Unit = {}
 ) {
     // stateless
     Scaffold(
@@ -69,7 +69,7 @@ fun MainScreen(
                     )
 
                     if (snackbarResult == SnackbarResult.ActionPerformed) {
-                        onClickSnackBar()
+                        onRetry()
                     }
                 }
             }

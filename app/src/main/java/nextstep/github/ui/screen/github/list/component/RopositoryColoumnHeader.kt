@@ -26,7 +26,7 @@ fun RepositoryColumnHeader(
         modifier = Modifier
             .padding(horizontal = 16.dp)
     ) {
-        if(repositoryInfo.stars > 50) {
+        if(repositoryInfo.isHot) {
             Text(
                 modifier = Modifier.align(Alignment.CenterVertically),
                 text = stringResource(id = R.string.text_hot),

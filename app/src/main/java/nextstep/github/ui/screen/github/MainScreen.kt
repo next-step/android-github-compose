@@ -16,11 +16,11 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.domain.entity.RepositoryEntity
-import nextstep.github.ui.screen.github.list.component.MainTopBar
 import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryEmpty
 import nextstep.github.ui.screen.github.list.component.GithubRepositoryList
 import nextstep.github.ui.screen.github.list.component.LoadingProgress
+import nextstep.github.ui.screen.github.list.component.MainTopBar
 
 @Composable
 fun MainScreen(
@@ -39,8 +39,9 @@ fun MainScreen(
 
 @Composable
 fun MainScreen(
-    uiState: GithubRepositoryUiState = GithubRepositoryUiState.Loading,
+    uiState: GithubRepositoryUiState,
     snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
     onRetry: () -> Unit = {}
 ) {
     // stateless
@@ -51,47 +52,42 @@ fun MainScreen(
     { paddingValues ->
         when (uiState) {
             is GithubRepositoryUiState.Loading -> {
-                // 로딩 화면
                 LoadingProgress(
                     modifier = Modifier.padding(paddingValues)
                 )
             }
 
-            is GithubRepositoryUiState.Error -> {
-                // 에러 화면
-                val errorMsg = stringResource(id = R.string.text_snackbar_network_error)
-                val actionLabel = stringResource(id = R.string.text_snackbar_action_retry)
+            is GithubRepositoryUiState.Ready -> {
+                if (uiState.isError) {
+                    val errorMsg = stringResource(id = R.string.text_snackbar_network_error)
+                    val actionLabel = stringResource(id = R.string.text_snackbar_action_retry)
 
-                LaunchedEffect(snackbarHostState) {
-                    val snackbarResult = snackbarHostState.showSnackbar(
-                        message = errorMsg,
-                        actionLabel = actionLabel,
-                    )
+                    LaunchedEffect(snackbarHostState) {
+                        val snackbarResult = snackbarHostState.showSnackbar(
+                            message = errorMsg,
+                            actionLabel = actionLabel,
+                        )
 
-                    if (snackbarResult == SnackbarResult.ActionPerformed) {
-                        onRetry()
+                        if (snackbarResult == SnackbarResult.ActionPerformed) {
+                            onRetry()
+                        }
                     }
                 }
+
+                if (uiState.isEmpty) {
+                    GithubRepositoryEmpty(
+                        modifier = Modifier.padding(paddingValues)
+                    )
+                } else {
+                    GithubRepositoryList(
+                        repositoryEntityList = uiState.githubRepositories,
+                        modifier = Modifier.padding(paddingValues)
+                    )
+                }
             }
-
-            is GithubRepositoryUiState.Empty -> {
-                GithubRepositoryEmpty(
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-
-            is GithubRepositoryUiState.Success -> {
-                GithubRepositoryList(
-                    repositoryEntityList = uiState.githubRepositories,
-                    modifier = Modifier.padding(paddingValues)
-                )
-            }
-
-
         }
     }
 }
-
 
 @Preview
 @Composable
@@ -106,7 +102,10 @@ private fun LoadingMainScreenPreview() {
 @Composable
 private fun EmptyMainScreenPreview() {
     MainScreen(
-        uiState = GithubRepositoryUiState.Empty,
+        uiState = GithubRepositoryUiState.Ready(
+            githubRepositories = emptyList(),
+            isError = true
+        ),
         snackbarHostState = remember { SnackbarHostState() }
     )
 }
@@ -138,7 +137,10 @@ private fun SuccessMainScreenPreview() {
     )
 
     MainScreen(
-        uiState = GithubRepositoryUiState.Success(githubRepositoryList),
+        uiState = GithubRepositoryUiState.Ready(
+            githubRepositories = githubRepositoryList,
+            isError = false
+        ),
         snackbarHostState = remember { SnackbarHostState() }
     )
 }

@@ -20,9 +20,7 @@ import nextstep.github.ui.screen.github.list.GithubRepositoryUiState
 class GithubViewModel(
     private val getGithubRepoUseCase: GetGithubRepoUseCase
 ) : ViewModel() {
-
-    private val _uiState =
-        MutableStateFlow<GithubRepositoryUiState>(GithubRepositoryUiState.Loading)
+    private val _uiState = MutableStateFlow<GithubRepositoryUiState>(GithubRepositoryUiState.Loading)
     val uiState: StateFlow<GithubRepositoryUiState> = _uiState
 
     fun getRepositories(organization: String) {
@@ -33,30 +31,26 @@ class GithubViewModel(
                 delay(300)
                 when (val result = getGithubRepoUseCase(organization)) {
                     is ApiResult.Success -> {
-                        if (result.value.isEmpty()) {
-                            _uiState.value = GithubRepositoryUiState.Empty
-                        } else {
-                            _uiState.value =
-                                GithubRepositoryUiState.Success(
-                                    githubRepositories = result.value
-                                )
-                        }
+                        _uiState.value = GithubRepositoryUiState.Ready(
+                            githubRepositories = result.value,
+                            isError = false
+                        )
                     }
 
                     is ApiResult.Error -> {
-                        _uiState.value = GithubRepositoryUiState.Error
-                        Log.e("GithubViewModel", "Error: ${result.code} ${result.exception}")
+                        _uiState.value = GithubRepositoryUiState.Ready(
+                            githubRepositories = emptyList(),
+                            isError = true
+                        )
                     }
                 }
             } catch (e: Exception) {
-                _uiState.value = GithubRepositoryUiState.Error
-                Log.e("GithubViewModel", "Error: ${e.message}")
+                _uiState.value = GithubRepositoryUiState.Ready(
+                    githubRepositories = emptyList(),
+                    isError = true
+                )
             }
         }
-    }
-
-    fun setLoadingUiState() {
-        _uiState.value = GithubRepositoryUiState.Loading
     }
 
     companion object {

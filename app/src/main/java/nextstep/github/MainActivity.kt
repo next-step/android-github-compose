@@ -22,7 +22,7 @@ class MainActivity : ComponentActivity() {
         val appContainer = (application as GitHubApplication).appContainer
         val repository = appContainer.nextStepRepository
 
-        lifecycleScope.launch(Dispatchers.IO) {
+        lifecycleScope.launch {
             println(repository.getRepositories("next-step"))
         }
 

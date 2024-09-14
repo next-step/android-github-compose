@@ -15,15 +15,32 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.model.NextStepRepositoryEntity
+import nextstep.github.viewmodel.RepositoryListViewModel
+
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
+@Composable
+fun RepositoryListScreenStateful(viewModel: RepositoryListViewModel) {
+    var repositories by remember { mutableStateOf<List<NextStepRepositoryEntity>>(emptyList()) }
+
+    LaunchedEffect(Unit) {
+        repositories = viewModel.getRepositories("next-step")
+    }
+
+    RepositoryListScreenStateless(repositories = repositories)
+}
 
 @OptIn(ExperimentalMaterial3Api::class)
-@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 @Composable
-fun RepositoryListScreen(repositories: List<NextStepRepositoryEntity>) {
+fun RepositoryListScreenStateless(repositories: List<NextStepRepositoryEntity>) {
     Scaffold(
         topBar = {
             CenterAlignedTopAppBar(
@@ -58,8 +75,8 @@ fun RepositoryListScreen(repositories: List<NextStepRepositoryEntity>) {
 
 @Preview(showBackground = true)
 @Composable
-fun RepositoryListScreenPreview() {
-    RepositoryListScreen(
+fun StatelessRepositoryListScreenPreview() {
+    RepositoryListScreenStateless(
         repositories = listOf(
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",

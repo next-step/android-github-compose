@@ -114,7 +114,7 @@ private fun GithubRepositoryListScreenErrorPreview() {
     }
     GithubTheme {
         GithubRepositoryListScreen(
-            uiState = GithubRepoUiState(isLoading = true),
+            uiState = GithubRepoUiState(isLoading = false),
             snackBarHostState = snackBarHostState
         )
     }

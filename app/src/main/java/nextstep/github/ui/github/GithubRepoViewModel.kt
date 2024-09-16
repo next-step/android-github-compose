@@ -33,6 +33,7 @@ class GithubRepoViewModel(
 
     private fun fetchRepositories() {
         viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
+            _githubUiState.update { it.copy(isLoading = false) }
             _errorFlow.tryEmit(throwable)
         }) {
             _githubUiState.update { it.copy(isLoading = true) }

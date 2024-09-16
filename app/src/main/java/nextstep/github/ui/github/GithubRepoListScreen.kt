@@ -23,7 +23,7 @@ import kotlinx.coroutines.launch
 import nextstep.github.R
 import nextstep.github.model.GithubRepo
 import nextstep.github.ui.github.component.GithubRepoLoading
-import nextstep.github.ui.github.component.GithubRepoSuccess
+import nextstep.github.ui.github.component.GithubRepoList
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -71,7 +71,7 @@ private fun GithubRepositoryListScreen(
         if (uiState.isLoading) {
             GithubRepoLoading(modifier = Modifier.padding(it))
         }
-        GithubRepoSuccess(
+        GithubRepoList(
             modifier = Modifier.padding(it),
             repositories = uiState.repositories
         )

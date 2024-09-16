@@ -11,7 +11,7 @@ import nextstep.github.model.GithubRepo
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun GithubRepoSuccess(
+fun GithubRepoList(
     repositories: List<GithubRepo>,
     modifier: Modifier = Modifier,
 ) {
@@ -23,11 +23,11 @@ fun GithubRepoSuccess(
     }
 }
 
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "Github 저장소 리스트 불러오기 성공")
 @Composable
-private fun GithubRepoSuccessPreview() {
+private fun GithubRepoListPreview() {
     GithubTheme {
-        GithubRepoSuccess(
+        GithubRepoList(
             repositories = listOf(
                 GithubRepo(1, "NextStep/Test", "테스트 저장소"),
                 GithubRepo(2, "NextStep/Test2", "테스트 저장소2"),

@@ -15,8 +15,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.tooling.preview.PreviewParameter
-import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import nextstep.github.R
 import nextstep.github.ui.theme.GithubTheme
@@ -70,24 +68,28 @@ fun GithubRepositoryItem(
     }
 }
 
-private class GithubRepositoryItemProvider : PreviewParameterProvider<Triple<String, String, Int>> {
-    override val values: Sequence<Triple<String, String, Int>> = sequenceOf(
-        Triple("next-step/nextstep-docs", "nextstep 매뉴얼 및 문서를 관리하는 저장소", 30),
-        Triple("next-step/nextstep-docs", "nextstep 매뉴얼 및 문서를 관리하는 저장소 nextstep 매뉴얼 및 문서를 관리하는 저장소", 60)
-    )
-}
-
-@Preview(showBackground = true)
+@Preview(showBackground = true, name = "star 50개 미만 Repository Preview")
 @Composable
-private fun GithubRepositoryItemPreview(
-    @PreviewParameter(GithubRepositoryItemProvider::class) repository: Triple<String, String, Int>,
-) {
+private fun Preview1() {
     GithubTheme {
         GithubRepositoryItem(
-            fullName = repository.first,
-            description = repository.second,
-            startCount = repository.third,
-            isHot = repository.third >= 50
+            fullName = "next-step/nextstep-docs",
+            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+            startCount = 30,
+            isHot = false
+        )
+    }
+}
+
+@Preview(showBackground = true, name = "HOT Repository Preview")
+@Composable
+private fun Preview2() {
+    GithubTheme {
+        GithubRepositoryItem(
+            fullName = "next-step/nextstep-docs",
+            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소 nextstep 매뉴얼 및 문서를 관리하는 저장소",
+            startCount = 60,
+            isHot = true
         )
     }
 }

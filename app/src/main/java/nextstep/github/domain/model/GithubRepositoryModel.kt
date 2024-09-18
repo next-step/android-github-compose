@@ -3,9 +3,9 @@ package nextstep.github.domain.model
 import nextstep.github.data.response.RepositoryResponse
 
 data class GithubRepositoryModel(
-    val fullName: String = "",
-    val description: String = "",
-    val stars: Int = 0,
+    val fullName: String,
+    val description: String,
+    val stars: Int,
 ) {
     val isHot: Boolean
         get() = stars >= 50

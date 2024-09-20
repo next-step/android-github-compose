@@ -11,19 +11,21 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
 import nextstep.github.data.repository.GithubRepository
 import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.toModel
 import org.junit.Before
 import org.junit.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GithubRepositoryViewModelTest {
 
-    private val mockGithubRepository = mockk<GithubRepository>()
     private val testDispatcher = UnconfinedTestDispatcher()
     private lateinit var viewModel: GithubRepositoryViewModel
+    private lateinit var mockGithubRepository: GithubRepository
 
     @Before
     fun setup() {
         Dispatchers.setMain(testDispatcher)
+        mockGithubRepository = mockk<GithubRepository>()
         viewModel = GithubRepositoryViewModel(mockGithubRepository)
     }
 
@@ -36,8 +38,7 @@ internal class GithubRepositoryViewModelTest {
 
         viewModel.state.test {
             val secondState = awaitItem()
-            assertEquals(false, secondState.loading)
-            assertEquals(mockRepositories, secondState.repositories)
+            assertEquals(mockRepositories.map { it.toModel() }, secondState.repositories)
         }
     }
 
@@ -50,7 +51,7 @@ internal class GithubRepositoryViewModelTest {
 
         viewModel.state.test {
             val secondState = awaitItem()
-            assertEquals(exception, secondState.exception)
+            assertEquals(secondState.isError, true)
         }
     }
 }

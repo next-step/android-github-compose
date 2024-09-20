@@ -1,17 +1,18 @@
 package nextstep.github.ui.screen.repo
 
-import nextstep.github.data.response.RepositoryResponse
+import nextstep.github.domain.model.GithubRepositoryModel
 
 data class GithubState(
-    val repositories: List<RepositoryResponse> = emptyList(),
+    val repositories: List<GithubRepositoryModel> = emptyList(),
     val loading: Boolean = true,
-    val exception: Throwable? = null,
+    val isError: Boolean = false,
 ) {
+
     companion object {
         val Initial = GithubState(
             repositories = emptyList(),
             loading = true,
-            exception = null
+            isError = false
         )
     }
 }

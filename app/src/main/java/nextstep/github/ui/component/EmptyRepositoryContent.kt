@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.R
 
 @Composable
-fun EmptyContent(
+fun EmptyRepositoryContent(
     modifier: Modifier = Modifier
 ) {
     Box(
@@ -25,5 +25,5 @@ fun EmptyContent(
 @Preview(showBackground = true)
 @Composable
 private fun EmptyContentPreview() {
-    EmptyContent()
+    EmptyRepositoryContent()
 }

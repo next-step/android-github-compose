@@ -5,6 +5,7 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarDuration
@@ -17,6 +18,7 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -24,8 +26,8 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.data.response.RepositoryResponse
-import nextstep.github.ui.component.EmptyContent
+import nextstep.github.domain.model.GithubRepositoryModel
+import nextstep.github.ui.component.EmptyRepositoryContent
 import nextstep.github.ui.component.GithubRepositoryItem
 import nextstep.github.ui.component.LoadingContent
 import nextstep.github.ui.theme.GithubTheme
@@ -45,14 +47,14 @@ fun GithubRepositoryRoute(
         modifier = modifier,
         repositoryItems = state.repositories,
         isLoading = state.loading,
-        isError = state.exception != null,
+        isError = state.isError,
         eventSink = viewModel::handleEvent
     )
 }
 
 @Composable
 internal fun GithubRepositoryScreen(
-    repositoryItems: List<RepositoryResponse>,
+    repositoryItems: List<GithubRepositoryModel>,
     isLoading: Boolean,
     isError: Boolean,
     eventSink: (GithubEvent) -> Unit,
@@ -91,7 +93,7 @@ internal fun GithubRepositoryScreen(
         if (isLoading) {
             LoadingContent(modifier = innerPaddingModifier)
         } else if (repositoryItems.isEmpty()) {
-            EmptyContent(modifier = innerPaddingModifier)
+            EmptyRepositoryContent(modifier = innerPaddingModifier)
         } else {
             RepositoryContent(
                 repositoryItems = repositoryItems,
@@ -103,7 +105,7 @@ internal fun GithubRepositoryScreen(
 
 @Composable
 private fun RepositoryContent(
-    repositoryItems: List<RepositoryResponse>,
+    repositoryItems: List<GithubRepositoryModel>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -113,7 +115,15 @@ private fun RepositoryContent(
             GithubRepositoryItem(
                 modifier = Modifier.padding(16.dp),
                 fullName = it.fullName,
-                description = it.description
+                description = it.description,
+                startCount = it.stars,
+                isHot = it.isHot
+            )
+
+            HorizontalDivider(
+                color = Color.Gray,
+                thickness = 1.dp,
+                modifier = Modifier.padding(horizontal = 16.dp)
             )
         }
     }
@@ -138,10 +148,11 @@ private fun GithubRepositoryTopAppBar() {
 private fun ScreenPreview_정상케이스() {
     GithubTheme {
         GithubRepositoryScreen(
-            repositoryItems = List(5) {
-                RepositoryResponse(
+            repositoryItems = List(5) { index ->
+                GithubRepositoryModel(
                     fullName = "next-step/nextstep-docs",
-                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                    stars = index * 15
                 )
             },
             isLoading = false,
@@ -183,7 +194,7 @@ private fun ScreenPreview_에러() {
     GithubTheme {
         GithubRepositoryScreen(
             repositoryItems = emptyList(),
-            isLoading = false,
+            isLoading = true,
             isError = true,
             eventSink = {}
         )

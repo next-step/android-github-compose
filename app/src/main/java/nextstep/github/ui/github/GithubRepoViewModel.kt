@@ -32,13 +32,15 @@ class GithubRepoViewModel(
     }
 
     private fun fetchRepositories() {
-        viewModelScope.launch(CoroutineExceptionHandler { _, throwable ->
-            _githubUiState.update { it.copy(isLoading = false) }
-            _errorFlow.tryEmit(throwable)
-        }) {
+        viewModelScope.launch {
             _githubUiState.update { it.copy(isLoading = true) }
-            val repositories = githubRepoRepository.getRepositories("next-step")
-            _githubUiState.update { it.copy(repositories = repositories, isLoading = false) }
+            runCatching {
+                val repositories = githubRepoRepository.getRepositories("next-step")
+                _githubUiState.update { it.copy(repositories = repositories, isLoading = false) }
+            }.onFailure { throwable ->
+                _githubUiState.update { it.copy(isLoading = false) }
+                _errorFlow.emit(throwable)
+            }
         }
     }
 

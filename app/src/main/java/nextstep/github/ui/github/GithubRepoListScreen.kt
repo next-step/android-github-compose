@@ -43,7 +43,7 @@ fun GithubRepositoryListScreen(
                     message = context.getString(R.string.error_message),
                     actionLabel = context.getString(R.string.error_retry)
                 )
-                if (snackBarResult == SnackbarResult.ActionPerformed) run { viewModel::retryGithubRepo }
+                if (snackBarResult == SnackbarResult.ActionPerformed) viewModel.retryGithubRepo()
             }
         }
     }

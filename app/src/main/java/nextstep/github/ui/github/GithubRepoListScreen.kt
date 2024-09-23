@@ -55,7 +55,7 @@ fun GithubRepositoryListScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GithubRepositoryListScreen(
+fun GithubRepositoryListScreen(
     uiState: GithubRepoUiState,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier

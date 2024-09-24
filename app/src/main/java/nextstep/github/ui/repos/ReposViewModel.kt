@@ -13,7 +13,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.flow.update
 import nextstep.github.NextStepApp
@@ -24,14 +23,18 @@ internal class ReposViewModel(
     private val getGitHubRepositoryUseCase: GetGitHubRepositoryUseCase
 ) : ViewModel() {
 
-    private val refreshTrigger = MutableStateFlow(TARGET_ORGANIZATION)
+    class Query(val organization: String)
+    // 같은 저장소라도 검색이 가능하도록 String 타입이 아닌 Query 타입을 사용
+    private val refreshTrigger = MutableStateFlow(Query(TARGET_ORGANIZATION))
 
     @OptIn(ExperimentalCoroutinesApi::class)
     val repos: StateFlow<ReposUiState> = refreshTrigger
-        .flatMapLatest { organization ->
-            flow { emit(getGitHubRepositoryUseCase(organization = organization)) }
-                .map { ReposUiState.Success(it) }
-                .catch<ReposUiState> { emit(ReposUiState.Error(it)) }
+        .flatMapLatest { query ->
+            flow {
+                emit(ReposUiState.Loading)
+                val repos = getGitHubRepositoryUseCase(organization = query.organization)
+                emit(ReposUiState.Success(repos))
+            }.catch { e -> emit(ReposUiState.Error(e)) }
         }.stateIn(
             scope = viewModelScope,
             started = SharingStarted.WhileSubscribed(5_000),
@@ -39,7 +42,7 @@ internal class ReposViewModel(
         )
 
     fun searchRepos(organization: String = TARGET_ORGANIZATION) {
-        refreshTrigger.update { organization }
+        refreshTrigger.update { Query(organization) }
     }
 
     companion object {

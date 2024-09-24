@@ -12,8 +12,10 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import nextstep.github.R
 
 @Composable
 internal fun ReposErrorScreen(
@@ -29,7 +31,7 @@ internal fun ReposErrorScreen(
             horizontalAlignment = Alignment.CenterHorizontally
         ) {
             Text(
-                text = "레포지토리를 불러오는 과정에서 문제가 발생했습니다",
+                text = stringResource(R.string.repos_errorscreen_guide_message),
                 style = MaterialTheme.typography.bodyMedium
             )
 
@@ -39,7 +41,7 @@ internal fun ReposErrorScreen(
                 onClick = onRetryClick
             ) {
                 Text(
-                    text = "다시 시도하기",
+                    text = stringResource(R.string.repos_errorscreen_retry_button),
                     style = MaterialTheme.typography.bodyMedium
                 )
             }

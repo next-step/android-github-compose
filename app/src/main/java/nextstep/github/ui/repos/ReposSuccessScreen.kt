@@ -13,10 +13,12 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
+import nextstep.github.R
 import nextstep.github.ui.model.UiGitHubRepoInfo
 import nextstep.github.ui.repos.component.GitHubRepoInfoItem
 
@@ -35,7 +37,7 @@ internal fun ReposSuccessScreen(
                 contentAlignment = Alignment.Center
             ) {
                 Text(
-                    text = "NEXTSTEP Repositories",
+                    text = stringResource(R.string.repos_successscreen_title),
                     style = MaterialTheme.typography.titleLarge
                 )
             }

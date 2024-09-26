@@ -23,7 +23,7 @@ fun GithubRepoItem(
             .padding(16.dp),
     ) {
         Text(
-            text = githubRepo.fullName ?: "Unknown",
+            text = githubRepo.fullName,
             style = MaterialTheme.typography.titleLarge,
         )
         Text(

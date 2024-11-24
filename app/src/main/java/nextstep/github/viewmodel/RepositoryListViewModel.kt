@@ -13,12 +13,16 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GitHubApplication
 import nextstep.github.data.NextStepRepository
+import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
 
 class RepositoryListViewModel(private val nextStepRepository: NextStepRepository) : ViewModel() {
 
     private val _repositories = MutableStateFlow<List<NextStepRepositoryEntity>>(emptyList())
     val repositories: StateFlow<List<NextStepRepositoryEntity>> = _repositories.asStateFlow()
+
+    private val _loadState = MutableStateFlow<LoadState>(LoadState.Loading)
+    val loadState: StateFlow<LoadState> = _loadState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -27,8 +31,14 @@ class RepositoryListViewModel(private val nextStepRepository: NextStepRepository
     }
 
     private suspend fun getRepositories(organization: String) {
-        val repositoryEntities = nextStepRepository.getRepositories(organization)
-        _repositories.update { repositoryEntities }
+        _loadState.value = LoadState.Loading
+        try {
+            val repositoryEntities = nextStepRepository.getRepositories(organization)
+            _repositories.update { repositoryEntities }
+            _loadState.value = LoadState.Success
+        } catch (e: Exception) {
+            _loadState.value = LoadState.Error
+        }
     }
 
     companion object {

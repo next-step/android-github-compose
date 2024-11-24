@@ -23,8 +23,11 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import nextstep.github.R
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
 import nextstep.github.ui.theme.Purple50
@@ -91,7 +94,17 @@ fun RepositoryListScreen(repositories: List<NextStepRepositoryEntity>, loadState
             }
 
             is LoadState.Empty -> {
-
+                Box(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(innerPadding),
+                    contentAlignment = Alignment.Center
+                ) {
+                    Text(
+                        text = stringResource(id = R.string.empty_repositories),
+                        fontSize = 24.sp
+                    )
+                }
             }
 
             is LoadState.Error -> {
@@ -138,6 +151,24 @@ fun RepositoryListScreenPreview() {
             )
         ),
         loadState = LoadState.Success
+    )
+}
+
+@Preview(showBackground = true, name = "Empty 케이스")
+@Composable
+fun RepositoryListScreenEmptyPreview() {
+    RepositoryListScreen(
+        repositories = listOf(
+            NextStepRepositoryEntity(
+                fullName = "next-step/nextstep-study",
+                description = "NextStep의 자바 백엔드 스터디 저장소"
+            ),
+            NextStepRepositoryEntity(
+                fullName = "next-step/nextstep-docs",
+                description = "NextStep의 공식 문서 저장소"
+            )
+        ),
+        loadState = LoadState.Empty
     )
 }
 

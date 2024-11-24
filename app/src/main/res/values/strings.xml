@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHub</string>
+    <string name="empty_repositories">목록이 비었습니다.</string>
 </resources>

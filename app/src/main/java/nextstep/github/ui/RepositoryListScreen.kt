@@ -41,7 +41,7 @@ import nextstep.github.viewmodel.RepositoryListViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
-fun RepositoryListScreenContent(viewModel: RepositoryListViewModel) {
+fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
     val repositories = viewModel.repositories
     val loadState by viewModel.loadState.collectAsState()
     val snackbarHostState = remember { SnackbarHostState() }

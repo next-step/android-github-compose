@@ -18,23 +18,24 @@ import nextstep.github.model.NextStepRepositoryEntity
 
 class RepositoryListViewModel(private val nextStepRepository: NextStepRepository) : ViewModel() {
 
-    private val _repositories = MutableStateFlow<List<NextStepRepositoryEntity>>(emptyList())
-    val repositories: StateFlow<List<NextStepRepositoryEntity>> = _repositories.asStateFlow()
+    private var _repositories: List<NextStepRepositoryEntity> = emptyList()
+    val repositories: List<NextStepRepositoryEntity>
+        get() = _repositories
 
     private val _loadState = MutableStateFlow<LoadState>(LoadState.Loading)
     val loadState: StateFlow<LoadState> = _loadState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            getRepositories("next-step")
+            fetchRepositories("next-step")
         }
     }
 
-    private suspend fun getRepositories(organization: String) {
+    suspend fun fetchRepositories(organization: String) {
         _loadState.value = LoadState.Loading
         try {
             val repositoryEntities = nextStepRepository.getRepositories(organization)
-            _repositories.update { repositoryEntities }
+            _repositories = repositoryEntities
             _loadState.value = LoadState.Success
         } catch (e: Exception) {
             _loadState.value = LoadState.Error

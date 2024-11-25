@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RepositoryListScreen(viewModel = viewModel)
+                    RepositoryListScreenContent(viewModel = viewModel)
                 }
             }
         }

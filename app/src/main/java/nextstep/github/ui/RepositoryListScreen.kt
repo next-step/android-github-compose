@@ -21,17 +21,18 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
-import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
+import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.flow.filter
 import kotlinx.coroutines.launch
 import nextstep.github.R
 import nextstep.github.model.LoadState
@@ -42,16 +43,16 @@ import nextstep.github.viewmodel.RepositoryListViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
-    val repositories = viewModel.repositories
-    val loadState by viewModel.loadState.collectAsState()
+    val repositories = viewModel.repositories.collectAsStateWithLifecycle()
+    val loadState by viewModel.loadState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
 
     RepositoryListScreenContent(
-        repositories = repositories,
+        repositories = repositories.value,
         loadState = loadState,
         snackbarHostState = snackbarHostState,
         onRetry = {
-            viewModel.fetchRepositories("next-step")
+            viewModel.loadRepositories()
         }
     )
 }
@@ -119,7 +120,7 @@ fun RepositoryListScreenContent(
                 ) {
                     Text(
                         text = stringResource(id = R.string.repositories_empty_message),
-                        fontSize = 24.sp
+                        style = MaterialTheme.typography.headlineSmall
                     )
                 }
             }
@@ -127,7 +128,8 @@ fun RepositoryListScreenContent(
             is LoadState.Error -> {
                 ErrorSnackbar(
                     onRetry = onRetry,
-                    scaffoldState = snackbarHostState
+                    snackbarHostState = snackbarHostState,
+                    loadState = loadState
                 )
             }
         }
@@ -156,27 +158,44 @@ fun RepositoryItem(repository: NextStepRepositoryEntity) {
     }
 }
 
+@SuppressLint("CoroutineCreationDuringComposition")
 @Composable
-fun ErrorSnackbar(onRetry: suspend () -> Unit, scaffoldState: SnackbarHostState) {
+fun ErrorSnackbar(
+    onRetry: suspend () -> Unit,
+    snackbarHostState: SnackbarHostState,
+    loadState: LoadState
+) {
     val errorMessage = stringResource(id = R.string.repositories_error_message)
     val retryActionLabel = stringResource(id = R.string.repositories_retry_action)
     val coroutineScope = rememberCoroutineScope()
 
-    LaunchedEffect(scaffoldState) {
-        val result = scaffoldState.showSnackbar(
-            message = errorMessage,
-            actionLabel = retryActionLabel,
-            duration = SnackbarDuration.Long
-        )
-        if (result == SnackbarResult.ActionPerformed) {
-            coroutineScope.launch { onRetry() }
-        }
+    coroutineScope.launch {
+        snapshotFlow { loadState }.filter { it is LoadState.Error }
+            .collectLatest {
+                showSnackbar(onRetry, snackbarHostState, errorMessage, retryActionLabel)
+            }
+    }
+}
+
+private suspend fun showSnackbar(
+    onRetry: suspend () -> Unit,
+    snackbarHostState: SnackbarHostState,
+    errorMessage: String,
+    retryActionLabel: String
+) {
+    val result = snackbarHostState.showSnackbar(
+        message = errorMessage,
+        actionLabel = retryActionLabel,
+        duration = SnackbarDuration.Long
+    )
+    if (result == SnackbarResult.ActionPerformed) {
+        onRetry()
     }
 }
 
 @Preview(showBackground = true, name = "Success 케이스")
 @Composable
-fun RepositoryListScreenPreview() {
+private fun RepositoryListScreenPreview() {
     RepositoryListScreenContent(
         repositories = listOf(
             NextStepRepositoryEntity(
@@ -195,7 +214,7 @@ fun RepositoryListScreenPreview() {
 
 @Preview(showBackground = true, name = "Empty 케이스")
 @Composable
-fun RepositoryListScreenEmptyPreview() {
+private fun RepositoryListScreenEmptyPreview() {
     RepositoryListScreenContent(
         repositories = listOf(
             NextStepRepositoryEntity(
@@ -214,7 +233,7 @@ fun RepositoryListScreenEmptyPreview() {
 
 @Preview
 @Composable
-fun RepositoryItemPreview() {
+private fun RepositoryItemPreview() {
     RepositoryItem(
         repository = NextStepRepositoryEntity(
             fullName = "next-step/nextstep-study",

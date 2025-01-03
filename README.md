@@ -1,6 +1,14 @@
 # android-github-compose
 
+## Step4 구현 목록
+
+- [x] 피드백 반영: snapshotFlow 사용 개선
+- [] Star 개수 표시
+  - [] Star 개수 Entity 추가
+- [] Star 개수 50개 이상 HOT 표시
+
 ## Step3 구현 목록
+
 - [x] 로딩 UI 추가
 - [x] 빈 화면 UI 추가
 - [x] 오류 발생 시 스낵바 노출

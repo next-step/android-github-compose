@@ -21,9 +21,9 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.runtime.snapshotFlow
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -32,8 +32,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
-import kotlinx.coroutines.flow.filter
-import kotlinx.coroutines.launch
 import nextstep.github.R
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
@@ -43,17 +41,34 @@ import nextstep.github.viewmodel.RepositoryListViewModel
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
 fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
-    val repositories = viewModel.repositories.collectAsStateWithLifecycle()
+    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
     val loadState by viewModel.loadState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val errorMessage = stringResource(id = R.string.repositories_error_message)
+    val retryActionLabel = stringResource(id = R.string.repositories_retry_action)
+
+    LaunchedEffect(Unit) {
+        println("james: loadState11111: $loadState")
+        snapshotFlow { loadState }
+            .collectLatest { state ->
+                println("james: loadState22222: $state")
+                if (state is LoadState.Error) {
+                    showSnackbar(
+                        onRetry = {
+                            viewModel.loadRepositories()
+                        },
+                        snackbarHostState,
+                        errorMessage,
+                        retryActionLabel
+                    )
+                }
+            }
+    }
 
     RepositoryListScreenContent(
-        repositories = repositories.value,
+        repositories = repositories,
         loadState = loadState,
-        snackbarHostState = snackbarHostState,
-        onRetry = {
-            viewModel.loadRepositories()
-        }
+        snackbarHostState = snackbarHostState
     )
 }
 
@@ -62,8 +77,7 @@ fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
 fun RepositoryListScreenContent(
     repositories: List<NextStepRepositoryEntity>,
     loadState: LoadState,
-    snackbarHostState: SnackbarHostState,
-    onRetry: suspend () -> Unit = {}
+    snackbarHostState: SnackbarHostState
 ) {
     Scaffold(
         topBar = {
@@ -81,6 +95,7 @@ fun RepositoryListScreenContent(
         containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
+        println("james: RepositoryListScreenContent: $loadState")
         when (loadState) {
             is LoadState.Loading -> {
                 Box(
@@ -125,13 +140,7 @@ fun RepositoryListScreenContent(
                 }
             }
 
-            is LoadState.Error -> {
-                ErrorSnackbar(
-                    onRetry = onRetry,
-                    snackbarHostState = snackbarHostState,
-                    loadState = loadState
-                )
-            }
+            else -> {}
         }
     }
 }
@@ -158,25 +167,6 @@ fun RepositoryItem(repository: NextStepRepositoryEntity) {
     }
 }
 
-@SuppressLint("CoroutineCreationDuringComposition")
-@Composable
-fun ErrorSnackbar(
-    onRetry: suspend () -> Unit,
-    snackbarHostState: SnackbarHostState,
-    loadState: LoadState
-) {
-    val errorMessage = stringResource(id = R.string.repositories_error_message)
-    val retryActionLabel = stringResource(id = R.string.repositories_retry_action)
-    val coroutineScope = rememberCoroutineScope()
-
-    coroutineScope.launch {
-        snapshotFlow { loadState }.filter { it is LoadState.Error }
-            .collectLatest {
-                showSnackbar(onRetry, snackbarHostState, errorMessage, retryActionLabel)
-            }
-    }
-}
-
 private suspend fun showSnackbar(
     onRetry: suspend () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -200,11 +190,11 @@ private fun RepositoryListScreenPreview() {
         repositories = listOf(
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
-                description = "NextStep의 자바 백엔드 스터디 저장소"
+                description = "NextStep의 자바 백엔드 스터디 저장소",
             ),
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-docs",
-                description = "NextStep의 공식 문서 저장소"
+                description = "NextStep의 공식 문서 저장소",
             )
         ),
         loadState = LoadState.Success,
@@ -219,11 +209,11 @@ private fun RepositoryListScreenEmptyPreview() {
         repositories = listOf(
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
-                description = "NextStep의 자바 백엔드 스터디 저장소"
+                description = "NextStep의 자바 백엔드 스터디 저장소",
             ),
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-docs",
-                description = "NextStep의 공식 문서 저장소"
+                description = "NextStep의 공식 문서 저장소",
             )
         ),
         loadState = LoadState.Empty,
@@ -237,7 +227,7 @@ private fun RepositoryItemPreview() {
     RepositoryItem(
         repository = NextStepRepositoryEntity(
             fullName = "next-step/nextstep-study",
-            description = "NextStep의 자바 백엔드 스터디 저장소"
+            description = "NextStep의 자바 백엔드 스터디 저장소",
         )
     )
 }

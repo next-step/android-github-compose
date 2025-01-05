@@ -2,9 +2,13 @@ package nextstep.github.ui
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -33,6 +37,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
+import nextstep.github.domain.NextStepHotRepository
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
 import nextstep.github.ui.theme.Purple50
@@ -48,10 +53,8 @@ fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
     val retryActionLabel = stringResource(id = R.string.repositories_retry_action)
 
     LaunchedEffect(Unit) {
-        println("james: loadState11111: $loadState")
         snapshotFlow { loadState }
             .collectLatest { state ->
-                println("james: loadState22222: $state")
                 if (state is LoadState.Error) {
                     showSnackbar(
                         onRetry = {
@@ -95,7 +98,6 @@ fun RepositoryListScreenContent(
         containerColor = MaterialTheme.colorScheme.background,
         snackbarHost = { SnackbarHost(hostState = snackbarHostState) }
     ) { innerPadding ->
-        println("james: RepositoryListScreenContent: $loadState")
         when (loadState) {
             is LoadState.Loading -> {
                 Box(
@@ -149,21 +151,33 @@ fun RepositoryListScreenContent(
 fun RepositoryItem(repository: NextStepRepositoryEntity) {
     Column(
         modifier = Modifier
-            .padding(8.dp)
+            .padding(16.dp)
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        Text(
-            text = repository.fullName ?: "No name available",
-            style = MaterialTheme.typography.titleLarge,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-        )
-        Text(
-            text = repository.description ?: "No description available",
-            style = MaterialTheme.typography.bodyMedium,
-            modifier = Modifier
-                .background(MaterialTheme.colorScheme.surface)
-        )
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.SpaceBetween
+        ) {
+            Text(
+                text = "HOT",
+                color = Purple50,
+                style = MaterialTheme.typography.labelLarge
+            )
+            Text(
+                text = "★ ${repository.stars ?: "No stars available"}",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
+        Column {
+            Text(
+                text = repository.fullName ?: "No name available",
+                style = MaterialTheme.typography.titleLarge
+            )
+            Text(
+                text = repository.description ?: "No description available",
+                style = MaterialTheme.typography.bodyMedium
+            )
+        }
     }
 }
 
@@ -191,10 +205,12 @@ private fun RepositoryListScreenPreview() {
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
                 description = "NextStep의 자바 백엔드 스터디 저장소",
+                stars = 50
             ),
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-docs",
                 description = "NextStep의 공식 문서 저장소",
+                stars = 49
             )
         ),
         loadState = LoadState.Success,
@@ -210,10 +226,12 @@ private fun RepositoryListScreenEmptyPreview() {
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
                 description = "NextStep의 자바 백엔드 스터디 저장소",
+                stars = 50
             ),
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-docs",
                 description = "NextStep의 공식 문서 저장소",
+                stars = 49
             )
         ),
         loadState = LoadState.Empty,
@@ -228,6 +246,7 @@ private fun RepositoryItemPreview() {
         repository = NextStepRepositoryEntity(
             fullName = "next-step/nextstep-study",
             description = "NextStep의 자바 백엔드 스터디 저장소",
+            stars = 50
         )
     )
 }

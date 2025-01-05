@@ -37,9 +37,9 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
-import nextstep.github.domain.NextStepHotRepository
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
+import nextstep.github.model.NextStepRepositoryEntity.Companion.HOT_THRESHOLD
 import nextstep.github.ui.theme.Purple50
 import nextstep.github.viewmodel.RepositoryListViewModel
 
@@ -148,7 +148,9 @@ fun RepositoryListScreenContent(
 }
 
 @Composable
-fun RepositoryItem(repository: NextStepRepositoryEntity) {
+fun RepositoryItem(
+    repository: NextStepRepositoryEntity
+) {
     Column(
         modifier = Modifier
             .padding(16.dp)
@@ -158,11 +160,8 @@ fun RepositoryItem(repository: NextStepRepositoryEntity) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
-            Text(
-                text = "HOT",
-                color = Purple50,
-                style = MaterialTheme.typography.labelLarge
-            )
+            HotText(isHot = repository.isHot(HOT_THRESHOLD))
+            Spacer(modifier = Modifier.weight(1f))
             Text(
                 text = "★ ${repository.stars ?: "No stars available"}",
                 style = MaterialTheme.typography.bodyMedium
@@ -178,6 +177,17 @@ fun RepositoryItem(repository: NextStepRepositoryEntity) {
                 style = MaterialTheme.typography.bodyMedium
             )
         }
+    }
+}
+
+@Composable
+fun HotText(isHot: Boolean) {
+    if (isHot) {
+        Text(
+            text = "HOT",
+            color = Purple50,
+            style = MaterialTheme.typography.labelLarge
+        )
     }
 }
 

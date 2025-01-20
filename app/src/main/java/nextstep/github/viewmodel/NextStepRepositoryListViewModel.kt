@@ -15,7 +15,7 @@ import nextstep.github.data.NextStepRepository
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
 
-class RepositoryListViewModel(private val nextStepRepository: NextStepRepository) : ViewModel() {
+class NextStepRepositoryListViewModel(private val nextStepRepository: NextStepRepository) : ViewModel() {
 
     private val _repositories = MutableStateFlow<List<NextStepRepositoryEntity>>(emptyList())
     val repositories: StateFlow<List<NextStepRepositoryEntity>> = _repositories.asStateFlow()
@@ -50,7 +50,7 @@ class RepositoryListViewModel(private val nextStepRepository: NextStepRepository
                 val nextStepRepository = (this[APPLICATION_KEY] as GitHubApplication)
                     .appContainer
                     .nextStepRepository
-                RepositoryListViewModel(nextStepRepository)
+                NextStepRepositoryListViewModel(nextStepRepository)
             }
         }
     }

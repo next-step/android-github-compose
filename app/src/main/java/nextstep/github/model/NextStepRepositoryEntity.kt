@@ -9,11 +9,11 @@ data class NextStepRepositoryEntity(
     @SerialName("description") val description: String?,
     @SerialName("stargazers_count") val stars: Int?,
 ) {
-    companion object {
-        const val HOT_THRESHOLD = 50
+    fun isHot(): Boolean {
+        return stars != null && stars >= HOT_THRESHOLD
     }
 
-    fun isHot(count: Int): Boolean {
-        return stars != null && stars >= count
+    companion object {
+        const val HOT_THRESHOLD = 50
     }
 }

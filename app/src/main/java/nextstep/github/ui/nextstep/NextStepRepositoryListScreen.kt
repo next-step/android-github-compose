@@ -1,14 +1,9 @@
-package nextstep.github.ui
+package nextstep.github.ui.nextstep
 
 import android.annotation.SuppressLint
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
@@ -39,13 +34,13 @@ import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
 import nextstep.github.model.LoadState
 import nextstep.github.model.NextStepRepositoryEntity
-import nextstep.github.model.NextStepRepositoryEntity.Companion.HOT_THRESHOLD
+import nextstep.github.ui.component.RepositoryItem
 import nextstep.github.ui.theme.Purple50
-import nextstep.github.viewmodel.RepositoryListViewModel
+import nextstep.github.viewmodel.NextStepRepositoryListViewModel
 
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter", "CoroutineCreationDuringComposition")
 @Composable
-fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
+fun NextStepRepositoryListScreen(viewModel: NextStepRepositoryListViewModel) {
     val repositories by viewModel.repositories.collectAsStateWithLifecycle()
     val loadState by viewModel.loadState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
@@ -68,7 +63,7 @@ fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
             }
     }
 
-    RepositoryListScreenContent(
+    NextStepRepositoryListScreenContent(
         repositories = repositories,
         loadState = loadState,
         snackbarHostState = snackbarHostState
@@ -77,7 +72,7 @@ fun RepositoryListScreen(viewModel: RepositoryListViewModel) {
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun RepositoryListScreenContent(
+fun NextStepRepositoryListScreenContent(
     repositories: List<NextStepRepositoryEntity>,
     loadState: LoadState,
     snackbarHostState: SnackbarHostState
@@ -147,50 +142,6 @@ fun RepositoryListScreenContent(
     }
 }
 
-@Composable
-fun RepositoryItem(
-    repository: NextStepRepositoryEntity
-) {
-    Column(
-        modifier = Modifier
-            .padding(16.dp)
-            .background(MaterialTheme.colorScheme.surface)
-    ) {
-        Row(
-            modifier = Modifier.fillMaxWidth(),
-            horizontalArrangement = Arrangement.SpaceBetween
-        ) {
-            HotText(isHot = repository.isHot(HOT_THRESHOLD))
-            Spacer(modifier = Modifier.weight(1f))
-            Text(
-                text = "★ ${repository.stars ?: "No stars available"}",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-        Column {
-            Text(
-                text = repository.fullName ?: "No name available",
-                style = MaterialTheme.typography.titleLarge
-            )
-            Text(
-                text = repository.description ?: "No description available",
-                style = MaterialTheme.typography.bodyMedium
-            )
-        }
-    }
-}
-
-@Composable
-fun HotText(isHot: Boolean) {
-    if (isHot) {
-        Text(
-            text = "HOT",
-            color = Purple50,
-            style = MaterialTheme.typography.labelLarge
-        )
-    }
-}
-
 private suspend fun showSnackbar(
     onRetry: suspend () -> Unit,
     snackbarHostState: SnackbarHostState,
@@ -209,8 +160,8 @@ private suspend fun showSnackbar(
 
 @Preview(showBackground = true, name = "Success 케이스")
 @Composable
-private fun RepositoryListScreenPreview() {
-    RepositoryListScreenContent(
+private fun NextStepRepositoryListScreenPreview() {
+    NextStepRepositoryListScreenContent(
         repositories = listOf(
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
@@ -230,8 +181,8 @@ private fun RepositoryListScreenPreview() {
 
 @Preview(showBackground = true, name = "Empty 케이스")
 @Composable
-private fun RepositoryListScreenEmptyPreview() {
-    RepositoryListScreenContent(
+private fun NextStepRepositoryListScreenEmptyPreview() {
+    NextStepRepositoryListScreenContent(
         repositories = listOf(
             NextStepRepositoryEntity(
                 fullName = "next-step/nextstep-study",
@@ -246,17 +197,5 @@ private fun RepositoryListScreenEmptyPreview() {
         ),
         loadState = LoadState.Empty,
         snackbarHostState = SnackbarHostState()
-    )
-}
-
-@Preview
-@Composable
-private fun RepositoryItemPreview() {
-    RepositoryItem(
-        repository = NextStepRepositoryEntity(
-            fullName = "next-step/nextstep-study",
-            description = "NextStep의 자바 백엔드 스터디 저장소",
-            stars = 50
-        )
     )
 }

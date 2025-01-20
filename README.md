@@ -6,6 +6,7 @@
 - [x] Star 개수 표시
   - [x] Star 개수 Entity 추가
 - [x] Star 개수 50개 이상 HOT 표시
+- [x] 피드백 반영
 
 ## Step3 구현 목록
 

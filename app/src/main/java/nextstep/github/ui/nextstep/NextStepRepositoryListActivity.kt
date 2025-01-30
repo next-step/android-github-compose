@@ -1,4 +1,4 @@
-package nextstep.github.ui
+package nextstep.github.ui.nextstep
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
@@ -9,10 +9,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.ui.Modifier
 import nextstep.github.ui.theme.GithubTheme
-import nextstep.github.viewmodel.RepositoryListViewModel
+import nextstep.github.viewmodel.NextStepRepositoryListViewModel
 
-class MainActivity : ComponentActivity() {
-    private val viewModel: RepositoryListViewModel by viewModels { RepositoryListViewModel.Factory }
+class NextStepRepositoryListActivity : ComponentActivity() {
+    private val viewModel: NextStepRepositoryListViewModel by viewModels { NextStepRepositoryListViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -23,7 +23,7 @@ class MainActivity : ComponentActivity() {
                     modifier = Modifier.fillMaxSize(),
                     color = MaterialTheme.colorScheme.background
                 ) {
-                    RepositoryListScreen(viewModel = viewModel)
+                    NextStepRepositoryListScreen(viewModel = viewModel)
                 }
             }
         }

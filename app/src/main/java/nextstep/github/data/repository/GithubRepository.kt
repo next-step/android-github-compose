@@ -2,6 +2,7 @@ package nextstep.github.data.repository
 
 import nextstep.github.data.model.GithubModel
 import nextstep.github.data.remote.api.GithubService
+import nextstep.github.data.remote.api.mapper.toDataList
 
 interface GithubRepository {
     suspend fun getRepositories(organization: String): Result<List<GithubModel>>
@@ -15,12 +16,7 @@ class GithubRepositoryImpl(
         return runCatching {
             githubService
                 .getRepositories(organization = organization)
-                .map {
-                    GithubModel(
-                        fullName = it.fullName ?: "",
-                        description = it.description ?: ""
-                    )
-                }
+                .toDataList()
         }
     }
 }

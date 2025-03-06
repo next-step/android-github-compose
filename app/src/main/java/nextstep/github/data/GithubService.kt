@@ -1,5 +1,6 @@
 package nextstep.github.data
 
+import nextstep.github.network.Result
 import retrofit2.http.GET
 import retrofit2.http.Path
 

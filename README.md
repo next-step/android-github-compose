@@ -5,7 +5,7 @@
 - [x] 수동 DI 기반 구성
 - [x] Retrofit 세팅 및 Service 구현
 - [x] dataSource, repository 구현
-- [] 서버 데이터 로드되는지 확인
+- [x] 서버 데이터 로드되는지 확인
 
 ### 2단계
 

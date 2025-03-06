@@ -8,4 +8,4 @@
 - [x] GET https://api.github.com/orgs/next-step/repos 호출
     - full_name, description 필드만 가져오기
 - [x] 수동 DI 구현
-- [ ] LOG 를 이용해, 서버 데이터가 잘 로드 되는지 확인
+- [x] LOG 를 이용해, 서버 데이터가 잘 로드 되는지 확인

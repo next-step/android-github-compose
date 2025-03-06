@@ -14,7 +14,7 @@ class GithubRepositoryImpl(
     override suspend fun getRepositories(organization: String): Result<List<GithubModel>> {
         return runCatching {
             githubService
-                .getRepositories(organization)
+                .getRepositories(organization = organization)
                 .map {
                     GithubModel(
                         fullName = it.fullName ?: "",

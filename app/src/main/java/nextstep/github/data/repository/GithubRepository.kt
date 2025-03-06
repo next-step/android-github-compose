@@ -1,6 +1,6 @@
-package nextstep.github.data
+package nextstep.github.data.repository
 
-import nextstep.github.network.RepositoryEntity
+import nextstep.github.data.api.model.RepositoryEntity
 
 interface GithubRepository {
 

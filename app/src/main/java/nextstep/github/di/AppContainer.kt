@@ -2,9 +2,9 @@ package nextstep.github.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import nextstep.github.data.GithubRepository
-import nextstep.github.data.GithubRepositoryImpl
-import nextstep.github.network.GithubService
+import nextstep.github.data.repository.GithubRepository
+import nextstep.github.data.repository.GithubRepositoryImpl
+import nextstep.github.data.api.GithubService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import retrofit2.Retrofit

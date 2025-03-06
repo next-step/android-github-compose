@@ -1,7 +1,7 @@
-package nextstep.github.data
+package nextstep.github.data.repository
 
-import nextstep.github.network.GithubService
-import nextstep.github.network.RepositoryEntity
+import nextstep.github.data.api.GithubService
+import nextstep.github.data.api.model.RepositoryEntity
 
 class GithubRepositoryImpl(private val githubService: GithubService) : GithubRepository {
     override suspend fun getRepositories(organization: String): List<RepositoryEntity> =

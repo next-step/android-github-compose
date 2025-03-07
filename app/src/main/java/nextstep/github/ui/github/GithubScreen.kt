@@ -13,6 +13,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.data.api.model.RepositoryEntity
 import nextstep.github.ui.github.component.GithubTopBar
 import nextstep.github.ui.github.component.RepositoryList
+import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun GithubScreen(
@@ -56,6 +57,7 @@ private fun GithubScreenPreview() {
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소${it}"
         )
     }
-    GithubScreen(repositories)
-
+    GithubTheme {
+        GithubScreen(repositories)
+    }
 }

@@ -17,6 +17,7 @@ class RepositoryItemTest {
 
         //given
         val item = RepositoryEntity(
+            id = 1,
             fullName = "next-step/nextstep-docs1",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소12"
         )
@@ -37,6 +38,7 @@ class RepositoryItemTest {
     fun `레포지토리_설명이_올바르게_보여야_한다`() {
         //given
         val item = RepositoryEntity(
+            id = 2,
             fullName = "next-step/nextstep-docs2",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소34"
         )

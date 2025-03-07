@@ -17,10 +17,12 @@ class GithubViewModelTest {
         //given
         val repositories = listOf(
             RepositoryEntity(
+                id = 1,
                 fullName = "next-step/nextstep-docs1",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
             ),
             RepositoryEntity(
+                id = 2,
                 fullName = "next-step/nextstep-docs2",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
             )

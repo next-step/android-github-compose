@@ -20,10 +20,12 @@ class RepositoryListTest {
         //given
         val items = listOf(
             RepositoryEntity(
+                id = 1,
                 fullName = "next-step/nextstep-docs1",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
             ),
             RepositoryEntity(
+                id = 2,
                 fullName = "next-step/nextstep-docs2",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
             )
@@ -49,10 +51,12 @@ class RepositoryListTest {
         //given
         val items = listOf(
             RepositoryEntity(
+                id = 3,
                 fullName = "next-step/nextstep-docs3",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"
             ),
             RepositoryEntity(
+                id = 4,
                 fullName = "next-step/nextstep-docs4",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4"
             )
@@ -78,14 +82,17 @@ class RepositoryListTest {
         //given
         val items = listOf(
             RepositoryEntity(
+                id = 1,
                 fullName = "next-step/nextstep-docs1",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
             ),
             RepositoryEntity(
+                id = 2,
                 fullName = "next-step/nextstep-docs2",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
             ),
             RepositoryEntity(
+                id = 3,
                 fullName = "next-step/nextstep-docs3",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"
             )

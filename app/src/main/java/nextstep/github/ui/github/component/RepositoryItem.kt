@@ -7,7 +7,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.data.api.model.RepositoryEntity
@@ -26,12 +25,12 @@ fun RepositoryItem(
         Text(
             text = item.fullName.orEmpty(),
             style = MaterialTheme.typography.titleLarge,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.scrim
         )
         Text(
             text = item.description.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
-            color = Color.Black
+            color = MaterialTheme.colorScheme.scrim
         )
     }
 }

@@ -12,7 +12,6 @@ import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.data.api.model.RepositoryEntity
 import nextstep.github.ui.theme.GithubTheme
-import nextstep.github.ui.theme.OutlineVariant
 
 
 @Composable
@@ -28,7 +27,7 @@ fun RepositoryList(
         items(items, key = { item -> item.id }) { item ->
             RepositoryItem(item)
             HorizontalDivider(
-                color = OutlineVariant,
+                color = MaterialTheme.colorScheme.outlineVariant,
                 modifier = Modifier.testTag("HorizontalDivider")
             )
         }

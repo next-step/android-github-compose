@@ -11,7 +11,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.R
 import nextstep.github.ui.theme.GithubTheme
-import nextstep.github.ui.theme.TextColor
+import nextstep.github.ui.theme.TopAppBarTitleColor
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -23,7 +23,7 @@ fun GithubTopBar(
             Text(
                 text = stringResource(R.string.title_github),
                 style = MaterialTheme.typography.titleLarge,
-                color = TextColor
+                color = TopAppBarTitleColor
             )
         },
         modifier = modifier.fillMaxWidth(),

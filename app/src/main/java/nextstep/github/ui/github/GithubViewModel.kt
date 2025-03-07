@@ -21,7 +21,7 @@ class GithubViewModel(
     private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
     val repositories: StateFlow<List<RepositoryEntity>> = _repositories.asStateFlow()
 
-    fun getRepositories() {
+    fun fetchRepositories() {
         viewModelScope.launch {
             _repositories.update {
                 githubRepository.getRepositories(DEFAULT_SEARCH_KEYWORD)

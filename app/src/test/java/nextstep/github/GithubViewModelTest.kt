@@ -29,12 +29,9 @@ class GithubViewModelTest {
         )
         val githubViewModel = GithubViewModel(fakeGithubRepository(repositories))
 
-        //when
-        githubViewModel.getRepositories()
-
         advanceUntilIdle()
 
-        //then
+        //when, then
         assertEquals(repositories, githubViewModel.repositories.value)
     }
 

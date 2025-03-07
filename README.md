@@ -8,3 +8,8 @@
 - 힌트 코드를 참고하여 수동 DI를 구현한다. (Hilt와 같은 별도의 DI 라이브러리를 활용하지 않는다)
   - 실제로 서버 데이터가 잘 로드되는지 Log로 확인한다.
 
+#### 🚀 1단계 - GitHub(데이터 레이어) 개선 사항
+- GithubResponse 클래스 명 api 호출 의도에 맞게 변경
+- remote.api.mapper > remote.mapper 패키지 이동
+- getRepositories 첫 조회 viewModel init에서 호출하도록 수정
+- 화면 기준 패키지 재구성

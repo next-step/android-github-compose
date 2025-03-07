@@ -8,7 +8,7 @@ import nextstep.github.ui.github.GithubScreen
 import nextstep.github.ui.github.GithubViewModel
 import nextstep.github.ui.theme.GithubTheme
 
-class MainActivity : ComponentActivity() {
+class GithubActivity : ComponentActivity() {
 
     private val viewModel: GithubViewModel by viewModels { GithubViewModel.Factory }
 

@@ -25,7 +25,7 @@ fun RepositoryList(
             .fillMaxSize()
             .background(MaterialTheme.colorScheme.surface)
     ) {
-        items(items) { item ->
+        items(items, key = { item -> item.id }) { item ->
             RepositoryItem(item)
             HorizontalDivider(
                 color = OutlineVariant,

@@ -3,12 +3,21 @@ package nextstep.github.ui.viewmodel
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.viewModelScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import nextstep.github.data.repository.GithubRepository
 
 
 class GithubViewModel(
     private val githubRepository: GithubRepository,
 ): ViewModel() {
+
+    init {
+        viewModelScope.launch(Dispatchers.IO) {
+            getRepositories("next-step")
+        }
+    }
 
     suspend fun getRepositories(
         organization: String,

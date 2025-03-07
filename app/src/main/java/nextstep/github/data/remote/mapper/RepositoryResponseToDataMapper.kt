@@ -1,11 +1,11 @@
 package nextstep.github.data.remote.mapper
 
-import nextstep.github.data.model.GithubModel
+import nextstep.github.data.model.RepositoryModel
 import nextstep.github.data.remote.response.RepositoryResponse
 
-fun List<RepositoryResponse>.toDataList(): List<GithubModel> = map { it.toData() }
+fun List<RepositoryResponse>.toDataList(): List<RepositoryModel> = map { it.toData() }
 
-fun RepositoryResponse.toData() = GithubModel(
+fun RepositoryResponse.toData() = RepositoryModel(
     fullName = fullName ?: "",
     description = description ?: ""
 )

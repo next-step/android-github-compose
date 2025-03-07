@@ -1,6 +1,6 @@
 package nextstep.github.data.model
 
-data class GithubModel(
+data class RepositoryModel(
     val fullName: String,
     val description: String
 )

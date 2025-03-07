@@ -1,22 +1,14 @@
 package nextstep.github.ui.screen
 
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
-import androidx.lifecycle.viewmodel.compose.viewModel
-import nextstep.github.di.AppContainer
-import nextstep.github.ui.viewmodel.GithubViewModel
+import nextstep.github.ui.screen.github.GithubScreen
 
 @Composable
 fun GithubApp(
-    appContainer: AppContainer,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
-    val viewModel: GithubViewModel = viewModel(
-        factory = GithubViewModel.provideFactory(appContainer.githubRepository)
+    GithubScreen(
+        modifier = modifier,
     )
-
-    LaunchedEffect(Unit) {
-        viewModel.getRepositories("next-step")
-    }
 }

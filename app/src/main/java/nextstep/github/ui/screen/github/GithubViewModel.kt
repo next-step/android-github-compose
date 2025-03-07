@@ -3,9 +3,13 @@ package nextstep.github.ui.screen.github
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import nextstep.github.MainApplication
 import nextstep.github.data.repository.GithubRepository
 
 
@@ -36,12 +40,12 @@ class GithubViewModel(
     }
 
     companion object {
-        fun provideFactory(
-            githubRepository: GithubRepository,
-        ): ViewModelProvider.Factory = object : ViewModelProvider.Factory {
-            @Suppress("UNCHECKED_CAST")
-            override fun <T : ViewModel> create(modelClass: Class<T>): T {
-                return GithubViewModel(githubRepository) as T
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val githubRepository = (this[APPLICATION_KEY] as MainApplication)
+                    .appContainer
+                    .githubRepository
+                GithubViewModel(githubRepository)
             }
         }
     }

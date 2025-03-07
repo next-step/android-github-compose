@@ -1,4 +1,4 @@
-package nextstep.github.data.remote.api.mapper
+package nextstep.github.data.remote.mapper
 
 import nextstep.github.data.model.GithubModel
 import nextstep.github.data.remote.response.RepositoryResponse

@@ -8,14 +8,19 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
+import nextstep.github.data.model.RepositoryModel
 import nextstep.github.data.repository.GithubRepository
 
 
 class GithubViewModel(
     private val githubRepository: GithubRepository,
 ): ViewModel() {
+
+    private val _repositoryList = MutableStateFlow<List<RepositoryModel>>(emptyList())
+    val repositoryList = _repositoryList
 
     init {
         viewModelScope.launch(Dispatchers.IO) {
@@ -29,7 +34,7 @@ class GithubViewModel(
         githubRepository.getRepositories(
             organization = organization
         ).onSuccess {
-            Log.d("GithubViewModel", "getRepositories: $it")
+            _repositoryList.value = it
         }.onFailure {
             Log.d(
                 "GithubViewModel",

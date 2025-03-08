@@ -1,11 +1,13 @@
 package nextstep.github.ui.component
 
+import androidx.compose.foundation.background
 import androidx.compose.foundation.basicMarquee
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBar
 import androidx.compose.runtime.Composable
@@ -27,7 +29,9 @@ internal fun GithubRepositoryTopBar(modifier: Modifier = Modifier) {
                 title = stringResource(R.string.github_repositories_top_bar_title)
             )
         },
-        modifier = modifier.fillMaxWidth(),
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.surface)
+            .fillMaxWidth(),
     )
 }
 

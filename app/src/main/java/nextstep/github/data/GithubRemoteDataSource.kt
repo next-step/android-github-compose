@@ -5,7 +5,7 @@ import nextstep.github.network.Result
 class GithubRemoteDataSource(
     private val githubService: GithubService
 ) {
-     suspend fun fetchRepositories(organization: String): Result<List<RepositoryEntity>> {
+     suspend fun fetchRepositories(organization: String): Result<List<GithubRepositoryEntity>> {
         return githubService.getRepositories(organization)
     }
 }

@@ -4,7 +4,8 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RepositoryEntity(
+data class GithubRepositoryEntity(
+    @SerialName("id") val id: Int?,
     @SerialName("full_name") val fullName: String?,
     @SerialName("description") val description: String?,
 )

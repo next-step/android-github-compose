@@ -14,10 +14,10 @@
 
 ## NEXTSTEP 조직의 저장소 목록을 선형 리스트 노출
 
-- [ ] UI 구현
-  - [ ] item
-  - [ ] 리스트
-  - [ ] Preview
+- [x] UI 구현
+  - [x] item
+  - [x] 리스트
+  - [x] Preview
 - [ ] ViewModel 연결
   - [ ] 비지니스 로직 구현
   - [ ] UI 연결

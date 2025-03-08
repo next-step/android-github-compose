@@ -2,10 +2,12 @@ package nextstep.github
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity
+import androidx.activity.compose.setContent
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.MainScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import nextstep.github.ui.GithubRepositoryScreen
 
 class MainActivity : ComponentActivity() {
     private val mainScope = MainScope()
@@ -20,6 +22,10 @@ class MainActivity : ComponentActivity() {
             withContext(Dispatchers.IO) {
                 repository.getRepositories(NEXT_STEP_ORGANIZATION)
             }
+        }
+
+        setContent {
+            GithubRepositoryScreen()
         }
     }
 }

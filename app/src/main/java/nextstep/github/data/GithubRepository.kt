@@ -8,7 +8,13 @@ class GithubRepository(
     private val remoteDataSource: GithubRemoteDataSource = GithubRemoteDataSource(githubService)
     private val localDataSource: GithubLocalDataSource = GithubLocalDataSource()
 
-    suspend fun getRepositories(organization: String): Result<List<GithubRepositoryEntity>> {
-        return remoteDataSource.fetchRepositories(organization)
+    suspend fun getRepositories(
+        organization: String,
+        onPreLoad: () -> Unit
+    ): Result<List<GithubRepositoryEntity>> {
+        return remoteDataSource.fetchRepositories(
+            organization = organization,
+            onPreLoad = onPreLoad
+        )
     }
 }

@@ -1,4 +1,5 @@
 <resources>
     <string name="app_name">GitHub</string>
     <string name="github_repositories_top_bar_title">NEXTSTEP Repositories</string>
+    <string name="github_repositories_empty">목록이 비었습니다.</string>
 </resources>

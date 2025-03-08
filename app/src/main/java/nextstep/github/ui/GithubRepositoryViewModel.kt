@@ -7,6 +7,7 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -19,8 +20,8 @@ class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
-    private val _githubRepositories = MutableStateFlow<List<GithubRepositoryModel>>(emptyList())
-    val githubRepositories = _githubRepositories.asStateFlow()
+    private val _state = MutableStateFlow<GithubRepositoryState>(GithubRepositoryState())
+    val state: StateFlow<GithubRepositoryState> = _state.asStateFlow()
 
     init {
         loadRepositories()
@@ -28,10 +29,23 @@ class GithubRepositoryViewModel(
 
     private fun loadRepositories() {
         viewModelScope.launch {
-            githubRepository.getRepositories(NEXT_STEP_ORGANIZATION)
+            githubRepository.getRepositories(organization = NEXT_STEP_ORGANIZATION,
+                onPreLoad = { _state.update { it.copy(loadState = GithubRepositoryState.LoadState.Loading) } })
                 .onSuccess { data ->
                     val result = data.mapNotNull { it.toGithubRepositoryModel() }
-                    _githubRepositories.update { result }
+                    _state.update {
+                        it.copy(
+                            loadState = GithubRepositoryState.LoadState.Success,
+                            repositories = result
+                        )
+                    }
+                }
+                .onError { t ->
+                    _state.update {
+                        it.copy(
+                            loadState = GithubRepositoryState.LoadState.Error(t)
+                        )
+                    }
                 }
         }
     }
@@ -39,12 +53,28 @@ class GithubRepositoryViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as GithubApplication)
-                    .appContainer
-                    .githubRepository
+                val githubRepository =
+                    (this[APPLICATION_KEY] as GithubApplication).appContainer.githubRepository
                 GithubRepositoryViewModel(githubRepository)
             }
         }
+    }
+}
+
+data class GithubRepositoryState(
+    val loadState: LoadState,
+    val repositories: List<GithubRepositoryModel>,
+) {
+    constructor() : this(
+        loadState = LoadState.Idle,
+        repositories = emptyList(),
+    )
+
+    sealed interface LoadState {
+        data object Idle : LoadState
+        data object Loading : LoadState
+        data object Success : LoadState
+        data class Error(val t: Throwable) : LoadState
     }
 }
 

@@ -1,5 +1,6 @@
-package nextstep.github.network
+package nextstep.github.data.api
 
+import nextstep.github.data.api.model.RepositoryEntity
 import retrofit2.http.GET
 import retrofit2.http.Path
 

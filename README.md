@@ -9,3 +9,16 @@
     - full_name, description 필드만 가져오기
 - [x] 수동 DI 구현
 - [x] LOG 를 이용해, 서버 데이터가 잘 로드 되는지 확인
+
+# step2 UI layer
+
+## NEXTSTEP 조직의 저장소 목록을 선형 리스트 노출
+
+- [ ] UI 구현
+  - [ ] item
+  - [ ] 리스트
+  - [ ] Preview
+- [ ] ViewModel 연결
+  - [ ] 비지니스 로직 구현
+  - [ ] UI 연결
+  - [ ] ViewModelFactory

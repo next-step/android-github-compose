@@ -30,8 +30,8 @@ internal fun GithubRepositoryTopBar(modifier: Modifier = Modifier) {
             )
         },
         modifier = modifier
-            .background(color = MaterialTheme.colorScheme.surface)
-            .fillMaxWidth(),
+            .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.surface),
     )
 }
 
@@ -44,7 +44,7 @@ private fun Title(
         text = title,
         style = Typography.titleLarge,
         textAlign = TextAlign.Center,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxWidth()
             .padding(horizontal = 4.dp)
             .basicMarquee(),

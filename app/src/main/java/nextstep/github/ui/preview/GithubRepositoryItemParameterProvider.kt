@@ -3,7 +3,7 @@ package nextstep.github.ui.preview
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import nextstep.github.ui.model.GithubRepositoryModel
 
-class GithubRepositoryParameterProvider : PreviewParameterProvider<GithubRepositoryModel> {
+class GithubRepositoryItemParameterProvider : PreviewParameterProvider<GithubRepositoryModel> {
     override val values: Sequence<GithubRepositoryModel>
         get() = sequenceOf(
             hasNameHasDescription,

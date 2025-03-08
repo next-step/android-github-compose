@@ -13,19 +13,19 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.unit.dp
 import nextstep.github.ui.model.GithubRepositoryModel
-import nextstep.github.ui.preview.GithubRepositoryParameterProvider
+import nextstep.github.ui.preview.GithubRepositoryItemParameterProvider
 import nextstep.github.ui.theme.GithubTheme
 import nextstep.github.ui.theme.Typography
 
 @Composable
-internal fun GithubRepository(
+internal fun GithubRepositoryItem(
     model: GithubRepositoryModel,
     modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier
-            .background(color = MaterialTheme.colorScheme.surface)
+        modifier = modifier
             .fillMaxWidth()
+            .background(color = MaterialTheme.colorScheme.surface)
             .padding(16.dp)
     ) {
         Text(
@@ -45,11 +45,11 @@ internal fun GithubRepository(
 
 @Preview(showBackground = true)
 @Composable
-private fun GithubRepositoryPreview(
-    @PreviewParameter(GithubRepositoryParameterProvider::class)
+private fun GithubRepositoryItemPreview(
+    @PreviewParameter(GithubRepositoryItemParameterProvider::class)
     model: GithubRepositoryModel
 ) {
     GithubTheme {
-        GithubRepository(model)
+        GithubRepositoryItem(model)
     }
 }

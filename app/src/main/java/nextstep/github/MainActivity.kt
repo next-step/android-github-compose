@@ -3,31 +3,19 @@ package nextstep.github
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.MainScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
+import androidx.activity.viewModels
 import nextstep.github.ui.GithubRepositoryScreen
+import nextstep.github.ui.GithubRepositoryViewModel
 
 class MainActivity : ComponentActivity() {
-    private val mainScope = MainScope()
+
+    private val viewModel: GithubRepositoryViewModel by viewModels<GithubRepositoryViewModel> { GithubRepositoryViewModel.Factory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        val appContainer = (application as GithubApplication).appContainer
-        val repository = appContainer.githubRepository
-
-        mainScope.launch {
-            withContext(Dispatchers.IO) {
-                repository.getRepositories(NEXT_STEP_ORGANIZATION)
-            }
-        }
-
         setContent {
-            GithubRepositoryScreen()
+            GithubRepositoryScreen(viewModel = viewModel)
         }
     }
 }
-
-private const val NEXT_STEP_ORGANIZATION = "next-step"

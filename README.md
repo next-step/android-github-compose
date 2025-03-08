@@ -18,7 +18,7 @@
   - [x] item
   - [x] 리스트
   - [x] Preview
-- [ ] ViewModel 연결
-  - [ ] 비지니스 로직 구현
-  - [ ] UI 연결
-  - [ ] ViewModelFactory
+- [x] ViewModel 연결
+  - [x] 비지니스 로직 구현
+  - [x] UI 연결
+  - [x] ViewModelFactory

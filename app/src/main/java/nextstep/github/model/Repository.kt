@@ -5,6 +5,8 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class Repository(
+    @SerialName("id")
+    val id: Long,
 
     @SerialName("full_name")
     val fullName: String?,

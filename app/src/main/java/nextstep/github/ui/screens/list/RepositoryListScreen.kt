@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.repositories
+package nextstep.github.ui.screens.list
 
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -14,11 +14,11 @@ import androidx.compose.ui.unit.dp
 import nextstep.github.R
 import nextstep.github.model.Repository
 import nextstep.github.ui.components.GithubTopBar
-import nextstep.github.ui.screens.repositories.components.RepositoryItem
+import nextstep.github.ui.screens.list.components.RepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoriesScreen(
+fun RepositoryListScreen(
     repositories: List<Repository>,
     modifier: Modifier = Modifier,
 ) {
@@ -42,9 +42,9 @@ fun RepositoriesScreen(
 
 @Preview
 @Composable
-private fun RepositoriesScreenPreview() {
+private fun RepositoryListScreenPreview() {
     GithubTheme {
-        RepositoriesScreen(
+        RepositoryListScreen(
             repositories = List(10) {
                 Repository(
                     id = it.toLong(),

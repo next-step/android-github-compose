@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.repositories.components
+package nextstep.github.ui.screens.list.components
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -57,5 +57,3 @@ private fun Preview2() {
         )
     }
 }
-
-

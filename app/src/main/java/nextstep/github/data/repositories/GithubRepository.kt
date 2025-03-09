@@ -1,8 +1,8 @@
 package nextstep.github.data.repositories
 
-import nextstep.github.data.entities.RepositoryEntity
+import nextstep.github.model.Repository
 
 interface GithubRepository {
 
-    suspend fun getRepositories(organization: String): List<RepositoryEntity>
+    suspend fun getRepositories(organization: String): List<Repository>
 }

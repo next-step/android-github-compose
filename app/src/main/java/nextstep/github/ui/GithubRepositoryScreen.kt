@@ -2,8 +2,13 @@ package nextstep.github.ui
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -11,6 +16,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.ui.component.GithubRepositoryEmpty
 import nextstep.github.ui.component.GithubRepositoryList
 import nextstep.github.ui.component.GithubRepositoryLoading
+import nextstep.github.ui.component.GithubRepositorySnackBar
 import nextstep.github.ui.component.GithubRepositoryTopBar
 import nextstep.github.ui.theme.GithubTheme
 
@@ -18,25 +24,31 @@ import nextstep.github.ui.theme.GithubTheme
 internal fun GithubRepositoryScreen(
     viewModel: GithubRepositoryViewModel = viewModel<GithubRepositoryViewModel>(factory = GithubRepositoryViewModel.Factory),
 ) {
-    val state by viewModel.state.collectAsStateWithLifecycle()
+    val repositoryUiState by viewModel.state.repositoryUiState.collectAsStateWithLifecycle()
+
+    val snackBarHostState = remember { SnackbarHostState() }
+    var showSnackBar by remember { mutableStateOf(false) }
 
     Scaffold(
-        topBar = { GithubRepositoryTopBar() }
+        topBar = { GithubRepositoryTopBar() },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
 
-        when (state.loadState) {
-            is GithubRepositoryState.LoadState.Loading -> {
+        when (repositoryUiState) {
+            is GithubRepositoryState.RepositoryUiState.Loading -> {
                 GithubRepositoryLoading()
             }
 
-            is GithubRepositoryState.LoadState.Success -> {
-                if (state.repositories.isEmpty()) {
-                    GithubRepositoryEmpty()
-                } else {
-                    GithubRepositoryList(
-                        model = state.repositories,
-                        modifier = Modifier.padding(innerPadding),
-                    )
+            is GithubRepositoryState.RepositoryUiState.Success -> {
+                (repositoryUiState as? GithubRepositoryState.RepositoryUiState.Success)?.let { state ->
+                    if (state.items.isEmpty()) {
+                        GithubRepositoryEmpty()
+                    } else {
+                        GithubRepositoryList(
+                            model = state.items,
+                            modifier = Modifier.padding(innerPadding),
+                        )
+                    }
                 }
             }
 

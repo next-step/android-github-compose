@@ -8,7 +8,6 @@ import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
@@ -20,8 +19,8 @@ class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
-    private val _state = MutableStateFlow<GithubRepositoryState>(GithubRepositoryState())
-    val state: StateFlow<GithubRepositoryState> = _state.asStateFlow()
+    private val _state = GithubRepositoryStateImpl()
+    val state: GithubRepositoryState = _state
 
     init {
         loadRepositories()
@@ -29,22 +28,21 @@ class GithubRepositoryViewModel(
 
     private fun loadRepositories() {
         viewModelScope.launch {
-            githubRepository.getRepositories(organization = NEXT_STEP_ORGANIZATION,
-                onPreLoad = { _state.update { it.copy(loadState = GithubRepositoryState.LoadState.Loading) } })
+            githubRepository.getRepositories(
+                organization = NEXT_STEP_ORGANIZATION,
+                onPreLoad = {
+                    _state.repositoryUiState.update { GithubRepositoryState.RepositoryUiState.Loading }
+                }
+            )
                 .onSuccess { data ->
                     val result = data.mapNotNull { it.toGithubRepositoryModel() }
-                    _state.update {
-                        it.copy(
-                            loadState = GithubRepositoryState.LoadState.Success,
-                            repositories = result
-                        )
+                    _state.repositoryUiState.update {
+                        GithubRepositoryState.RepositoryUiState.Success(result)
                     }
                 }
                 .onError { t ->
-                    _state.update {
-                        it.copy(
-                            loadState = GithubRepositoryState.LoadState.Error(t)
-                        )
+                    _state.repositoryUiState.update {
+                        GithubRepositoryState.RepositoryUiState.Error(t)
                     }
                 }
         }
@@ -61,21 +59,21 @@ class GithubRepositoryViewModel(
     }
 }
 
-data class GithubRepositoryState(
-    val loadState: LoadState,
-    val repositories: List<GithubRepositoryModel>,
-) {
-    constructor() : this(
-        loadState = LoadState.Idle,
-        repositories = emptyList(),
-    )
+interface GithubRepositoryState {
+    val repositoryUiState: StateFlow<RepositoryUiState>
 
-    sealed interface LoadState {
-        data object Idle : LoadState
-        data object Loading : LoadState
-        data object Success : LoadState
-        data class Error(val t: Throwable) : LoadState
+    sealed interface RepositoryUiState {
+        data object Idle : RepositoryUiState
+        data object Loading : RepositoryUiState
+        data class Success(val items: List<GithubRepositoryModel>) : RepositoryUiState
+        data class Error(val t: Throwable) : RepositoryUiState
     }
 }
+
+class GithubRepositoryStateImpl(
+    override val repositoryUiState: MutableStateFlow<GithubRepositoryState.RepositoryUiState> = MutableStateFlow(
+        GithubRepositoryState.RepositoryUiState.Idle
+    )
+) : GithubRepositoryState
 
 private const val NEXT_STEP_ORGANIZATION = "next-step"

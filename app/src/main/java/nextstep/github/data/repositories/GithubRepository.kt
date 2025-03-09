@@ -1,8 +1,9 @@
 package nextstep.github.data.repositories
 
-import nextstep.github.data.entities.RepositoryEntity
+import kotlinx.coroutines.flow.Flow
+import nextstep.github.model.Repository
 
 interface GithubRepository {
 
-    suspend fun getRepositories(organization: String): List<RepositoryEntity>
+    fun getRepositories(organization: String): Flow<List<Repository>>
 }

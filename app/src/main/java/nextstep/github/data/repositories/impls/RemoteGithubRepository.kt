@@ -1,13 +1,16 @@
 package nextstep.github.data.repositories.impls
 
-import nextstep.github.data.entities.RepositoryEntity
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.flow
 import nextstep.github.data.repositories.GithubRepository
 import nextstep.github.data.services.GithubService
+import nextstep.github.model.Repository
 
 class RemoteGithubRepository(
     private val githubService: GithubService,
 ) : GithubRepository {
-    override suspend fun getRepositories(organization: String): List<RepositoryEntity> {
-        return githubService.getRepositories(organization = organization)
-    }
+    override fun getRepositories(organization: String): Flow<List<Repository>> =
+        flow {
+            emit(githubService.getRepositories(organization = organization))
+        }
 }

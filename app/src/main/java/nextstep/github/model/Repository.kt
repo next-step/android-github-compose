@@ -1,13 +1,15 @@
-package nextstep.github.data.entities
+package nextstep.github.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RepositoryEntity(
+data class Repository(
+    @SerialName("id")
+    val id: Long,
 
     @SerialName("full_name")
-    val fullName: String?,
+    val fullName: String,
 
     @SerialName("description")
     val description: String?,

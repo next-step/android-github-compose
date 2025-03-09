@@ -9,7 +9,7 @@ data class Repository(
     val id: Long,
 
     @SerialName("full_name")
-    val fullName: String?,
+    val fullName: String,
 
     @SerialName("description")
     val description: String?,

@@ -6,7 +6,6 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
-import androidx.compose.ui.test.performClick
 import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
@@ -85,8 +84,9 @@ class GithubScreenTest {
                 snackBarHostState = snackBarHostState
             )
         }
-        val snackBarJob = launch {
-            snackBarHostState?.showSnackbar(
+
+        launch {
+            snackBarHostState.showSnackbar(
                 message = "예기치 못한 오류가 발생했습니다.",
                 actionLabel = "재시도"
             )
@@ -98,7 +98,7 @@ class GithubScreenTest {
             .onNodeWithText("예기치 못한 오류가 발생했습니다.")
             .assertIsDisplayed()
 
-        snackBarJob.cancel()
+        snackBarHostState.currentSnackbarData?.dismiss()
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)
@@ -113,8 +113,8 @@ class GithubScreenTest {
                 snackBarHostState = snackBarHostState
             )
         }
-        val snackBarJob = launch {
-            snackBarHostState?.showSnackbar(
+        launch {
+            snackBarHostState.showSnackbar(
                 message = "오류",
                 actionLabel = "재시도"
             )
@@ -126,7 +126,7 @@ class GithubScreenTest {
             .onNodeWithText("재시도")
             .assertIsDisplayed()
 
-        snackBarJob.cancel()
+        snackBarHostState.currentSnackbarData?.dismiss()
     }
 
 
@@ -144,9 +144,8 @@ class GithubScreenTest {
                 snackBarHostState = snackBarHostState
             )
         }
-        val snackBarJob = launch {
-
-            when (snackBarHostState?.showSnackbar(
+        launch {
+            when (snackBarHostState.showSnackbar(
                 message = "예기치 못한 오류",
                 actionLabel = "재시도"
             )) {
@@ -160,14 +159,10 @@ class GithubScreenTest {
 
         advanceUntilIdle()
 
-        composeTestRule
-            .onNodeWithText("재시도")
-            .performClick()
+        snackBarHostState.currentSnackbarData?.performAction()
 
         advanceUntilIdle()
 
         assertTrue(isSendEvent)
-
-        snackBarJob.cancel()
     }
 }

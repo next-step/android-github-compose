@@ -15,7 +15,7 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.model.Repository
+import nextstep.github.model.RepositoryResponse
 import nextstep.github.ui.components.GithubTopBar
 import nextstep.github.ui.screens.list.components.RepositoryItem
 import nextstep.github.ui.theme.GithubTheme
@@ -47,7 +47,7 @@ fun RepositoryListScreen(
         ) {
             items(state.repositories) { repository ->
                 RepositoryItem(
-                    repository = repository,
+                    repositoryResponse = repository,
                     modifier = Modifier.padding(16.dp)
                 )
                 HorizontalDivider()
@@ -63,7 +63,7 @@ private fun RepositoryListScreenPreview() {
         RepositoryListScreen(
             RepositoryListUiState(
                 repositories = List(10) {
-                    Repository(
+                    RepositoryResponse(
                         id = it.toLong(),
                         fullName = "next-step/nextstep-docs-$it",
                         description = if (it % 2 == 0) "nextstep 매뉴얼 및 문서를 관리하는 저장소" else null,

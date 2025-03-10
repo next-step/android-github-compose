@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class Repository(
+data class RepositoryResponse(
     @SerialName("id")
     val id: Long,
 

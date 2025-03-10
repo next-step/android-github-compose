@@ -23,7 +23,7 @@ fun RepositoryItem(
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
-            text = repository.description ?: "",
+            text = repository.description.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
         )
     }

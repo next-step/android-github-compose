@@ -51,6 +51,18 @@ fun GithubScreen(
 @Composable
 fun GithubScreen(
     uiState: GithubUiState,
+    snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
+) {
+    GithubScreen(
+        uiState = uiState,
+        snackBarHostState = snackBarHostState,
+        modifier = Modifier
+    )
+}
+
+@Composable
+fun GithubScreen(
+    uiState: GithubUiState,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {

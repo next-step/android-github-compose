@@ -30,7 +30,6 @@ class GithubScreenTest {
         composeTestRule.setContent {
             GithubScreen(
                 uiState = GithubUiState.Loading,
-                snackBarHostState = remember { SnackbarHostState() }
             )
         }
         composeTestRule
@@ -43,7 +42,6 @@ class GithubScreenTest {
         composeTestRule.setContent {
             GithubScreen(
                 uiState = GithubUiState.EmptyRepository,
-                snackBarHostState = remember { SnackbarHostState() }
             )
         }
 
@@ -66,7 +64,6 @@ class GithubScreenTest {
         composeTestRule.setContent {
             GithubScreen(
                 uiState = GithubUiState.Repositories(items = repositories),
-                snackBarHostState = remember { SnackbarHostState() }
             )
         }
 

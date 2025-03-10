@@ -2,7 +2,6 @@ package nextstep.github
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
-import androidx.compose.runtime.remember
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -78,13 +77,12 @@ class GithubScreenTest {
     @Test
     fun `주어진_스낵바의_메시지가_보여야_한다`() = runTest {
 
-        var snackBarHostState: SnackbarHostState? = null
+        val snackBarHostState = SnackbarHostState()
 
         composeTestRule.setContent {
-            snackBarHostState = remember { SnackbarHostState() }
             GithubScreen(
                 uiState = GithubUiState.Loading,
-                snackBarHostState = requireNotNull(snackBarHostState)
+                snackBarHostState = snackBarHostState
             )
         }
         val snackBarJob = launch {
@@ -107,13 +105,12 @@ class GithubScreenTest {
     @Test
     fun `주어진_스낵바의_엑션_라벨이_보여야_한다`() = runTest {
 
-        var snackBarHostState: SnackbarHostState? = null
+        val snackBarHostState = SnackbarHostState()
 
         composeTestRule.setContent {
-            snackBarHostState = remember { SnackbarHostState() }
             GithubScreen(
                 uiState = GithubUiState.Loading,
-                snackBarHostState = requireNotNull(snackBarHostState)
+                snackBarHostState = snackBarHostState
             )
         }
         val snackBarJob = launch {
@@ -137,15 +134,14 @@ class GithubScreenTest {
     @Test
     fun `주어진_스낵바의_엑션_라벨_클릭시_이벤트가_올바르게_전달되어야_한다`() = runTest {
 
-        var snackBarHostState: SnackbarHostState? = null
+        val snackBarHostState = SnackbarHostState()
 
         var isSendEvent = false
 
         composeTestRule.setContent {
-            snackBarHostState = remember { SnackbarHostState() }
             GithubScreen(
                 uiState = GithubUiState.Loading,
-                snackBarHostState = requireNotNull(snackBarHostState)
+                snackBarHostState = snackBarHostState
             )
         }
         val snackBarJob = launch {

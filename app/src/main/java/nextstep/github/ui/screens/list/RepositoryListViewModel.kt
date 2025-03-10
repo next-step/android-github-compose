@@ -6,31 +6,48 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepository
-import nextstep.github.model.Repository
 
 class RepositoryListViewModel(
-    githubRepository: GithubRepository,
+    private val githubRepository: GithubRepository,
 ) : ViewModel() {
-    val uiState: StateFlow<RepositoryListUiState> =
-        githubRepository.getRepositoriesStream(
-            organization = NEXT_STEP_ORGANIZATION
-        ).map { repositories: List<Repository> ->
-            RepositoryListUiState(repositories = repositories)
-        }.stateIn(
-            scope = viewModelScope,
-            started = SharingStarted.WhileSubscribed(STOP_TIMEOUT_MILLIS),
-            initialValue = RepositoryListUiState()
-        )
+
+    private val _uiState: MutableStateFlow<RepositoryListUiState> =
+        MutableStateFlow(RepositoryListUiState.Loading)
+    val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
+
+    private var observeRepositoriesJob: Job? = null
+
+    init {
+        observeRepositories()
+    }
+
+    fun observeRepositories() {
+        observeRepositoriesJob?.cancel()
+
+        observeRepositoriesJob = viewModelScope.launch {
+            githubRepository.getRepositoriesStream(organization = NEXT_STEP_ORGANIZATION)
+                .catch {
+                    _uiState.value = RepositoryListUiState.Error
+                }
+                .collect { repositories ->
+                    when {
+                        repositories.isEmpty() -> _uiState.value = RepositoryListUiState.Empty
+                        else -> _uiState.value = RepositoryListUiState.Success(repositories)
+                    }
+                }
+        }
+    }
 
     companion object {
         private const val NEXT_STEP_ORGANIZATION = "next-step"
-        private const val STOP_TIMEOUT_MILLIS = 5_000L
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {

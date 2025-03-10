@@ -13,11 +13,11 @@ import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 internal fun GithubRepositoryList(
-    model: List<GithubRepositoryModel>, modifier: Modifier = Modifier
+    model: List<GithubRepositoryModel>,
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
-        modifier = modifier
-    ) {
+        modifier = modifier) {
         items(
             items = model,
             key = { it.id }
@@ -39,7 +39,7 @@ private fun GithubRepositoryListPreview() {
     }
 }
 
-private fun dummyList() = buildList {
+internal fun dummyList() = buildList {
     for (index in 0..30) {
         add(
             GithubRepositoryModel(

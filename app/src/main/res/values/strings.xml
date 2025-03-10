@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">GitHub</string>
     <string name="github_repositories_top_bar_title">NEXTSTEP Repositories</string>
+    <string name="github_repositories_empty">목록이 비었습니다.</string>
+    <string name="github_repositories_error">예상치 못한 오류가 발생했습니다.</string>
+    <string name="retry_action">재시도</string>
 </resources>

@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharedFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
@@ -19,33 +21,80 @@ class GithubRepositoryViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
-    private val _githubRepositories = MutableStateFlow<List<GithubRepositoryModel>>(emptyList())
-    val githubRepositories = _githubRepositories.asStateFlow()
+    private val _state = GithubRepositoryStateImpl()
+    val state: GithubRepositoryState = _state
+
+    private val _events = MutableSharedFlow<GithubRepositoryEvent>()
+    val event: SharedFlow<GithubRepositoryEvent> = _events
 
     init {
         loadRepositories()
     }
 
-    private fun loadRepositories() {
+    fun loadRepositories() {
         viewModelScope.launch {
-            githubRepository.getRepositories(NEXT_STEP_ORGANIZATION)
+            githubRepository.getRepositories(
+                organization = NEXT_STEP_ORGANIZATION,
+                onPreLoad = {
+                    _state.repositoryUiState.update { GithubRepositoryState.RepositoryUiState.Loading }
+                }
+            )
                 .onSuccess { data ->
                     val result = data.mapNotNull { it.toGithubRepositoryModel() }
-                    _githubRepositories.update { result }
+                    _state.repositoryUiState.update {
+                        if (result.isEmpty()) {
+                            GithubRepositoryState.RepositoryUiState.Empty
+                        } else {
+                            GithubRepositoryState.RepositoryUiState.Data(result)
+                        }
+                    }
                 }
+                .onError { t ->
+                    _state.repositoryUiState.update {
+                        GithubRepositoryState.RepositoryUiState.Error(t)
+                    }
+                    showSnackBar()
+                }
+        }
+    }
+
+    private fun showSnackBar() {
+        viewModelScope.launch {
+            _events.emit(GithubRepositoryEvent.ShowSnackBar)
         }
     }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as GithubApplication)
-                    .appContainer
-                    .githubRepository
+                val githubRepository =
+                    (this[APPLICATION_KEY] as GithubApplication).appContainer.githubRepository
                 GithubRepositoryViewModel(githubRepository)
             }
         }
     }
+}
+
+interface GithubRepositoryState {
+    val repositoryUiState: StateFlow<RepositoryUiState>
+
+    sealed interface RepositoryUiState {
+        data object Idle : RepositoryUiState
+        data object Loading : RepositoryUiState
+        data object Empty : RepositoryUiState
+        data class Data(val items: List<GithubRepositoryModel>) : RepositoryUiState
+        data class Error(val t: Throwable? = null) : RepositoryUiState
+    }
+}
+
+class GithubRepositoryStateImpl(
+    override val repositoryUiState: MutableStateFlow<GithubRepositoryState.RepositoryUiState> = MutableStateFlow(
+        GithubRepositoryState.RepositoryUiState.Idle
+    )
+) : GithubRepositoryState
+
+sealed interface GithubRepositoryEvent {
+    data object ShowSnackBar : GithubRepositoryEvent
 }
 
 private const val NEXT_STEP_ORGANIZATION = "next-step"

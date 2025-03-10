@@ -70,17 +70,11 @@ class GithubScreenTest {
             )
         }
 
-        composeTestRule
-            .onNodeWithText("next-step/nextstep-docs1")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("next-step/nextstep-docs2")
-            .assertIsDisplayed()
-
-        composeTestRule
-            .onNodeWithText("next-step/nextstep-docs3")
-            .assertIsDisplayed()
+        repositories.forEach {
+            composeTestRule
+                .onNodeWithText(it.fullName.orEmpty())
+                .assertIsDisplayed()
+        }
     }
 
     @OptIn(ExperimentalCoroutinesApi::class)

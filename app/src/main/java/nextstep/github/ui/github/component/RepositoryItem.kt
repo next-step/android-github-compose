@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.data.api.model.RepositoryEntity
+import nextstep.github.model.Repository
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryItem(
-    item: RepositoryEntity,
+    item: Repository,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -39,7 +39,7 @@ fun RepositoryItem(
 @Composable
 private fun RepositoryItemPreview() {
 
-    val item = RepositoryEntity(
+    val item = Repository(
         id = 0,
         fullName = "next-step/nextstep-docs",
         description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"

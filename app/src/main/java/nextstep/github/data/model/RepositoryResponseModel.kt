@@ -2,6 +2,7 @@ package nextstep.github.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
+import nextstep.github.data.entity.Repository
 
 @Serializable
 data class RepositoryResponseModel(
@@ -9,7 +10,7 @@ data class RepositoryResponseModel(
     @SerialName("description") val description: String?,
 )
 
-fun RepositoryResponseModel.toDataModel() = RepositoryDataModel(
+fun RepositoryResponseModel.toEntity() = Repository(
     fullName = this.fullName.orEmpty(),
     description = this.description.orEmpty(),
 )

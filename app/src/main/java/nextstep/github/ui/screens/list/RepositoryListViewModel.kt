@@ -7,10 +7,13 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.Job
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepository
@@ -23,6 +26,9 @@ class RepositoryListViewModel(
         MutableStateFlow(RepositoryListUiState.Loading)
     val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
 
+    private val _errorFlow: Channel<Throwable> = Channel()
+    val errorFlow: Flow<Throwable> = _errorFlow.receiveAsFlow()
+
     private var observeRepositoriesJob: Job? = null
 
     init {
@@ -34,8 +40,8 @@ class RepositoryListViewModel(
 
         observeRepositoriesJob = viewModelScope.launch {
             githubRepository.getRepositoriesStream(organization = NEXT_STEP_ORGANIZATION)
-                .catch {
-                    _uiState.value = RepositoryListUiState.Error
+                .catch { throwable ->
+                    _errorFlow.send(throwable)
                 }
                 .collect { repositories ->
                     when {

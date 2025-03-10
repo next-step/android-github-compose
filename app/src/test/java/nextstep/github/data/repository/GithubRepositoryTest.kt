@@ -1,12 +1,10 @@
-package nextstep.github
+package nextstep.github.data.repository
 
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.test.runTest
 import nextstep.github.data.api.GithubService
 import nextstep.github.data.api.model.RepositoryEntity
 import nextstep.github.data.mapper.toRepository
-import nextstep.github.data.repository.GithubRepository
-import nextstep.github.data.repository.GithubRepositoryImpl
 import org.junit.Test
 
 class GithubRepositoryTest {

@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui.github
 
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.collectLatest
@@ -8,8 +8,6 @@ import kotlinx.coroutines.test.runTest
 import nextstep.github.data.repository.GithubRepository
 import nextstep.github.domain.usecase.GetGithubRepositoriesUseCase
 import nextstep.github.model.Repository
-import nextstep.github.ui.github.GithubUiState
-import nextstep.github.ui.github.GithubViewModel
 import org.junit.Test
 
 class GithubViewModelTest {

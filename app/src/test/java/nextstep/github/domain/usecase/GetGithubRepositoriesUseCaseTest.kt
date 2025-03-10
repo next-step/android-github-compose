@@ -1,11 +1,10 @@
-package nextstep.github
+package nextstep.github.domain.usecase
 
 import junit.framework.TestCase.assertEquals
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.last
 import kotlinx.coroutines.test.runTest
 import nextstep.github.data.repository.GithubRepository
-import nextstep.github.domain.usecase.GetGithubRepositoriesUseCase
 import nextstep.github.model.Repository
 import nextstep.github.util.Result
 import org.junit.Test

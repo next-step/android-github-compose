@@ -9,7 +9,7 @@
 
 ### 2단계
 - [x] UI에 필요한 스타일 재정의
-- [] Repository 목록 화면 껍데기 구현
+- [x] Repository 목록 화면 껍데기 구현
 - [] Repository 목록 화면 TopBar 구현
 - [] Repository 목록 화면 Repository 목록 구현
 

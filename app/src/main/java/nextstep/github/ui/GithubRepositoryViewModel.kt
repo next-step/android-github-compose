@@ -6,7 +6,9 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -22,11 +24,14 @@ class GithubRepositoryViewModel(
     private val _state = GithubRepositoryStateImpl()
     val state: GithubRepositoryState = _state
 
+    private val _events = MutableSharedFlow<GithubRepositoryEvent>()
+    val event: SharedFlow<GithubRepositoryEvent> = _events
+
     init {
         loadRepositories()
     }
 
-    private fun loadRepositories() {
+    fun loadRepositories() {
         viewModelScope.launch {
             githubRepository.getRepositories(
                 organization = NEXT_STEP_ORGANIZATION,
@@ -37,14 +42,25 @@ class GithubRepositoryViewModel(
                 .onSuccess { data ->
                     val result = data.mapNotNull { it.toGithubRepositoryModel() }
                     _state.repositoryUiState.update {
-                        GithubRepositoryState.RepositoryUiState.Success(result)
+                        if (result.isEmpty()) {
+                            GithubRepositoryState.RepositoryUiState.Empty
+                        } else {
+                            GithubRepositoryState.RepositoryUiState.Data(result)
+                        }
                     }
                 }
                 .onError { t ->
                     _state.repositoryUiState.update {
                         GithubRepositoryState.RepositoryUiState.Error(t)
                     }
+                    showSnackBar()
                 }
+        }
+    }
+
+    private fun showSnackBar() {
+        viewModelScope.launch {
+            _events.emit(GithubRepositoryEvent.ShowSnackBar)
         }
     }
 
@@ -65,8 +81,9 @@ interface GithubRepositoryState {
     sealed interface RepositoryUiState {
         data object Idle : RepositoryUiState
         data object Loading : RepositoryUiState
-        data class Success(val items: List<GithubRepositoryModel>) : RepositoryUiState
-        data class Error(val t: Throwable) : RepositoryUiState
+        data object Empty : RepositoryUiState
+        data class Data(val items: List<GithubRepositoryModel>) : RepositoryUiState
+        data class Error(val t: Throwable? = null) : RepositoryUiState
     }
 }
 
@@ -75,5 +92,9 @@ class GithubRepositoryStateImpl(
         GithubRepositoryState.RepositoryUiState.Idle
     )
 ) : GithubRepositoryState
+
+sealed interface GithubRepositoryEvent {
+    data object ShowSnackBar : GithubRepositoryEvent
+}
 
 private const val NEXT_STEP_ORGANIZATION = "next-step"

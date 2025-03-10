@@ -45,7 +45,8 @@ internal fun dummyList() = buildList {
             GithubRepositoryModel(
                 id = index,
                 fullName = "안녕 $index",
-                description = "내용입니다"
+                description = "내용입니다",
+                starCount = index * 10
             )
         )
     }

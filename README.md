@@ -36,9 +36,9 @@
 
 ## 저장소의 Star 수를 노출
 
-- [ ] 저장소의 Star 수 노출
+- [x] 저장소의 Star 수 노출
     - [x] stargazers_count 필드 추가
-    - [ ] star 수 노출 UI 생성
-    - [ ] star 노출
-- [ ] 저장소의 Star 수가 50 이상이면 HOT 텍스트 노출
+    - [x] star 수 노출 UI 생성
+    - [x] star 노출
+- [x] 저장소의 Star 수가 50 이상이면 HOT 텍스트 노출
 - [ ] domain 패키지로 비지니스 로직 캡슐화

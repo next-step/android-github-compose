@@ -6,6 +6,7 @@ data class GithubRepositoryModel(
     val id: Int,
     val fullName: String?,
     val description: String?,
+    val starCount: Int?,
 )
 
 fun GithubRepositoryEntity.toGithubRepositoryModel(): GithubRepositoryModel? {
@@ -14,6 +15,7 @@ fun GithubRepositoryEntity.toGithubRepositoryModel(): GithubRepositoryModel? {
             id = this.id,
             fullName = this.fullName,
             description = this.description,
+            starCount = this.starCount,
         )
     }
 }

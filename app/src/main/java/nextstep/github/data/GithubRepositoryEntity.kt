@@ -8,4 +8,5 @@ data class GithubRepositoryEntity(
     @SerialName("id") val id: Int?,
     @SerialName("full_name") val fullName: String?,
     @SerialName("description") val description: String?,
+    @SerialName("stargazers_count") val starCount: Int?,
 )

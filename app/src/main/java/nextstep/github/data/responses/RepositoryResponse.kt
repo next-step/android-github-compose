@@ -1,4 +1,4 @@
-package nextstep.github.model
+package nextstep.github.data.responses
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

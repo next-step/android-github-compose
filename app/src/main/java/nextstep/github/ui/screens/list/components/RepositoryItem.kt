@@ -7,23 +7,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.model.RepositoryResponse
+import nextstep.github.model.Repository
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryItem(
-    repositoryResponse: RepositoryResponse,
+    repository: Repository,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
         Text(
-            text = repositoryResponse.fullName,
+            text = repository.fullName,
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
-            text = repositoryResponse.description ?: "",
+            text = repository.description ?: "",
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -34,10 +34,11 @@ fun RepositoryItem(
 private fun Preview1() {
     GithubTheme {
         RepositoryItem(
-            repositoryResponse = RepositoryResponse(
+            repository = Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"),
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+            ),
             modifier = Modifier.fillMaxWidth(),
         )
     }
@@ -48,10 +49,10 @@ private fun Preview1() {
 private fun Preview2() {
     GithubTheme {
         RepositoryItem(
-            repositoryResponse = RepositoryResponse(
+            repository = Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
-                description = null
+                description = null,
             ),
             modifier = Modifier.fillMaxWidth(),
         )

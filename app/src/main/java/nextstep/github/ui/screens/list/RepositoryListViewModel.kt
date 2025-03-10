@@ -12,6 +12,7 @@ import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepository
+import nextstep.github.model.Repository
 
 class RepositoryListViewModel(
     githubRepository: GithubRepository,
@@ -19,7 +20,7 @@ class RepositoryListViewModel(
     val uiState: StateFlow<RepositoryListUiState> =
         githubRepository.getRepositoriesStream(
             organization = NEXT_STEP_ORGANIZATION
-        ).map { repositories ->
+        ).map { repositories: List<Repository> ->
             RepositoryListUiState(repositories = repositories)
         }.stateIn(
             scope = viewModelScope,

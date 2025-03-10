@@ -1,6 +1,6 @@
 package nextstep.github.data.services
 
-import nextstep.github.model.RepositoryResponse
+import nextstep.github.data.responses.RepositoryResponse
 import retrofit2.http.GET
 import retrofit2.http.Path
 

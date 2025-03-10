@@ -5,9 +5,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
-import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
@@ -17,12 +15,12 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
-import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
+import nextstep.github.ext.ToLaunchedEffect
 import nextstep.github.model.Repository
 import nextstep.github.ui.github.component.EmptyRepository
-import nextstep.github.ui.github.component.GithubTopBar
 import nextstep.github.ui.github.component.GithubLoading
+import nextstep.github.ui.github.component.GithubTopBar
 import nextstep.github.ui.github.component.RepositoryList
 import nextstep.github.ui.theme.GithubTheme
 
@@ -36,18 +34,11 @@ fun GithubScreen(
 
     val context = LocalContext.current
 
-    LaunchedEffect(Unit) {
-        viewModel.errorFlow.collectLatest {
-            when (snackBarHostState.showSnackbar(
-                message = context.getString(R.string.error_github),
-                actionLabel = context.getString(R.string.action_label_retry)
-            )) {
-                SnackbarResult.Dismissed -> {}
-                SnackbarResult.ActionPerformed -> {
-                    viewModel.fetchRepositories()
-                }
-            }
-        }
+    viewModel.errorFlow.ToLaunchedEffect {
+        snackBarHostState.showSnackbar(
+            message = context.getString(R.string.error_github),
+            actionLabel = context.getString(R.string.action_label_retry)
+        )
     }
 
     GithubScreen(

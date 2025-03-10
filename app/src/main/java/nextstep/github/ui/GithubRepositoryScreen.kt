@@ -61,7 +61,7 @@ private fun GithubRepositoryScreen(
                 is GithubRepositoryState.RepositoryUiState.Loading -> GithubRepositoryLoading()
                 is GithubRepositoryState.RepositoryUiState.Empty -> GithubRepositoryEmpty()
                 is GithubRepositoryState.RepositoryUiState.Data -> GithubRepositoryList(
-                    model = (repositoryUiState as GithubRepositoryState.RepositoryUiState.Data).items,
+                    repositoryUiState.items
                 )
 
                 else -> {

@@ -29,9 +29,9 @@ fun RepositoryItem(
     }
 }
 
-@Preview(showBackground = true, name = "모든 값이 null이 아닐 때")
+@Preview(showBackground = true)
 @Composable
-private fun Preview1() {
+private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
             repository = Repository(
@@ -44,9 +44,9 @@ private fun Preview1() {
     }
 }
 
-@Preview(showBackground = true, name = "설명이 null일 때")
+@Preview(showBackground = true)
 @Composable
-private fun Preview2() {
+private fun RepositoryItemPreview_NoDescription() {
     GithubTheme {
         RepositoryItem(
             repository = Repository(

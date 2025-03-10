@@ -2,5 +2,6 @@
     <string name="app_name">GitHub</string>
 
     <!-- RepositoriesScreen -->
-    <string name="repositories_top_bat_title">NEXTSTEP Repositories</string>
+    <string name="repository_list_top_bat_title">NEXTSTEP Repositories</string>
+    <string name="repository_list_empty">목록이 비었습니다.</string>
 </resources>

@@ -17,7 +17,7 @@ class RepositoryListViewModel(
     githubRepository: GithubRepository,
 ) : ViewModel() {
     val uiState: StateFlow<RepositoryListUiState> =
-        githubRepository.getRepositories(
+        githubRepository.getRepositoriesStream(
             organization = NEXT_STEP_ORGANIZATION
         ).map { repositories ->
             RepositoryListUiState(repositories = repositories)

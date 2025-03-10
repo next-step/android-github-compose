@@ -9,7 +9,7 @@ import nextstep.github.model.Repository
 class RemoteGithubRepository(
     private val githubService: GithubService,
 ) : GithubRepository {
-    override fun getRepositories(organization: String): Flow<List<Repository>> =
+    override fun getRepositoriesStream(organization: String): Flow<List<Repository>> =
         flow {
             emit(githubService.getRepositories(organization = organization))
         }

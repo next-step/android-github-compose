@@ -8,7 +8,10 @@
 - [x] 서버 데이터 로드되는지 확인
 
 ### 2단계
-
+- [] UI에 필요한 스타일 재정의
+- [] Repository 목록 화면 껍데기 구현
+- [] Repository 목록 화면 TopBar 구현
+- [] Repository 목록 화면 Repository 목록 구현
 
 ### 3단계
 

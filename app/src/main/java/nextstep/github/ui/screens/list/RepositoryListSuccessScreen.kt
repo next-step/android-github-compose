@@ -9,7 +9,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.model.Repository
+import nextstep.github.data.repositories.impls.FakeGithubRepository
 import nextstep.github.ui.screens.list.components.RepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
@@ -37,13 +37,7 @@ private fun RepositoryListSuccessScreenPreview() {
     GithubTheme {
         RepositoryListSuccessScreen(
             state = RepositoryListUiState.Success(
-                repositories = List(10) {
-                    Repository(
-                        id = it.toLong(),
-                        fullName = "next-step/nextstep-docs-$it",
-                        description = if (it % 2 == 0) "nextstep 매뉴얼 및 문서를 관리하는 저장소" else null,
-                    )
-                }
+                repositories = FakeGithubRepository.repositories
             ),
         )
     }

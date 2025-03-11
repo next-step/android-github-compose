@@ -19,7 +19,8 @@ class RepositoryItemTest {
         val item = Repository(
             id = 1,
             fullName = "next-step/nextstep-docs1",
-            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소12"
+            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소12",
+            stars = 10
         )
 
         //when
@@ -40,7 +41,8 @@ class RepositoryItemTest {
         val item = Repository(
             id = 2,
             fullName = "next-step/nextstep-docs2",
-            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소34"
+            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소34",
+            stars = 15
         )
 
         //when

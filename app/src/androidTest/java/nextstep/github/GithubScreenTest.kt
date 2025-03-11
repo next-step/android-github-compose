@@ -55,7 +55,8 @@ class GithubScreenTest {
             Repository(
                 id = it,
                 fullName = "next-step/nextstep-docs${it}",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소${it}"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소${it}",
+                stars = it
             )
         }
 

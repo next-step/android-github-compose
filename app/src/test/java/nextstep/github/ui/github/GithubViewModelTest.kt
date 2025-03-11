@@ -19,12 +19,14 @@ class GithubViewModelTest {
             Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs1",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1",
+                stars = 91
             ),
             Repository(
                 id = 2,
                 fullName = "next-step/nextstep-docs2",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2",
+                stars = 92
             )
         )
         val getGithubRepositoriesUseCase = fakeGetGithubRepositoriesUseCase(repositories)
@@ -53,12 +55,14 @@ class GithubViewModelTest {
             Repository(
                 id = 11,
                 fullName = "next-step/nextstep-docs11",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소11"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소11",
+                stars = 39
             ),
             Repository(
                 id = 22,
                 fullName = "next-step/nextstep-docs22",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소22"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소22",
+                stars = 3
             )
         )
 

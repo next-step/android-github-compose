@@ -22,12 +22,14 @@ class RepositoryListTest {
             Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs1",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1",
+                stars = 2
             ),
             Repository(
                 id = 2,
                 fullName = "next-step/nextstep-docs2",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2",
+                stars = 3
             )
         )
         //when
@@ -53,12 +55,14 @@ class RepositoryListTest {
             Repository(
                 id = 3,
                 fullName = "next-step/nextstep-docs3",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3",
+                stars = 10
             ),
             Repository(
                 id = 4,
                 fullName = "next-step/nextstep-docs4",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4",
+                stars = 6
             )
         )
         //when
@@ -84,17 +88,20 @@ class RepositoryListTest {
             Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs1",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1",
+                stars = 3
             ),
             Repository(
                 id = 2,
                 fullName = "next-step/nextstep-docs2",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2",
+                stars = 5
             ),
             Repository(
                 id = 3,
                 fullName = "next-step/nextstep-docs3",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3",
+                stars = 7
             )
         )
         //when

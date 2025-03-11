@@ -23,7 +23,7 @@ class GithubViewModel(
     val repositoryList = _repositoryList
 
     init {
-        viewModelScope.launch(Dispatchers.IO) {
+        viewModelScope.launch {
             getRepositories("next-step")
         }
     }

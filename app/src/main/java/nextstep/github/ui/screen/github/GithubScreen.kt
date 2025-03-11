@@ -85,3 +85,11 @@ private fun GithubScreenPreview() {
         repositoryList = dummyList
     )
 }
+
+@Preview(showBackground = true)
+@Composable
+private fun GithubScreenEmptyPreview() {
+    GithubScreen(
+        repositoryList = emptyList()
+    )
+}

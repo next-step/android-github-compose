@@ -5,4 +5,5 @@
     <string name="content_empty_repository">목록이 비었습니다.</string>
     <string name="error_github">예기치 못한 오류가 발생했습니다.</string>
     <string name="action_label_retry">재시도</string>
+    <string name="label_hot_repository">HOT</string>
 </resources>

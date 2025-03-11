@@ -44,7 +44,7 @@ fun GithubScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun GithubScreen(
+fun GithubScreen(
     repositoryList: List<RepositoryModel>,
     modifier: Modifier = Modifier,
 ) {

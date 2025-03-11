@@ -8,5 +8,6 @@ fun RepositoryEntity.toRepository(): Repository =
     Repository(
         id = id,
         fullName = fullName,
-        description = description
+        description = description,
+        stars = stars
     )

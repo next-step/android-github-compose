@@ -7,7 +7,6 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
@@ -24,11 +23,11 @@ class GithubViewModel(
 
     init {
         viewModelScope.launch {
-            getRepositories("next-step")
+            fetchRepositories("next-step")
         }
     }
 
-    suspend fun getRepositories(
+    suspend fun fetchRepositories(
         organization: String,
     ) {
         githubRepository.getRepositories(

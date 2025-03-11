@@ -5,7 +5,7 @@ import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithTag
 import androidx.compose.ui.test.onNodeWithText
-import nextstep.github.data.api.model.RepositoryEntity
+import nextstep.github.model.Repository
 import nextstep.github.ui.github.component.RepositoryList
 import org.junit.Rule
 import org.junit.Test
@@ -19,12 +19,12 @@ class RepositoryListTest {
     fun `여러개의_레포지토리의_이름이_올바르게_보여야_한다`() {
         //given
         val items = listOf(
-            RepositoryEntity(
+            Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs1",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
             ),
-            RepositoryEntity(
+            Repository(
                 id = 2,
                 fullName = "next-step/nextstep-docs2",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
@@ -50,12 +50,12 @@ class RepositoryListTest {
 
         //given
         val items = listOf(
-            RepositoryEntity(
+            Repository(
                 id = 3,
                 fullName = "next-step/nextstep-docs3",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"
             ),
-            RepositoryEntity(
+            Repository(
                 id = 4,
                 fullName = "next-step/nextstep-docs4",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4"
@@ -81,17 +81,17 @@ class RepositoryListTest {
 
         //given
         val items = listOf(
-            RepositoryEntity(
+            Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs1",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소1"
             ),
-            RepositoryEntity(
+            Repository(
                 id = 2,
                 fullName = "next-step/nextstep-docs2",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소2"
             ),
-            RepositoryEntity(
+            Repository(
                 id = 3,
                 fullName = "next-step/nextstep-docs3",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소3"

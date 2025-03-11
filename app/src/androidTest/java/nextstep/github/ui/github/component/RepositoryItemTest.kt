@@ -1,4 +1,4 @@
-package nextstep.github.component
+package nextstep.github.ui.github.component
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.assertIsNotDisplayed
@@ -6,7 +6,6 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithContentDescription
 import androidx.compose.ui.test.onNodeWithText
 import nextstep.github.model.Repository
-import nextstep.github.ui.github.component.RepositoryItem
 import org.junit.Rule
 import org.junit.Test
 

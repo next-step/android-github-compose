@@ -6,6 +6,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.model.Repository
@@ -17,7 +18,9 @@ fun RepositoryListSuccessScreen(
     state: RepositoryListUiState.Success,
     modifier: Modifier = Modifier,
 ) {
-    LazyColumn(modifier = modifier) {
+    LazyColumn(
+        modifier = modifier.testTag("repositoryList")
+    ) {
         items(key = { item -> item.id }, items = state.repositories) { repository ->
             RepositoryItem(
                 repository = repository,

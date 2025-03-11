@@ -56,9 +56,6 @@ fun GithubScreen(
                     Text(
                         text = stringResource(R.string.app_bar_title),
                         style = MaterialTheme.typography.titleLarge,
-                        fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                        lineHeight = MaterialTheme.typography.titleLarge.lineHeight,
-                        letterSpacing = MaterialTheme.typography.titleLarge.letterSpacing,
                         fontWeight = FontWeight.W400
                     )
                 },
@@ -116,17 +113,11 @@ private fun GithubRepoItem(
             Text(
                 text = fullName,
                 style = MaterialTheme.typography.titleLarge,
-                fontSize = MaterialTheme.typography.titleLarge.fontSize,
-                lineHeight = MaterialTheme.typography.titleLarge.lineHeight,
-                letterSpacing = MaterialTheme.typography.titleLarge.letterSpacing,
                 fontWeight = FontWeight.W400
             )
             Text(
                 text = description,
                 style = MaterialTheme.typography.bodyMedium,
-                fontSize = MaterialTheme.typography.bodyMedium.fontSize,
-                lineHeight = MaterialTheme.typography.bodyMedium.lineHeight,
-                letterSpacing = MaterialTheme.typography.bodyMedium.letterSpacing,
             )
         }
         HorizontalDivider(

@@ -60,12 +60,12 @@ fun RepositoryItem(
         }
 
         Text(
-            text = item.fullName.orEmpty(),
+            text = item.fullName,
             style = MaterialTheme.typography.titleLarge,
             color = MaterialTheme.colorScheme.scrim
         )
         Text(
-            text = item.description.orEmpty(),
+            text = item.description,
             style = MaterialTheme.typography.bodyMedium,
             color = MaterialTheme.colorScheme.scrim
         )

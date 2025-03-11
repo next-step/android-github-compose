@@ -79,12 +79,15 @@ fun GithubScreen(
 @Composable
 private fun GithubRepoListContainer(
     repositoryList: List<RepositoryModel>,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier,
     ) {
-        items(repositoryList) {
+        items(
+            items = repositoryList,
+            key = { it.id }
+        ) {
             GithubRepoItem(
                 fullName = it.fullName,
                 description = it.description,
@@ -139,6 +142,7 @@ private fun GithubRepoItemPreview() {
 private fun GithubRepoListContainerPreview(modifier: Modifier = Modifier) {
     val dummyList = List(3) {
         RepositoryModel(
+            id = 0,
             fullName = "next-step/nextstep-docs",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
         )
@@ -154,6 +158,7 @@ private fun GithubRepoListContainerPreview(modifier: Modifier = Modifier) {
 private fun GithubScreenPreview() {
     val dummyList = List(10) {
         RepositoryModel(
+            id = 0,
             fullName = "next-step/nextstep-docs",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
         )

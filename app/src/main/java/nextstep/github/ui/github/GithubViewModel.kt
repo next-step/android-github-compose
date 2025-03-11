@@ -30,12 +30,13 @@ class GithubViewModel(
     private val _errorFlow = Channel<Throwable>()
     val errorFlow = _errorFlow.receiveAsFlow()
 
+    private var fetchRepositoriesJob: Job? = null
+    private val isRunning = AtomicBoolean(false)
+
     init {
         fetchRepositories()
     }
 
-    private var fetchRepositoriesJob: Job? = null
-    private val isRunning = AtomicBoolean(false)
 
     fun fetchRepositories() {
         if (isRunning.get()) return

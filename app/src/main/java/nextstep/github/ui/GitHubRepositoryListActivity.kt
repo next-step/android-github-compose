@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui
 
 import android.os.Bundle
 import android.util.Log
@@ -13,9 +13,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.lifecycleScope
 import kotlinx.coroutines.launch
+import nextstep.github.GitHubApplication
 import nextstep.github.ui.theme.GithubTheme
 
-class MainActivity : ComponentActivity() {
+class GitHubRepositoryListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         lifecycleScope.launch {

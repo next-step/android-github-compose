@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -17,6 +18,7 @@ import nextstep.github.GithubApplication
 import nextstep.github.domain.usecase.GetGithubRepositoriesUseCase
 import nextstep.github.model.Repository
 import nextstep.github.util.Result
+import java.util.concurrent.atomic.AtomicBoolean
 
 class GithubViewModel(
     private val getGithubRepositoriesUseCase: GetGithubRepositoriesUseCase
@@ -32,27 +34,46 @@ class GithubViewModel(
         fetchRepositories()
     }
 
+    private var fetchRepositoriesJob: Job? = null
+    private val isRunning = AtomicBoolean(false)
+
     fun fetchRepositories() {
-        getGithubRepositoriesUseCase(organization = DEFAULT_SEARCH_KEYWORD).onEach { result ->
-            when (result) {
-                Result.Loading -> {
-                    _uiState.update { GithubUiState.Loading }
-                }
+        if (isRunning.get()) return
+        if (fetchRepositoriesJob?.isActive == true) return
 
-                is Result.Error -> {
-                    _errorFlow.send(result.exception)
-                }
+        isRunning.set(true)
 
-                is Result.Success<List<Repository>> -> {
-                    _uiState.update {
-                        when {
-                            result.data.isEmpty() -> GithubUiState.EmptyRepository
-                            else -> GithubUiState.Repositories(result.data)
+        fetchRepositoriesJob =
+            getGithubRepositoriesUseCase(organization = DEFAULT_SEARCH_KEYWORD).onEach { result ->
+                when (result) {
+                    Result.Loading -> {
+                        _uiState.update { GithubUiState.Loading }
+                    }
+
+                    is Result.Error -> {
+                        _errorFlow.send(result.exception)
+                    }
+
+                    is Result.Success<List<Repository>> -> {
+                        _uiState.update {
+                            when {
+                                result.data.isEmpty() -> GithubUiState.EmptyRepository
+                                else -> GithubUiState.Repositories(result.data)
+                            }
                         }
                     }
                 }
+            }.launchIn(viewModelScope).apply {
+                invokeOnCompletion {
+                    isRunning.set(false)
+                    fetchRepositoriesJob = null
+                }
             }
-        }.launchIn(viewModelScope)
+    }
+
+    override fun onCleared() {
+        fetchRepositoriesJob?.cancel()
+        super.onCleared()
     }
 
     companion object {

@@ -32,7 +32,7 @@ internal fun GitHubRepositoryListScreen(
 }
 
 @Composable
-private fun GitHubRepositoryListScreen(
+internal fun GitHubRepositoryListScreen(
     repositories: List<Repository>,
     modifier: Modifier = Modifier,
 ) {
@@ -42,17 +42,28 @@ private fun GitHubRepositoryListScreen(
             SingleTextTopBar(title = stringResource(R.string.repository_list_title))
         }
     ) { innerPadding ->
-        LazyColumn(
+        RepositoryListContent(
+            repositories = repositories,
             modifier = Modifier
                 .fillMaxSize()
                 .padding(innerPadding)
+        )
+    }
+}
+
+@Composable
+private fun RepositoryListContent(
+    repositories: List<Repository>,
+    modifier: Modifier = Modifier,
+) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(
+            items = repositories,
+            key = { it.id }
         ) {
-            items(
-                items = repositories,
-                key = { it.id }
-            ) {
-                GitHubRepositoryItem(it)
-            }
+            GitHubRepositoryItem(it)
         }
     }
 }

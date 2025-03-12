@@ -5,8 +5,11 @@ import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.data.entity.Repository
+import nextstep.github.ui.component.RepositoryListTopBar
+import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryListScreen(
@@ -25,7 +28,7 @@ fun RepositoryListScreen(
     modifier: Modifier = Modifier
 ) {
     Scaffold(
-        topBar = {},
+        topBar = { RepositoryListTopBar() },
         modifier = modifier,
     ) { paddingValues ->
         LazyColumn(
@@ -33,5 +36,15 @@ fun RepositoryListScreen(
         ) {
 
         }
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            repositoryList = emptyList(),
+        )
     }
 }

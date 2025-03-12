@@ -20,7 +20,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.data.model.RepositoryModel
 import nextstep.github.ui.screen.github.component.GithubRepoListContainer
-import nextstep.github.ui.theme.White
+import nextstep.github.ui.theme.topAppBarContainer
 
 @Composable
 fun GithubScreen(
@@ -53,7 +53,7 @@ fun GithubScreen(
                     )
                 },
                 colors = TopAppBarDefaults.centerAlignedTopAppBarColors(
-                    containerColor = White
+                    containerColor = MaterialTheme.colorScheme.topAppBarContainer
                 )
             )
         }

@@ -10,7 +10,7 @@ class GithubScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    val repositoryList = listOf(
+    val repositories = listOf(
         RepositoryModel(
             id = 1,
             fullName = "next-step/nextstep-docs",
@@ -32,17 +32,13 @@ class GithubScreenTest {
     fun Github_레포지토리_데이터가_정상적으로_화면에_출력된다() {
         composeTestRule.setContent {
             GithubScreen(
-                repositoryList = repositoryList,
+                repositoryList = repositories,
             )
         }
 
-        composeTestRule.onNodeWithText("next-step/nextstep-docs")
-            .assertExists()
-
-        composeTestRule.onNodeWithText("next-step/holy-moly")
-            .assertExists()
-
-        composeTestRule.onNodeWithText("next-step/haly-galy")
-            .assertExists()
+        repositories.forEach {
+            composeTestRule.onNodeWithText(it.fullName)
+                .assertExists()
+        }
     }
 }

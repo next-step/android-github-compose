@@ -41,9 +41,6 @@ class StatefulGithubScreenTest {
 
     @Before
     fun setUp() {
-        // FakeGithubRepository 데이터 초기화
-        repository.clearData()
-
         // FakeGithubRepository 생성
         repository = FakeGithubRepository()
 

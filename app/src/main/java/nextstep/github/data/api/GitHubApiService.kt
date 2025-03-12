@@ -6,5 +6,5 @@ import retrofit2.http.GET
 interface GitHubApiService {
 
     @GET("orgs/next-step/repos")
-    suspend fun getRepositories(): List<RepositoryResponse>
+    suspend fun getNextStepRepositories(): List<RepositoryResponse>
 }

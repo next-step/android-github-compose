@@ -4,9 +4,9 @@ import nextstep.github.data.api.GitHubApiService
 import nextstep.github.data.model.dto.RepositoryResponse
 
 class GithubRemoteDataSourceImpl(
-    private val _service: GitHubApiService,
+    private val service: GitHubApiService,
 ) : GitHubRemoteDataSource {
     override suspend fun getRepositories(): List<RepositoryResponse> {
-        return _service.getRepositories()
+        return service.getNextStepRepositories()
     }
 }

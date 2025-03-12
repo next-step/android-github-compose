@@ -40,11 +40,14 @@ fun GithubScreen(
 
     val snackbarHostState = remember { SnackbarHostState() }
 
+    val snackbarRetryMesssage = stringResource(R.string.snackbar_retry_error_message)
+    val retryActionLabel = stringResource(R.string.retry_action_label)
+
     LaunchedEffect(Unit) {
         viewModel.errorFlow.collectLatest { message ->
             val result = snackbarHostState.showSnackbar(
-                message = "예상치 못한 오류가 발생했습니다.",
-                actionLabel = "재시도",
+                message = snackbarRetryMesssage,
+                actionLabel = retryActionLabel,
                 duration = SnackbarDuration.Indefinite
             )
             if (result == SnackbarResult.ActionPerformed) {
@@ -100,7 +103,7 @@ fun GithubScreen(
                 is UiState.Empty -> {
                     CenteredContent {
                         Text(
-                            text = "No repositories",
+                            text = stringResource(R.string.empty_repositories_text),
                             style = MaterialTheme.typography.bodyMedium,
                         )
                     }

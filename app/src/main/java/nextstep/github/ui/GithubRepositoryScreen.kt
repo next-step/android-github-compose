@@ -1,6 +1,5 @@
 package nextstep.github.ui
 
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.SnackbarHost
@@ -55,27 +54,27 @@ private fun GithubRepositoryScreen(
         topBar = { GithubRepositoryTopBar() },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
     ) { innerPadding ->
+        val modifier = Modifier.padding(innerPadding)
 
-        Box(modifier = Modifier.padding(innerPadding)) {
-            when (repositoryUiState) {
-                is GithubRepositoryState.RepositoryUiState.Loading -> GithubRepositoryLoading()
-                is GithubRepositoryState.RepositoryUiState.Empty -> GithubRepositoryEmpty()
-                is GithubRepositoryState.RepositoryUiState.Data -> GithubRepositoryList(
-                    repositoryUiState.items
-                )
+        when (repositoryUiState) {
+            is GithubRepositoryState.RepositoryUiState.Loading -> GithubRepositoryLoading(modifier)
+            is GithubRepositoryState.RepositoryUiState.Empty -> GithubRepositoryEmpty(modifier)
+            is GithubRepositoryState.RepositoryUiState.Data -> GithubRepositoryList(
+                model = repositoryUiState.items,
+                modifier = modifier
+            )
 
-                else -> {
-                    /** do nothing */
-                }
+            else -> {
+                /** do nothing */
             }
-            when (events) {
-                is GithubRepositoryEvent.ShowSnackBar -> {
-                    onUpdateShowSnackBar(true)
-                }
+        }
+        when (events) {
+            is GithubRepositoryEvent.ShowSnackBar -> {
+                onUpdateShowSnackBar(true)
+            }
 
-                else -> {
-                    /** do nothing */
-                }
+            else -> {
+                /** do nothing */
             }
         }
     }

@@ -31,4 +31,8 @@
 - GithubViewModel getRepositories > fetchRepositories로 함수명 변경(의도 명확화)
 - HorizontalDivider thickness 1dp 제거 (내부 기본값이 1dp)
 
+### 🚀 3단계 - GitHub(UI 상태) 요구 사항
+- 목록이 로딩되기 전에는 로딩 UI를 노출한다.
+- 목록이 빈 경우에는 빈 화면 UI를 노출한다.
+- 오류가 발생한 경우 재시도 가능한 스낵바를 노출한다.
 

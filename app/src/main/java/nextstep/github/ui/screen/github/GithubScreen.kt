@@ -8,16 +8,23 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
 import nextstep.github.ui.screen.component.CenteredContent
 import nextstep.github.ui.screen.github.component.GithubRepoListContainer
@@ -31,8 +38,24 @@ fun GithubScreen(
 ) {
     val repositoryUiState by viewModel.repositoryUiState.collectAsStateWithLifecycle()
 
+    val snackbarHostState = remember { SnackbarHostState() }
+
+    LaunchedEffect(Unit) {
+        viewModel.errorFlow.collectLatest { message ->
+            val result = snackbarHostState.showSnackbar(
+                message = "예상치 못한 오류가 발생했습니다.",
+                actionLabel = "재시도",
+                duration = SnackbarDuration.Indefinite
+            )
+            if (result == SnackbarResult.ActionPerformed) {
+                viewModel.onRetry()
+            }
+        }
+    }
+
     GithubScreen(
         repositoryUiState = repositoryUiState,
+        snackbarHostState = snackbarHostState,
         modifier = modifier
     )
 }
@@ -41,10 +64,11 @@ fun GithubScreen(
 @Composable
 fun GithubScreen(
     repositoryUiState: UiState<List<RepositoryUiState>>,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        modifier = modifier,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -58,7 +82,8 @@ fun GithubScreen(
                     containerColor = MaterialTheme.colorScheme.topAppBarContainer
                 )
             )
-        }
+        },
+        modifier = modifier
     ) {
         Column(
             modifier = Modifier
@@ -83,10 +108,7 @@ fun GithubScreen(
 
                 is UiState.Failure -> {
                     CenteredContent {
-                        Text(
-                            text = repositoryUiState.meesage,
-                            style = MaterialTheme.typography.bodyMedium,
-                        )
+                        CircularProgressIndicator()
                     }
                 }
 
@@ -115,7 +137,8 @@ private fun GithubScreenSuccessPreview() {
     )
 
     GithubScreen(
-        repositoryUiState = uiState
+        repositoryUiState = uiState,
+        snackbarHostState = SnackbarHostState()
     )
 }
 
@@ -123,7 +146,8 @@ private fun GithubScreenSuccessPreview() {
 @Composable
 private fun GithubScreenEmptyPreview() {
     GithubScreen(
-        repositoryUiState = UiState.Empty
+        repositoryUiState = UiState.Empty,
+        snackbarHostState = SnackbarHostState()
     )
 }
 
@@ -131,7 +155,8 @@ private fun GithubScreenEmptyPreview() {
 @Composable
 private fun GithubScreenLoadingPreview() {
     GithubScreen(
-        repositoryUiState = UiState.Loading
+        repositoryUiState = UiState.Loading,
+        snackbarHostState = SnackbarHostState()
     )
 }
 
@@ -139,6 +164,7 @@ private fun GithubScreenLoadingPreview() {
 @Composable
 private fun GithubScreenFailurePreview() {
     GithubScreen(
-        repositoryUiState = UiState.Failure("Error message")
+        repositoryUiState = UiState.Failure("Error message"),
+        snackbarHostState = SnackbarHostState()
     )
 }

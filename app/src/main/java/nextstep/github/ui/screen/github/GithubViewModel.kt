@@ -6,8 +6,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
@@ -19,10 +21,11 @@ class GithubViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
-    private val _repositoryUiState =
-        MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
-    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> =
-        _repositoryUiState.asStateFlow()
+    private val _repositoryUiState = MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
+    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> = _repositoryUiState.asStateFlow()
+
+    private val _errorFlow = MutableSharedFlow<String>()
+    val errorFlow = _errorFlow.asSharedFlow()
 
     init {
         viewModelScope.launch {
@@ -43,6 +46,19 @@ class GithubViewModel(
             }
         }.onFailure {
             _repositoryUiState.value = UiState.Failure(it.message ?: "Unknown error")
+            notifyFailure(it.message ?: "Unknown error")
+        }
+    }
+
+    fun onRetry() {
+        viewModelScope.launch {
+            fetchRepositories("next-step")
+        }
+    }
+
+    private fun notifyFailure(message: String) {
+        viewModelScope.launch {
+            _errorFlow.emit(message)
         }
     }
 

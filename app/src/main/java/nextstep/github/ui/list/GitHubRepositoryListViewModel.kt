@@ -1,4 +1,4 @@
-package nextstep.github.ui.github.repository.list
+package nextstep.github.ui.list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY

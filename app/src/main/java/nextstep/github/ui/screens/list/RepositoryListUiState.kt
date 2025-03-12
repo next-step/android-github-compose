@@ -2,6 +2,8 @@ package nextstep.github.ui.screens.list
 
 import nextstep.github.model.Repository
 
-data class RepositoryListUiState(
-    val repositories: List<Repository> = emptyList(),
-)
+sealed interface RepositoryListUiState {
+    data object Loading : RepositoryListUiState
+    data object Empty : RepositoryListUiState
+    data class Success(val repositories: List<Repository>) : RepositoryListUiState
+}

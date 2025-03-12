@@ -23,35 +23,36 @@ fun RepositoryItem(
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
-            text = repository.description ?: "",
+            text = repository.description.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
 }
 
-@Preview(showBackground = true, name = "모든 값이 null이 아닐 때")
+@Preview(showBackground = true)
 @Composable
-private fun Preview1() {
+private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
             repository = Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"),
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+            ),
             modifier = Modifier.fillMaxWidth(),
         )
     }
 }
 
-@Preview(showBackground = true, name = "설명이 null일 때")
+@Preview(showBackground = true)
 @Composable
-private fun Preview2() {
+private fun RepositoryItemPreview_NoDescription() {
     GithubTheme {
         RepositoryItem(
             repository = Repository(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
-                description = null
+                description = null,
             ),
             modifier = Modifier.fillMaxWidth(),
         )

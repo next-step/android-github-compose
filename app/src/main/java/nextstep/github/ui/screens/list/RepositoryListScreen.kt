@@ -1,24 +1,21 @@
 package nextstep.github.ui.screens.list
 
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
-import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
-import nextstep.github.model.Repository
 import nextstep.github.ui.components.GithubTopBar
-import nextstep.github.ui.screens.list.components.RepositoryItem
-import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryListScreen(
@@ -27,8 +24,28 @@ fun RepositoryListScreen(
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
+    val snackBarHostState = remember { SnackbarHostState() }
+
+    val message = stringResource(R.string.snack_bar_unexpected_error)
+    val actionLabel = stringResource(R.string.snack_bar_action_label_retry)
+
+    LaunchedEffect(Unit) {
+        viewModel.errorFlow.collectLatest {
+            when (snackBarHostState.showSnackbar(
+                message = message,
+                actionLabel = actionLabel,
+            )) {
+                SnackbarResult.Dismissed -> Unit
+                SnackbarResult.ActionPerformed -> {
+                    viewModel.observeRepositories()
+                }
+            }
+        }
+    }
+
     RepositoryListScreen(
         state = state,
+        snackBarHostState = snackBarHostState,
         modifier = modifier,
     )
 }
@@ -36,40 +53,26 @@ fun RepositoryListScreen(
 @Composable
 fun RepositoryListScreen(
     state: RepositoryListUiState,
+    snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { GithubTopBar(title = stringResource(R.string.repositories_top_bat_title)) },
-        modifier = modifier.fillMaxSize()
-    ) {
-        LazyColumn(
-            modifier = Modifier.padding(it)
-        ) {
-            items(state.repositories) { repository ->
-                RepositoryItem(
-                    repository = repository,
-                    modifier = Modifier.padding(16.dp)
-                )
-                HorizontalDivider()
-            }
-        }
-    }
-}
+        topBar = { GithubTopBar(title = stringResource(R.string.repository_list_top_bat_title)) },
+        snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
+        modifier = modifier,
+    ) { paddingValues ->
+        when (state) {
+            RepositoryListUiState.Empty ->
+                RepositoryListEmptyScreen(modifier = Modifier.padding(paddingValues))
 
-@Preview
-@Composable
-private fun RepositoryListScreenPreview() {
-    GithubTheme {
-        RepositoryListScreen(
-            RepositoryListUiState(
-                repositories = List(10) {
-                    Repository(
-                        id = it.toLong(),
-                        fullName = "next-step/nextstep-docs-$it",
-                        description = if (it % 2 == 0) "nextstep 매뉴얼 및 문서를 관리하는 저장소" else null,
-                    )
-                }
-            )
-        )
+            RepositoryListUiState.Loading ->
+                RepositoryListLoadingScreen(modifier = Modifier.padding(paddingValues))
+
+            is RepositoryListUiState.Success ->
+                RepositoryListSuccessScreen(
+                    state = state,
+                    modifier = Modifier.padding(paddingValues),
+                )
+        }
     }
 }

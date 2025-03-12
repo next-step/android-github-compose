@@ -5,5 +5,5 @@ import nextstep.github.model.Repository
 
 interface GithubRepository {
 
-    fun getRepositories(organization: String): Flow<List<Repository>>
+    fun getRepositoriesStream(organization: String): Flow<List<Repository>>
 }

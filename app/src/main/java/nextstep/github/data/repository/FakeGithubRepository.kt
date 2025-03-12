@@ -16,10 +16,6 @@ class FakeGithubRepository : GithubRepository {
         shouldFail = isFail
     }
 
-    fun clearData() {
-        fakeData = emptyList()
-    }
-
     override suspend fun getRepositories(organization: String): Result<List<RepositoryModel>> {
         return if (shouldFail) {
             Result.failure(Exception("Fake network error"))

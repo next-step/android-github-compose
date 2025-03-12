@@ -20,6 +20,8 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -71,7 +73,14 @@ fun GithubScreen(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        snackbarHost = { SnackbarHost(snackbarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackbarHostState,
+                modifier = Modifier.semantics {
+                    contentDescription = "Snackbar"
+                }
+            )
+        },
         topBar = {
             CenterAlignedTopAppBar(
                 title = {
@@ -96,7 +105,11 @@ fun GithubScreen(
             when (repositoryUiState) {
                 is UiState.Loading -> {
                     CenteredContent {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.semantics {
+                                contentDescription = "LoadingProgressBar"
+                            }
+                        )
                     }
                 }
 
@@ -111,7 +124,11 @@ fun GithubScreen(
 
                 is UiState.Failure -> {
                     CenteredContent {
-                        CircularProgressIndicator()
+                        CircularProgressIndicator(
+                            modifier = Modifier.semantics {
+                                contentDescription = "LoadingProgressBar"
+                            }
+                        )
                     }
                 }
 

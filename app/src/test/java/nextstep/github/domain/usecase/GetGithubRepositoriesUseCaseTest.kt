@@ -18,7 +18,8 @@ class GetGithubRepositoriesUseCaseTest {
             Repository(
                 id = 10,
                 fullName = "next-step/nextstep-docs10",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소10"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소10",
+                stars = 1
             )
         )
 
@@ -39,17 +40,20 @@ class GetGithubRepositoriesUseCaseTest {
             Repository(
                 id = 15,
                 fullName = "next-step/nextstep-docs15",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소15"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소15",
+                stars = 115
             ),
             Repository(
                 id = 16,
                 fullName = "next-step/nextstep-docs16",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소16"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소16",
+                stars = 5
             ),
             Repository(
                 id = 17,
                 fullName = "next-step/nextstep-docs17",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소17"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소17",
+                stars = 59
             )
         )
 

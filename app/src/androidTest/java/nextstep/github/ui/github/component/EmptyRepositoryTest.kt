@@ -1,28 +1,26 @@
-package nextstep.github.component
+package nextstep.github.ui.github.component
 
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithText
-import nextstep.github.ui.github.component.GithubTopBar
 import org.junit.Rule
 import org.junit.Test
 
-class GithubTopBarTest {
+class EmptyRepositoryTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
 
     @Test
-    fun `초기화면에_타이틀이_올바르게_보여야_한다`() {
-        //given, when
+    fun `초기화면에_목록이_비어있는_문구가_보여야_한다`() {
+        //given
         composeTestRule.setContent {
-            GithubTopBar()
+            EmptyRepository()
         }
 
-        //then
+        //when, then
         composeTestRule
-            .onNodeWithText("NEXTSTEP Repositories")
+            .onNodeWithText("목록이 비었습니다.")
             .assertIsDisplayed()
-
     }
 }

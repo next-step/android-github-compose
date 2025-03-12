@@ -16,17 +16,20 @@ class GithubRepositoryTest {
             RepositoryEntity(
                 id = 4,
                 fullName = "next-step/nextstep-docs4",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소4",
+                stars = 12
             ),
             RepositoryEntity(
                 id = 5,
                 fullName = "next-step/nextstep-docs5",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소5"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소5",
+                stars = 1
             ),
             RepositoryEntity(
                 id = 6,
                 fullName = "next-step/nextstep-docs6",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소6"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소6",
+                stars = 19
             )
         )
 

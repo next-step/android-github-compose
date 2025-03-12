@@ -7,6 +7,7 @@ import nextstep.github.model.Repository
 fun RepositoryEntity.toRepository(): Repository =
     Repository(
         id = id,
-        fullName = fullName,
-        description = description
+        fullName = fullName.orEmpty(),
+        description = description.orEmpty(),
+        stars = stars ?: 0
     )

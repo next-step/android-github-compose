@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui.github
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -12,8 +12,6 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import nextstep.github.model.Repository
-import nextstep.github.ui.github.GithubScreen
-import nextstep.github.ui.github.GithubUiState
 import org.junit.Rule
 import org.junit.Test
 
@@ -55,7 +53,8 @@ class GithubScreenTest {
             Repository(
                 id = it,
                 fullName = "next-step/nextstep-docs${it}",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소${it}"
+                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소${it}",
+                stars = it
             )
         }
 

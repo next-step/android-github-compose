@@ -1,6 +1,5 @@
 package nextstep.github.ui.screen.github
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
@@ -8,18 +7,22 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
-import nextstep.github.data.model.RepositoryModel
 import nextstep.github.data.repository.GithubRepository
+import nextstep.github.ui.uistate.UiState
 
 
 class GithubViewModel(
     private val githubRepository: GithubRepository,
-): ViewModel() {
+) : ViewModel() {
 
-    private val _repositoryList = MutableStateFlow<List<RepositoryModel>>(emptyList())
-    val repositoryList = _repositoryList
+    private val _repositoryUiState =
+        MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
+    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> =
+        _repositoryUiState.asStateFlow()
 
     init {
         viewModelScope.launch {
@@ -32,14 +35,14 @@ class GithubViewModel(
     ) {
         githubRepository.getRepositories(
             organization = organization
-        ).onSuccess {
-            _repositoryList.value = it
+        ).onSuccess { repositories ->
+            if (repositories.isEmpty()) {
+                _repositoryUiState.value = UiState.Empty
+            } else {
+                _repositoryUiState.value = UiState.Success(repositories.toUiStateList())
+            }
         }.onFailure {
-            Log.d(
-                "GithubViewModel",
-                "getRepositories: ${it.message}",
-                it
-            )
+            _repositoryUiState.value = UiState.Failure(it.message ?: "Unknown error")
         }
     }
 

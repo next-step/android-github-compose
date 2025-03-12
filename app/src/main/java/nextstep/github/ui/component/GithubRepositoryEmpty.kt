@@ -24,7 +24,7 @@ internal fun GithubRepositoryEmpty(modifier: Modifier = Modifier) {
     ) {
         Text(
             text = stringResource(R.string.github_repositories_empty),
-            style = Typography.titleLarge,
+            style = Typography.headlineSmall,
         )
     }
 }

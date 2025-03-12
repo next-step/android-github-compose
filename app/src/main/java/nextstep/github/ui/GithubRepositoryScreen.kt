@@ -26,15 +26,10 @@ internal fun GithubRepositoryScreen(
     viewModel: GithubRepositoryViewModel = viewModel<GithubRepositoryViewModel>(factory = GithubRepositoryViewModel.Factory),
 ) {
     val repositoryUiState by viewModel.state.repositoryUiState.collectAsStateWithLifecycle()
-    val events by viewModel.event.collectAsStateWithLifecycle(null)
-
-    var showSnackBar by remember { mutableStateOf(false) }
 
     GithubRepositoryScreen(
         repositoryUiState = repositoryUiState,
-        events = events,
-        showSnackBar = showSnackBar,
-        onUpdateShowSnackBar = { showSnackBar = it },
+        showSnackBar = repositoryUiState is GithubRepositoryState.RepositoryUiState.Error,
         onClickSnackBarRetry = { viewModel.loadRepositories() }
     )
 }
@@ -42,9 +37,7 @@ internal fun GithubRepositoryScreen(
 @Composable
 private fun GithubRepositoryScreen(
     repositoryUiState: GithubRepositoryState.RepositoryUiState,
-    events: GithubRepositoryEvent?,
     showSnackBar: Boolean,
-    onUpdateShowSnackBar: (Boolean) -> Unit,
     onClickSnackBarRetry: () -> Unit,
 ) {
 
@@ -68,15 +61,6 @@ private fun GithubRepositoryScreen(
                 /** do nothing */
             }
         }
-        when (events) {
-            is GithubRepositoryEvent.ShowSnackBar -> {
-                onUpdateShowSnackBar(true)
-            }
-
-            else -> {
-                /** do nothing */
-            }
-        }
     }
 
     if (showSnackBar) {
@@ -84,7 +68,6 @@ private fun GithubRepositoryScreen(
             snackBarHostState = snackBarHostState,
             onRetryAction = {
                 onClickSnackBarRetry()
-                onUpdateShowSnackBar(false)
             }
         )
     }
@@ -96,9 +79,7 @@ private fun GithubRepositoryScreen(
 ) {
     GithubRepositoryScreen(
         repositoryUiState = repositoryUiState,
-        events = null,
         showSnackBar = false,
-        onUpdateShowSnackBar = {},
         onClickSnackBarRetry = {},
     )
 }
@@ -134,25 +115,18 @@ private fun GithubRepositoryScreeRepositoryPreview() {
 @Preview
 @Composable
 private fun GithubRepositoryScreeErrorPreview() {
-    var showSnackBar by remember { mutableStateOf(false) }
-    var event by remember { mutableStateOf<GithubRepositoryEvent?>(null) }
     var repositoryState by remember {
         mutableStateOf<GithubRepositoryState.RepositoryUiState>(
             GithubRepositoryState.RepositoryUiState.Error()
         )
     }
 
-    event = GithubRepositoryEvent.ShowSnackBar
-
     GithubTheme {
         GithubRepositoryScreen(
             repositoryUiState = repositoryState,
-            events = event,
-            showSnackBar = showSnackBar,
-            onUpdateShowSnackBar = { showSnackBar = it },
+            showSnackBar = repositoryState is GithubRepositoryState.RepositoryUiState.Error,
             onClickSnackBarRetry = {
                 repositoryState = GithubRepositoryState.RepositoryUiState.Empty
-                event = null
             },
         )
     }

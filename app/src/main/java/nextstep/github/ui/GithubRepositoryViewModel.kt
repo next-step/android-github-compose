@@ -6,9 +6,7 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
@@ -23,9 +21,6 @@ class GithubRepositoryViewModel(
 
     private val _state = GithubRepositoryStateImpl()
     val state: GithubRepositoryState = _state
-
-    private val _events = MutableSharedFlow<GithubRepositoryEvent>()
-    val event: SharedFlow<GithubRepositoryEvent> = _events
 
     init {
         loadRepositories()
@@ -53,14 +48,7 @@ class GithubRepositoryViewModel(
                     _state.repositoryUiState.update {
                         GithubRepositoryState.RepositoryUiState.Error(t)
                     }
-                    showSnackBar()
                 }
-        }
-    }
-
-    private fun showSnackBar() {
-        viewModelScope.launch {
-            _events.emit(GithubRepositoryEvent.ShowSnackBar)
         }
     }
 

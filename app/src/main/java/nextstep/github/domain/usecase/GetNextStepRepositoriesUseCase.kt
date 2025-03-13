@@ -7,5 +7,5 @@ class GetNextStepRepositoriesUseCase(
     private val repository: GitHubRepository
 ) {
     suspend operator fun invoke(): List<Repository> =
-        repository.getRepositories().map(Repository::fromResponse)
+        repository.getNextStepRepositories().map(Repository::fromResponse)
 }

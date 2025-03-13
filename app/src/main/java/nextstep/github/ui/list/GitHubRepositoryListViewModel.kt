@@ -5,8 +5,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GitHubApplication
 import nextstep.github.domain.usecase.GetNextStepRepositoriesUseCase
@@ -17,6 +19,9 @@ class GitHubRepositoryListViewModel(
     private val _uiState: MutableStateFlow<GitHubRepositoryListState> =
         MutableStateFlow(GitHubRepositoryListState.Loading)
     val uiState = _uiState.asStateFlow()
+
+    private val _errorEvent = Channel<Throwable>()
+    val errorEvent = _errorEvent.receiveAsFlow()
 
     init {
         fetchRepositories()
@@ -32,6 +37,9 @@ class GitHubRepositoryListViewModel(
                 } else {
                     GitHubRepositoryListState.Repositories(it)
                 }
+            }
+            .onFailure {
+                _errorEvent.send(it)
             }
     }
 

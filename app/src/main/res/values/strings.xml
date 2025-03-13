@@ -4,4 +4,6 @@
     <string name="github_repositories_empty">목록이 비었습니다.</string>
     <string name="github_repositories_error">예상치 못한 오류가 발생했습니다.</string>
     <string name="retry_action">재시도</string>
+    <string name="star">별점</string>
+    <string name="hot">HOT</string>
 </resources>

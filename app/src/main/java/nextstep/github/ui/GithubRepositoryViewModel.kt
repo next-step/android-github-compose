@@ -11,12 +11,12 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
-import nextstep.github.data.GithubRepository
+import nextstep.github.domain.GetGithubRepositoryUseCase
 import nextstep.github.ui.model.GithubRepositoryModel
 import nextstep.github.ui.model.toGithubRepositoryModel
 
 class GithubRepositoryViewModel(
-    private val githubRepository: GithubRepository,
+    private val getGithubRepositoryUseCase: GetGithubRepositoryUseCase
 ) : ViewModel() {
 
     private val _state = GithubRepositoryStateImpl()
@@ -28,9 +28,9 @@ class GithubRepositoryViewModel(
 
     fun loadRepositories() {
         viewModelScope.launch {
-            githubRepository.getRepositories(
+            getGithubRepositoryUseCase.invoke(
                 organization = NEXT_STEP_ORGANIZATION,
-                onPreLoad = {
+                preLoad = {
                     _state.repositoryUiState.update { GithubRepositoryState.RepositoryUiState.Loading }
                 }
             )
@@ -55,9 +55,9 @@ class GithubRepositoryViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository =
-                    (this[APPLICATION_KEY] as GithubApplication).appContainer.githubRepository
-                GithubRepositoryViewModel(githubRepository)
+                val getGithubRepositoryUseCase =
+                    (this[APPLICATION_KEY] as GithubApplication).appContainer.provideGetGithubRepositoryUseCase()
+                GithubRepositoryViewModel(getGithubRepositoryUseCase)
             }
         }
     }

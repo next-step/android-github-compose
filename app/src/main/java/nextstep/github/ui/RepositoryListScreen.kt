@@ -68,48 +68,12 @@ fun RepositoryListScreen(
 private fun RepositoryListScreenPreview() {
     GithubTheme {
         RepositoryListScreen(
-            repositoryList = listOf(
+            repositoryList = List(10) {
                 Repository(
                     fullName = "nextstep/github",
                     description = "Github Repository for NextStep"
-                ),
-                Repository(
-                    fullName = "nextstep/nextstep-docs",
-                    description = "NextStep Docs Repository"
-                ),
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                ),
-                Repository(
-                    fullName = "nextstep/nextstep-docs",
-                    description = "NextStep Docs Repository"
-                ),
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                ),
-                Repository(
-                    fullName = "nextstep/nextstep-docs",
-                    description = "NextStep Docs Repository"
-                ),
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                ),
-                Repository(
-                    fullName = "nextstep/nextstep-docs",
-                    description = "NextStep Docs Repository"
-                ),
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                ),
-                Repository(
-                    fullName = "nextstep/nextstep-docs",
-                    description = "NextStep Docs Repository"
-                ),
-            ),
+                )
+            }
         )
     }
 }

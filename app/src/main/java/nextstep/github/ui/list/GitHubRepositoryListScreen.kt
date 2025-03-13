@@ -9,13 +9,13 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.domain.model.Repository
 import nextstep.github.ui.component.GitHubRepositoryItem
 import nextstep.github.ui.component.SingleTextTopBar
+import nextstep.github.ui.preview.BackgroundPreview
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -68,7 +68,7 @@ private fun RepositoryListContent(
     }
 }
 
-@Preview
+@BackgroundPreview
 @Composable
 private fun GitHubRepositoryListScreenPreview() {
     GithubTheme {

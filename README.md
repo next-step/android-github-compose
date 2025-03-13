@@ -22,3 +22,12 @@
   - [x] 비지니스 로직 구현
   - [x] UI 연결
   - [x] ViewModelFactory
+
+# step3 UI state
+
+## Response 응답에 따른 상태 UI 노출 
+
+- [x] 목록 로딩 전, 로딩 UI 노출
+- [x] 빈 목록일 경우, 빈 화면 UI 노출
+- [x] 오류 발생 시, 재시도 가능한 스낵바 노출 
+- [x] UI 테스트 작성 -> Preview 로 대체

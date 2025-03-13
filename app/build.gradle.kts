@@ -73,4 +73,5 @@ dependencies {
     implementation(libs.retrofit2)
     implementation(libs.okhttp)
     implementation(libs.okhttp.logging.interceptor)
+    implementation(libs.collections.immutable)
 }

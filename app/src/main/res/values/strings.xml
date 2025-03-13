@@ -2,4 +2,5 @@
     <string name="app_name">GitHub</string>
 
     <string name="repository_list_title">NEXTSTEP Repositories</string>
+    <string name="empty_content">목록이 비었습니다.</string>
 </resources>

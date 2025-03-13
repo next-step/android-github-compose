@@ -11,10 +11,10 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GitHubApplication
 import nextstep.github.domain.model.Repository
-import nextstep.github.domain.usecase.GetNextStepRepositories
+import nextstep.github.domain.usecase.GetNextStepRepositoriesUseCase
 
 class GitHubRepositoryListViewModel(
-    private val getNextStepRepositories: GetNextStepRepositories,
+    private val getNextStepRepositoriesUseCase: GetNextStepRepositoriesUseCase,
 ) : ViewModel() {
     private val _repositories = MutableStateFlow(emptyList<Repository>())
     val repositories = _repositories.asStateFlow()
@@ -25,7 +25,7 @@ class GitHubRepositoryListViewModel(
 
     private fun fetchRepositories() = viewModelScope.launch {
         _repositories.update {
-            getNextStepRepositories()
+            getNextStepRepositoriesUseCase()
         }
     }
 
@@ -36,7 +36,7 @@ class GitHubRepositoryListViewModel(
                 val repository = application.appContainer.githubRepository
 
                 GitHubRepositoryListViewModel(
-                    GetNextStepRepositories(repository)
+                    GetNextStepRepositoriesUseCase(repository)
                 )
             }
         }

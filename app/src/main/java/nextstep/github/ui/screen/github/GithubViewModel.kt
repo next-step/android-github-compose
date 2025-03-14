@@ -21,10 +21,12 @@ class GithubViewModel(
     private val githubRepository: GithubRepository,
 ) : ViewModel() {
 
-    private val _repositoryUiState = MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
-    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> = _repositoryUiState.asStateFlow()
+    private val _repositoryUiState =
+        MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
+    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> =
+        _repositoryUiState.asStateFlow()
 
-    private val _errorFlow = MutableSharedFlow<String>()
+    private val _errorFlow = MutableSharedFlow<String>(replay = 1)
     val errorFlow = _errorFlow.asSharedFlow()
 
     init {
@@ -57,9 +59,7 @@ class GithubViewModel(
     }
 
     private fun notifyFailure(message: String) {
-        viewModelScope.launch {
-            _errorFlow.emit(message)
-        }
+        _errorFlow.tryEmit(message)
     }
 
     companion object {

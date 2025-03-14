@@ -29,16 +29,22 @@ fun RepositoryListScreen(
     val message = stringResource(R.string.snack_bar_unexpected_error)
     val actionLabel = stringResource(R.string.snack_bar_action_label_retry)
 
-    LaunchedEffect(Unit) {
-        viewModel.errorFlow.collectLatest {
-            when (snackBarHostState.showSnackbar(
-                message = message,
-                actionLabel = actionLabel,
-            )) {
-                SnackbarResult.Dismissed -> Unit
-                SnackbarResult.ActionPerformed -> {
-                    viewModel.observeRepositories()
+    LaunchedEffect(viewModel) {
+        viewModel.sideEffect.collectLatest { effect ->
+            when(effect) {
+                is RepositoryListSideEffect.ShowError -> {
+                    when (snackBarHostState.showSnackbar(
+                        message = message,
+                        actionLabel = actionLabel,
+                    )) {
+                        SnackbarResult.Dismissed -> Unit
+                        SnackbarResult.ActionPerformed -> {
+                            viewModel.observeRepositories()
+                        }
+                    }
                 }
+
+                RepositoryListSideEffect.Nothing -> Unit
             }
         }
     }

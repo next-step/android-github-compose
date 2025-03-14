@@ -6,13 +6,13 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepository
@@ -25,8 +25,8 @@ class RepositoryListViewModel(
         MutableStateFlow(RepositoryListUiState.Loading)
     val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
 
-    private val _errorFlow: Channel<Throwable> = Channel()
-    val errorFlow: Flow<Throwable> = _errorFlow.receiveAsFlow()
+    private val _sideEffect: MutableSharedFlow<RepositoryListSideEffect> = MutableSharedFlow(replay = 1)
+    val sideEffect: SharedFlow<RepositoryListSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         observeRepositories()
@@ -36,9 +36,11 @@ class RepositoryListViewModel(
         viewModelScope.launch {
             githubRepository.getRepositoriesStream(organization = NEXT_STEP_ORGANIZATION)
                 .catch { throwable ->
-                    _errorFlow.send(throwable)
+                    _sideEffect.emit(RepositoryListSideEffect.ShowError(throwable))
                 }
                 .collect { repositories ->
+                    _sideEffect.emit(RepositoryListSideEffect.Nothing)
+
                     when {
                         repositories.isEmpty() -> _uiState.value = RepositoryListUiState.Empty
                         else -> _uiState.value = RepositoryListUiState.Success(repositories)

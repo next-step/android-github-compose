@@ -1,6 +1,7 @@
 package nextstep.github.ui.screens.list
 
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.StandardTestDispatcher
@@ -84,7 +85,7 @@ class RepositoryListViewModelTest {
     }
 
     @Test
-    fun 레포지토리_목록을_불러오는_것에_예외가_발생하면_에러플로우로_전달된다() = runTest {
+    fun 레포지토리_목록을_불러오는_것에_예외가_발생하면_사이드이펙트로_전달된다() = runTest {
         // given
         viewmodel = RepositoryListViewModel(
             FakeGithubRepository(
@@ -95,9 +96,9 @@ class RepositoryListViewModelTest {
         )
 
         // then
-        assertEquals(
-            "예외 발생!",
-            viewmodel.errorFlow.toListDuring(1.milliseconds).last().message,
+        assertTrue(
+            viewmodel.sideEffect.toListDuring(1.milliseconds).last()
+                    is RepositoryListSideEffect.ShowError,
         )
     }
 }

@@ -72,7 +72,7 @@ fun RepositoryListScreen(
                 EmptyRepositoryContent(modifier = Modifier.padding(paddingValues))
 
             RepositoryListUiState.Loading ->
-                RepositoryListLoadingScreen(modifier = Modifier.padding(paddingValues))
+                LoadingContent(modifier = Modifier.padding(paddingValues))
 
             is RepositoryListUiState.Success ->
                 RepositoryListSuccessScreen(

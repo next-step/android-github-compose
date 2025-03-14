@@ -69,7 +69,7 @@ fun RepositoryListScreen(
     ) { paddingValues ->
         when (state) {
             RepositoryListUiState.Empty ->
-                RepositoryListEmptyScreen(modifier = Modifier.padding(paddingValues))
+                EmptyRepositoryContent(modifier = Modifier.padding(paddingValues))
 
             RepositoryListUiState.Loading ->
                 RepositoryListLoadingScreen(modifier = Modifier.padding(paddingValues))

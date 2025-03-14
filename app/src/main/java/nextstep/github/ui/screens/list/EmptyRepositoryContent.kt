@@ -13,7 +13,7 @@ import nextstep.github.R
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListEmptyScreen(modifier: Modifier = Modifier) {
+fun EmptyRepositoryContent(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -27,9 +27,9 @@ fun RepositoryListEmptyScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListEmptyScreenPreview() {
+private fun EmptyRepositoryContentPreview() {
     GithubTheme {
-        RepositoryListEmptyScreen(
+        EmptyRepositoryContent(
             modifier = Modifier.fillMaxSize()
         )
     }

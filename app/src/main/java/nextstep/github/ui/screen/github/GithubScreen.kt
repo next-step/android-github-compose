@@ -45,7 +45,7 @@ fun GithubScreen(
     val snackbarRetryMesssage = stringResource(R.string.snackbar_retry_error_message)
     val retryActionLabel = stringResource(R.string.retry_action_label)
 
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel) {
         viewModel.errorFlow.collectLatest { message ->
             val result = snackbarHostState.showSnackbar(
                 message = snackbarRetryMesssage,

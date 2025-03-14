@@ -76,7 +76,7 @@ fun RepositoryListScreen(
 
             is RepositoryListUiState.Success ->
                 RepositoryListContent(
-                    state = state,
+                    repositories = state.repositories,
                     modifier = Modifier.padding(paddingValues),
                 )
         }

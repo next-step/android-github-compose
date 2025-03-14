@@ -15,10 +15,10 @@ import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
-import nextstep.github.data.repositories.GithubRepository
+import nextstep.github.data.repositories.GithubRepoRepository
 
 class RepositoryListViewModel(
-    private val githubRepository: GithubRepository,
+    private val githubRepoRepository: GithubRepoRepository,
 ) : ViewModel() {
 
     private val _uiState: MutableStateFlow<RepositoryListUiState> =
@@ -34,7 +34,7 @@ class RepositoryListViewModel(
 
     fun observeRepositories() {
         viewModelScope.launch {
-            githubRepository.getRepositoriesStream(organization = NEXT_STEP_ORGANIZATION)
+            githubRepoRepository.getGitHubReposStream(organization = NEXT_STEP_ORGANIZATION)
                 .catch { throwable ->
                     _sideEffect.emit(RepositoryListSideEffect.ShowError(throwable))
                 }
@@ -57,7 +57,7 @@ class RepositoryListViewModel(
                 val githubRepository =
                     (this[APPLICATION_KEY] as GithubApplication)
                         .appContainer
-                        .githubRepository
+                        .githubRepoRepository
 
                 RepositoryListViewModel(githubRepository)
             }

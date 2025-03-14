@@ -7,23 +7,23 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.model.Repository
+import nextstep.github.model.GitHubRepo
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryItem(
-    repository: Repository,
+    gitHubRepo: GitHubRepo,
     modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier,
     ) {
         Text(
-            text = repository.fullName,
+            text = gitHubRepo.fullName,
             style = MaterialTheme.typography.titleLarge,
         )
         Text(
-            text = repository.description.orEmpty(),
+            text = gitHubRepo.description.orEmpty(),
             style = MaterialTheme.typography.bodyMedium,
         )
     }
@@ -34,7 +34,7 @@ fun RepositoryItem(
 private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
-            repository = Repository(
+            gitHubRepo = GitHubRepo(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
@@ -49,7 +49,7 @@ private fun RepositoryItemPreview() {
 private fun RepositoryItemPreview_NoDescription() {
     GithubTheme {
         RepositoryItem(
-            repository = Repository(
+            gitHubRepo = GitHubRepo(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
                 description = null,

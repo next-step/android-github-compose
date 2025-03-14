@@ -9,14 +9,14 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.data.repositories.impls.FakeGithubRepository
-import nextstep.github.model.Repository
+import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
+import nextstep.github.model.GitHubRepo
 import nextstep.github.ui.screens.list.components.RepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryListContent(
-    repositories: List<Repository>,
+    repositories: List<GitHubRepo>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -24,7 +24,7 @@ fun RepositoryListContent(
     ) {
         items(key = { item -> item.id }, items = repositories) { repository ->
             RepositoryItem(
-                repository = repository,
+                gitHubRepo = repository,
                 modifier = Modifier.padding(16.dp)
             )
             HorizontalDivider()
@@ -37,7 +37,7 @@ fun RepositoryListContent(
 private fun RepositoryListContentPreview() {
     GithubTheme {
         RepositoryListContent(
-            repositories = FakeGithubRepository.repositories,
+            repositories = FakeGithubRepoRepository.gitHubRepos,
         )
     }
 }

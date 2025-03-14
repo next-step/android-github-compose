@@ -6,11 +6,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import nextstep.github.data.repositories.impls.FakeGithubRepository
+import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
 import org.junit.Rule
 import org.junit.Test
 
-class RepositoryListScreenTest {
+class GitHubRepoListScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -58,14 +58,14 @@ class RepositoryListScreenTest {
             .setContent {
                 RepositoryListScreen(
                     state = RepositoryListUiState.Success(
-                        repositories = FakeGithubRepository.repositories
+                        repositories = FakeGithubRepoRepository.gitHubRepos
                     ),
                     snackBarHostState = snackBarHostState,
                 )
             }
 
         // then
-        FakeGithubRepository.repositories.forEachIndexed { index, _ ->
+        FakeGithubRepoRepository.gitHubRepos.forEachIndexed { index, _ ->
             composeTestRule
                 .onNodeWithText("next-step/nextstep-docs-$index")
                 .assertIsDisplayed()

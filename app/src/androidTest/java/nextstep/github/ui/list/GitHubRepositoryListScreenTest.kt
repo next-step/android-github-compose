@@ -1,5 +1,6 @@
 package nextstep.github.ui.list
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
@@ -8,7 +9,12 @@ import androidx.compose.ui.test.hasScrollAction
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performClick
 import androidx.compose.ui.test.performScrollToIndex
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.test.advanceUntilIdle
+import kotlinx.coroutines.test.runTest
 import nextstep.github.domain.model.Repository
 import org.junit.Before
 import org.junit.Rule
@@ -20,12 +26,14 @@ class GitHubRepositoryListScreenTest {
     val composeTestRule = createComposeRule()
 
     private var uiState: GitHubRepositoryListState by mutableStateOf(GitHubRepositoryListState.Loading)
+    val snackBarHostState = SnackbarHostState()
 
     @Before
     fun setup() {
         composeTestRule.setContent {
             GitHubRepositoryListScreen(
                 uiState = uiState,
+                snackBarHostState = snackBarHostState,
             )
         }
     }
@@ -77,5 +85,51 @@ class GitHubRepositoryListScreenTest {
         composeTestRule
             .onNodeWithText("풀무원말고풀네임99")
             .assertIsDisplayed()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `주어진_스낵바_메시지와_라벨이_보인다`() = runTest {
+        launch {
+            snackBarHostState.showSnackbar(
+                message = "예상치 못한 오류가 발생했습니다.",
+                actionLabel = "재시도"
+            )
+        }
+
+        advanceUntilIdle()
+
+        composeTestRule
+            .onNodeWithText("예상치 못한 오류가 발생했습니다.")
+            .assertIsDisplayed()
+
+        composeTestRule
+            .onNodeWithText("재시도")
+            .assertIsDisplayed()
+
+        snackBarHostState.currentSnackbarData?.dismiss()
+    }
+
+    @OptIn(ExperimentalCoroutinesApi::class)
+    @Test
+    fun `액션_라벨을_누르면_스낵바가_사라진다`() = runTest {
+        launch {
+            snackBarHostState.showSnackbar(
+                message = "메세지",
+                actionLabel = "액션라벨"
+            )
+        }
+
+        advanceUntilIdle()
+
+        composeTestRule
+            .onNodeWithText("액션라벨")
+            .performClick()
+
+        advanceUntilIdle()
+
+        composeTestRule
+            .onNodeWithText("메세지")
+            .assertDoesNotExist()
     }
 }

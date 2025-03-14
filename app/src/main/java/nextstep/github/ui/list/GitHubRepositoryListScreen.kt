@@ -59,7 +59,7 @@ internal fun GitHubRepositoryListScreen(
 internal fun GitHubRepositoryListScreen(
     uiState: GitHubRepositoryListState,
     modifier: Modifier = Modifier,
-    snackBarHostState: SnackbarHostState = SnackbarHostState(),
+    snackBarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Scaffold(
         modifier = modifier,

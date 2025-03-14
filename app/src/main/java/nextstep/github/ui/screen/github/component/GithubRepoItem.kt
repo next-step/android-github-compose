@@ -40,7 +40,6 @@ fun GithubRepoItem(
         }
         HorizontalDivider(
             color = MaterialTheme.colorScheme.outlineVariant,
-            thickness = 1.dp
         )
     }
 }

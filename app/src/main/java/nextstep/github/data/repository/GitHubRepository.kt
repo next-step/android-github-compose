@@ -3,5 +3,5 @@ package nextstep.github.data.repository
 import nextstep.github.data.model.dto.RepositoryResponse
 
 interface GitHubRepository {
-    suspend fun getRepositories(): List<RepositoryResponse>
+    suspend fun getNextStepRepositories(): List<RepositoryResponse>
 }

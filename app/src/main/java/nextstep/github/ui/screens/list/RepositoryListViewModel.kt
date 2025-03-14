@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.Job
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -29,16 +28,12 @@ class RepositoryListViewModel(
     private val _errorFlow: Channel<Throwable> = Channel()
     val errorFlow: Flow<Throwable> = _errorFlow.receiveAsFlow()
 
-    private var observeRepositoriesJob: Job? = null
-
     init {
         observeRepositories()
     }
 
     fun observeRepositories() {
-        observeRepositoriesJob?.cancel()
-
-        observeRepositoriesJob = viewModelScope.launch {
+        viewModelScope.launch {
             githubRepository.getRepositoriesStream(organization = NEXT_STEP_ORGANIZATION)
                 .catch { throwable ->
                     _errorFlow.send(throwable)

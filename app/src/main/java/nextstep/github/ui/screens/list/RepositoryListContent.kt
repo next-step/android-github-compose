@@ -14,7 +14,7 @@ import nextstep.github.ui.screens.list.components.RepositoryItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListSuccessScreen(
+fun RepositoryListContent(
     state: RepositoryListUiState.Success,
     modifier: Modifier = Modifier,
 ) {
@@ -33,9 +33,9 @@ fun RepositoryListSuccessScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListSuccessScreenPreview() {
+private fun RepositoryListContentPreview() {
     GithubTheme {
-        RepositoryListSuccessScreen(
+        RepositoryListContent(
             state = RepositoryListUiState.Success(
                 repositories = FakeGithubRepository.repositories
             ),

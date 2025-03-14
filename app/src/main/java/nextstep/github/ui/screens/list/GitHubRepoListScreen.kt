@@ -18,9 +18,9 @@ import nextstep.github.R
 import nextstep.github.ui.components.GithubTopBar
 
 @Composable
-fun RepositoryListScreen(
+fun GitHubRepoListScreen(
     modifier: Modifier = Modifier,
-    viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory),
+    viewModel: GitHubRepoListViewModel = viewModel(factory = GitHubRepoListViewModel.Factory),
 ) {
     val state by viewModel.uiState.collectAsStateWithLifecycle()
 
@@ -32,7 +32,7 @@ fun RepositoryListScreen(
     LaunchedEffect(viewModel) {
         viewModel.sideEffect.collectLatest { effect ->
             when(effect) {
-                is RepositoryListSideEffect.ShowError -> {
+                is GitHubRepoListSideEffect.ShowError -> {
                     when (snackBarHostState.showSnackbar(
                         message = message,
                         actionLabel = actionLabel,
@@ -44,12 +44,12 @@ fun RepositoryListScreen(
                     }
                 }
 
-                RepositoryListSideEffect.Nothing -> Unit
+                GitHubRepoListSideEffect.Nothing -> Unit
             }
         }
     }
 
-    RepositoryListScreen(
+    GitHubRepoListScreen(
         state = state,
         snackBarHostState = snackBarHostState,
         modifier = modifier,
@@ -57,8 +57,8 @@ fun RepositoryListScreen(
 }
 
 @Composable
-fun RepositoryListScreen(
-    state: RepositoryListUiState,
+fun GitHubRepoListScreen(
+    state: GitHubRepoListUiState,
     snackBarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -68,14 +68,14 @@ fun RepositoryListScreen(
         modifier = modifier,
     ) { paddingValues ->
         when (state) {
-            RepositoryListUiState.Empty ->
-                EmptyRepositoryContent(modifier = Modifier.padding(paddingValues))
+            GitHubRepoListUiState.Empty ->
+                EmptyGitHubRepoContent(modifier = Modifier.padding(paddingValues))
 
-            RepositoryListUiState.Loading ->
+            GitHubRepoListUiState.Loading ->
                 LoadingContent(modifier = Modifier.padding(paddingValues))
 
-            is RepositoryListUiState.Success ->
-                RepositoryListContent(
+            is GitHubRepoListUiState.Success ->
+                GitHubRepoListContent(
                     repositories = state.repositories,
                     modifier = Modifier.padding(paddingValues),
                 )

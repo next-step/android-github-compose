@@ -11,11 +11,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
 import nextstep.github.model.GitHubRepo
-import nextstep.github.ui.screens.list.components.RepositoryItem
+import nextstep.github.ui.screens.list.components.GitHubRepoItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListContent(
+fun GitHubRepoListContent(
     repositories: List<GitHubRepo>,
     modifier: Modifier = Modifier,
 ) {
@@ -23,7 +23,7 @@ fun RepositoryListContent(
         modifier = modifier.testTag("repositoryList")
     ) {
         items(key = { item -> item.id }, items = repositories) { repository ->
-            RepositoryItem(
+            GitHubRepoItem(
                 gitHubRepo = repository,
                 modifier = Modifier.padding(16.dp)
             )
@@ -34,9 +34,9 @@ fun RepositoryListContent(
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListContentPreview() {
+private fun GitHubRepoListContentPreview() {
     GithubTheme {
-        RepositoryListContent(
+        GitHubRepoListContent(
             repositories = FakeGithubRepoRepository.gitHubRepos,
         )
     }

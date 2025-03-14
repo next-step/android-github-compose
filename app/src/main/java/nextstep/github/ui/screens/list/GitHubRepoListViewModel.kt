@@ -17,16 +17,16 @@ import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepoRepository
 
-class RepositoryListViewModel(
+class GitHubRepoListViewModel(
     private val githubRepoRepository: GithubRepoRepository,
 ) : ViewModel() {
 
-    private val _uiState: MutableStateFlow<RepositoryListUiState> =
-        MutableStateFlow(RepositoryListUiState.Loading)
-    val uiState: StateFlow<RepositoryListUiState> = _uiState.asStateFlow()
+    private val _uiState: MutableStateFlow<GitHubRepoListUiState> =
+        MutableStateFlow(GitHubRepoListUiState.Loading)
+    val uiState: StateFlow<GitHubRepoListUiState> = _uiState.asStateFlow()
 
-    private val _sideEffect: MutableSharedFlow<RepositoryListSideEffect> = MutableSharedFlow(replay = 1)
-    val sideEffect: SharedFlow<RepositoryListSideEffect> = _sideEffect.asSharedFlow()
+    private val _sideEffect: MutableSharedFlow<GitHubRepoListSideEffect> = MutableSharedFlow(replay = 1)
+    val sideEffect: SharedFlow<GitHubRepoListSideEffect> = _sideEffect.asSharedFlow()
 
     init {
         observeRepositories()
@@ -36,14 +36,14 @@ class RepositoryListViewModel(
         viewModelScope.launch {
             githubRepoRepository.getGitHubReposStream(organization = NEXT_STEP_ORGANIZATION)
                 .catch { throwable ->
-                    _sideEffect.emit(RepositoryListSideEffect.ShowError(throwable))
+                    _sideEffect.emit(GitHubRepoListSideEffect.ShowError(throwable))
                 }
                 .collect { repositories ->
-                    _sideEffect.emit(RepositoryListSideEffect.Nothing)
+                    _sideEffect.emit(GitHubRepoListSideEffect.Nothing)
 
                     when {
-                        repositories.isEmpty() -> _uiState.value = RepositoryListUiState.Empty
-                        else -> _uiState.value = RepositoryListUiState.Success(repositories)
+                        repositories.isEmpty() -> _uiState.value = GitHubRepoListUiState.Empty
+                        else -> _uiState.value = GitHubRepoListUiState.Success(repositories)
                     }
                 }
         }
@@ -59,7 +59,7 @@ class RepositoryListViewModel(
                         .appContainer
                         .githubRepoRepository
 
-                RepositoryListViewModel(githubRepository)
+                GitHubRepoListViewModel(githubRepository)
             }
         }
     }

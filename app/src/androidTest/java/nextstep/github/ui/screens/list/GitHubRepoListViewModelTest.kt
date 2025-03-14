@@ -17,7 +17,7 @@ import kotlin.time.Duration.Companion.milliseconds
 
 class GitHubRepoListViewModelTest {
 
-    private lateinit var viewmodel: RepositoryListViewModel
+    private lateinit var viewmodel: GitHubRepoListViewModel
 
     @Before
     fun setup() {
@@ -32,7 +32,7 @@ class GitHubRepoListViewModelTest {
     @Test
     fun 레포지토리_목록_UiState의_초기상태는_Loading이다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
+        viewmodel = GitHubRepoListViewModel(
             FakeGithubRepoRepository(
                 fakeGitHubReposStream = flow { emit(FakeGithubRepoRepository.gitHubRepos) }
             )
@@ -40,7 +40,7 @@ class GitHubRepoListViewModelTest {
 
         // then
         assertEquals(
-            RepositoryListUiState.Loading,
+            GitHubRepoListUiState.Loading,
             viewmodel.uiState.value,
         )
     }
@@ -48,7 +48,7 @@ class GitHubRepoListViewModelTest {
     @Test
     fun 레포지토리_목록을_불러왔을_때_빈_값이라면_UiState는_Empty다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
+        viewmodel = GitHubRepoListViewModel(
             FakeGithubRepoRepository(
                 fakeGitHubReposStream = flow { emit(emptyList()) }
             )
@@ -58,7 +58,7 @@ class GitHubRepoListViewModelTest {
         val actualEmittedUiStates = viewmodel.uiState.toListDuring(1.milliseconds)
 
         assertEquals(
-            RepositoryListUiState.Empty,
+            GitHubRepoListUiState.Empty,
             actualEmittedUiStates.last(),
         )
     }
@@ -67,7 +67,7 @@ class GitHubRepoListViewModelTest {
     @Test
     fun 레포지토리_목록을_성공적으로_가져오면_UiState는_Success다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
+        viewmodel = GitHubRepoListViewModel(
             FakeGithubRepoRepository(
                 fakeGitHubReposStream = flow {
                     emit(FakeGithubRepoRepository.gitHubRepos)
@@ -79,7 +79,7 @@ class GitHubRepoListViewModelTest {
         val actualEmittedUiStates = viewmodel.uiState.toListDuring(1.milliseconds)
 
         assertEquals(
-            RepositoryListUiState.Success(FakeGithubRepoRepository.gitHubRepos),
+            GitHubRepoListUiState.Success(FakeGithubRepoRepository.gitHubRepos),
             actualEmittedUiStates.last(),
         )
     }
@@ -87,7 +87,7 @@ class GitHubRepoListViewModelTest {
     @Test
     fun 레포지토리_목록을_불러오는_것에_예외가_발생하면_사이드이펙트로_전달된다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
+        viewmodel = GitHubRepoListViewModel(
             FakeGithubRepoRepository(
                 fakeGitHubReposStream = flow {
                     error("예외 발생!")
@@ -98,7 +98,7 @@ class GitHubRepoListViewModelTest {
         // then
         assertTrue(
             viewmodel.sideEffect.toListDuring(1.milliseconds).last()
-                    is RepositoryListSideEffect.ShowError,
+                    is GitHubRepoListSideEffect.ShowError,
         )
     }
 }

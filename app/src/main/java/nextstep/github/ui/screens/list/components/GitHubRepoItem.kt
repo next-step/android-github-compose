@@ -11,7 +11,7 @@ import nextstep.github.model.GitHubRepo
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryItem(
+fun GitHubRepoItem(
     gitHubRepo: GitHubRepo,
     modifier: Modifier = Modifier,
 ) {
@@ -31,9 +31,9 @@ fun RepositoryItem(
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryItemPreview() {
+private fun GitHubRepoItemPreview() {
     GithubTheme {
-        RepositoryItem(
+        GitHubRepoItem(
             gitHubRepo = GitHubRepo(
                 id = 1,
                 fullName = "next-step/nextstep-docs",
@@ -46,9 +46,9 @@ private fun RepositoryItemPreview() {
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryItemPreview_NoDescription() {
+private fun GitHubRepoItemPreview_NoDescription() {
     GithubTheme {
-        RepositoryItem(
+        GitHubRepoItem(
             gitHubRepo = GitHubRepo(
                 id = 1,
                 fullName = "next-step/nextstep-docs",

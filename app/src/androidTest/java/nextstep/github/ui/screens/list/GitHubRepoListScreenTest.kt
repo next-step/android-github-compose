@@ -22,8 +22,8 @@ class GitHubRepoListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Loading,
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Loading,
                     snackBarHostState = snackBarHostState,
                 )
             }
@@ -39,8 +39,8 @@ class GitHubRepoListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Empty,
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Empty,
                     snackBarHostState = snackBarHostState,
                 )
             }
@@ -56,8 +56,8 @@ class GitHubRepoListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Success(
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Success(
                         repositories = FakeGithubRepoRepository.gitHubRepos
                     ),
                     snackBarHostState = snackBarHostState,

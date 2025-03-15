@@ -21,4 +21,3 @@ class GithubRepoRepository(
         }
     }.map { dto -> dto.map { it.toGithubRepo() } }
 }
-

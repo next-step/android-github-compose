@@ -19,7 +19,7 @@ fun EmptyGitHubRepoContent(modifier: Modifier = Modifier) {
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.repository_list_empty),
+            text = stringResource(R.string.github_repo_list_empty),
             style = MaterialTheme.typography.headlineSmall,
         )
     }

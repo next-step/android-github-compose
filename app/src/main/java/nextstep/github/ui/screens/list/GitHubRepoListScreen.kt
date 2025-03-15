@@ -63,7 +63,7 @@ fun GitHubRepoListScreen(
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
-        topBar = { GithubTopBar(title = stringResource(R.string.repository_list_top_bat_title)) },
+        topBar = { GithubTopBar(title = stringResource(R.string.github_repo_list_top_bat_title)) },
         snackbarHost = { SnackbarHost(hostState = snackBarHostState) },
         modifier = modifier,
     ) { paddingValues ->

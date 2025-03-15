@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui.nextsteprepos
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -19,13 +19,14 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import nextstep.github.R
 import nextstep.github.model.GithubRepo
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun NextStepReposScreen(
     modifier: Modifier = Modifier,
-    viewModel: GithubViewModel = viewModel()
+    viewModel: NextStepReposViewModel = viewModel()
 ) {
     val nextStepRepos by viewModel.nextStepRepos.collectAsStateWithLifecycle()
 

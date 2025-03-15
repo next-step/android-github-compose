@@ -1,4 +1,4 @@
-package nextstep.github
+package nextstep.github.ui.nextsteprepos
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
@@ -11,10 +11,11 @@ import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.stateIn
+import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepoRepository
 import nextstep.github.model.GithubRepo
 
-class GithubViewModel(
+class NextStepReposViewModel(
     githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
 
@@ -36,7 +37,7 @@ class GithubViewModel(
                     .appContainer
                     .githubRepoRepository
 
-                GithubViewModel(githubRepoRepository)
+                NextStepReposViewModel(githubRepoRepository)
             }
         }
     }

@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.list
+package nextstep.github.ui.screens.list.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -11,7 +11,6 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
 import nextstep.github.model.GitHubRepo
-import nextstep.github.ui.screens.list.components.GitHubRepoItem
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable

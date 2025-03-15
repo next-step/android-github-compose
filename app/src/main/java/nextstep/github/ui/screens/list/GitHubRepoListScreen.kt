@@ -16,6 +16,9 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
 import nextstep.github.ui.components.GithubTopBar
+import nextstep.github.ui.screens.list.components.EmptyGitHubRepoContent
+import nextstep.github.ui.screens.list.components.GitHubRepoListContent
+import nextstep.github.ui.screens.list.components.LoadingContent
 
 @Composable
 fun GitHubRepoListScreen(

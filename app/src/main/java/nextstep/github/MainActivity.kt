@@ -3,7 +3,7 @@ package nextstep.github
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import nextstep.github.ui.screens.list.RepositoryListScreen
+import nextstep.github.ui.screens.list.GitHubRepoListScreen
 import nextstep.github.ui.theme.GithubTheme
 
 class MainActivity : ComponentActivity() {
@@ -12,7 +12,7 @@ class MainActivity : ComponentActivity() {
 
         setContent {
             GithubTheme {
-                RepositoryListScreen()
+                GitHubRepoListScreen()
             }
         }
     }

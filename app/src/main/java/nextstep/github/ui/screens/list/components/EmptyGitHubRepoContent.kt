@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.list
+package nextstep.github.ui.screens.list.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,13 +13,13 @@ import nextstep.github.R
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListEmptyScreen(modifier: Modifier = Modifier) {
+fun EmptyGitHubRepoContent(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
     ) {
         Text(
-            text = stringResource(R.string.repository_list_empty),
+            text = stringResource(R.string.github_repo_list_empty),
             style = MaterialTheme.typography.headlineSmall,
         )
     }
@@ -27,9 +27,9 @@ fun RepositoryListEmptyScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListEmptyScreenPreview() {
+private fun EmptyGitHubRepoContentPreview() {
     GithubTheme {
-        RepositoryListEmptyScreen(
+        EmptyGitHubRepoContent(
             modifier = Modifier.fillMaxSize()
         )
     }

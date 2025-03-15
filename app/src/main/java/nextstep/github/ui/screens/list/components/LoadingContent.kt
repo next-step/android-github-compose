@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.list
+package nextstep.github.ui.screens.list.components
 
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.fillMaxSize
@@ -11,7 +11,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListLoadingScreen(modifier: Modifier = Modifier) {
+fun LoadingContent(modifier: Modifier = Modifier) {
     Box(
         modifier = modifier.fillMaxSize(),
         contentAlignment = Alignment.Center,
@@ -24,8 +24,8 @@ fun RepositoryListLoadingScreen(modifier: Modifier = Modifier) {
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListLoadingScreenPreview() {
+private fun LoadingContentPreview() {
     GithubTheme {
-        RepositoryListLoadingScreen()
+        LoadingContent()
     }
 }

@@ -1,22 +1,23 @@
 package nextstep.github.ui.screens.list
 
 import junit.framework.TestCase.assertEquals
+import junit.framework.TestCase.assertTrue
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.test.StandardTestDispatcher
 import kotlinx.coroutines.test.resetMain
 import kotlinx.coroutines.test.runTest
 import kotlinx.coroutines.test.setMain
-import nextstep.github.data.repositories.impls.FakeGithubRepository
+import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
 import nextstep.github.util.toListDuring
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
 import kotlin.time.Duration.Companion.milliseconds
 
-class RepositoryListViewModelTest {
+class GitHubRepoListViewModelTest {
 
-    private lateinit var viewmodel: RepositoryListViewModel
+    private lateinit var viewmodel: GitHubRepoListViewModel
 
     @Before
     fun setup() {
@@ -31,15 +32,15 @@ class RepositoryListViewModelTest {
     @Test
     fun 레포지토리_목록_UiState의_초기상태는_Loading이다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
-            FakeGithubRepository(
-                fakeRepositories = flow { emit(FakeGithubRepository.repositories) }
+        viewmodel = GitHubRepoListViewModel(
+            FakeGithubRepoRepository(
+                fakeGitHubReposStream = flow { emit(FakeGithubRepoRepository.gitHubRepos) }
             )
         )
 
         // then
         assertEquals(
-            RepositoryListUiState.Loading,
+            GitHubRepoListUiState.Loading,
             viewmodel.uiState.value,
         )
     }
@@ -47,9 +48,9 @@ class RepositoryListViewModelTest {
     @Test
     fun 레포지토리_목록을_불러왔을_때_빈_값이라면_UiState는_Empty다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
-            FakeGithubRepository(
-                fakeRepositories = flow { emit(emptyList()) }
+        viewmodel = GitHubRepoListViewModel(
+            FakeGithubRepoRepository(
+                fakeGitHubReposStream = flow { emit(emptyList()) }
             )
         )
 
@@ -57,7 +58,7 @@ class RepositoryListViewModelTest {
         val actualEmittedUiStates = viewmodel.uiState.toListDuring(1.milliseconds)
 
         assertEquals(
-            RepositoryListUiState.Empty,
+            GitHubRepoListUiState.Empty,
             actualEmittedUiStates.last(),
         )
     }
@@ -66,10 +67,10 @@ class RepositoryListViewModelTest {
     @Test
     fun 레포지토리_목록을_성공적으로_가져오면_UiState는_Success다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
-            FakeGithubRepository(
-                fakeRepositories = flow {
-                    emit(FakeGithubRepository.repositories)
+        viewmodel = GitHubRepoListViewModel(
+            FakeGithubRepoRepository(
+                fakeGitHubReposStream = flow {
+                    emit(FakeGithubRepoRepository.gitHubRepos)
                 }
             )
         )
@@ -78,26 +79,26 @@ class RepositoryListViewModelTest {
         val actualEmittedUiStates = viewmodel.uiState.toListDuring(1.milliseconds)
 
         assertEquals(
-            RepositoryListUiState.Success(FakeGithubRepository.repositories),
+            GitHubRepoListUiState.Success(FakeGithubRepoRepository.gitHubRepos),
             actualEmittedUiStates.last(),
         )
     }
 
     @Test
-    fun 레포지토리_목록을_불러오는_것에_예외가_발생하면_에러플로우로_전달된다() = runTest {
+    fun 레포지토리_목록을_불러오는_것에_예외가_발생하면_사이드이펙트로_전달된다() = runTest {
         // given
-        viewmodel = RepositoryListViewModel(
-            FakeGithubRepository(
-                fakeRepositories = flow {
+        viewmodel = GitHubRepoListViewModel(
+            FakeGithubRepoRepository(
+                fakeGitHubReposStream = flow {
                     error("예외 발생!")
                 }
             )
         )
 
         // then
-        assertEquals(
-            "예외 발생!",
-            viewmodel.errorFlow.toListDuring(1.milliseconds).last().message,
+        assertTrue(
+            viewmodel.sideEffect.toListDuring(1.milliseconds).last()
+                    is GitHubRepoListSideEffect.ShowError,
         )
     }
 }

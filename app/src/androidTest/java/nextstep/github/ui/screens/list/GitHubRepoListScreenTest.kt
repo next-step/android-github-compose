@@ -6,11 +6,11 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performScrollToIndex
-import nextstep.github.data.repositories.impls.FakeGithubRepository
+import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
 import org.junit.Rule
 import org.junit.Test
 
-class RepositoryListScreenTest {
+class GitHubRepoListScreenTest {
 
     @get:Rule
     val composeTestRule = createComposeRule()
@@ -22,8 +22,8 @@ class RepositoryListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Loading,
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Loading,
                     snackBarHostState = snackBarHostState,
                 )
             }
@@ -39,8 +39,8 @@ class RepositoryListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Empty,
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Empty,
                     snackBarHostState = snackBarHostState,
                 )
             }
@@ -56,16 +56,16 @@ class RepositoryListScreenTest {
         // given
         composeTestRule
             .setContent {
-                RepositoryListScreen(
-                    state = RepositoryListUiState.Success(
-                        repositories = FakeGithubRepository.repositories
+                GitHubRepoListScreen(
+                    state = GitHubRepoListUiState.Success(
+                        repositories = FakeGithubRepoRepository.gitHubRepos
                     ),
                     snackBarHostState = snackBarHostState,
                 )
             }
 
         // then
-        FakeGithubRepository.repositories.forEachIndexed { index, _ ->
+        FakeGithubRepoRepository.gitHubRepos.forEachIndexed { index, _ ->
             composeTestRule
                 .onNodeWithText("next-step/nextstep-docs-$index")
                 .assertIsDisplayed()

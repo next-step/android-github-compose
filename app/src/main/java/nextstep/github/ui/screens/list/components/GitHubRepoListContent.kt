@@ -1,4 +1,4 @@
-package nextstep.github.ui.screens.list
+package nextstep.github.ui.screens.list.components
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
@@ -9,21 +9,21 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.data.repositories.impls.FakeGithubRepository
-import nextstep.github.ui.screens.list.components.RepositoryItem
+import nextstep.github.data.repositories.impls.FakeGithubRepoRepository
+import nextstep.github.model.GitHubRepo
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
-fun RepositoryListSuccessScreen(
-    state: RepositoryListUiState.Success,
+fun GitHubRepoListContent(
+    repositories: List<GitHubRepo>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
         modifier = modifier.testTag("repositoryList")
     ) {
-        items(key = { item -> item.id }, items = state.repositories) { repository ->
-            RepositoryItem(
-                repository = repository,
+        items(key = { item -> item.id }, items = repositories) { repository ->
+            GitHubRepoItem(
+                gitHubRepo = repository,
                 modifier = Modifier.padding(16.dp)
             )
             HorizontalDivider()
@@ -33,12 +33,10 @@ fun RepositoryListSuccessScreen(
 
 @Preview(showBackground = true)
 @Composable
-private fun RepositoryListSuccessScreenPreview() {
+private fun GitHubRepoListContentPreview() {
     GithubTheme {
-        RepositoryListSuccessScreen(
-            state = RepositoryListUiState.Success(
-                repositories = FakeGithubRepository.repositories
-            ),
+        GitHubRepoListContent(
+            repositories = FakeGithubRepoRepository.gitHubRepos,
         )
     }
 }

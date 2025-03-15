@@ -4,7 +4,7 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class RepositoryResponse(
+data class GitHubRepoResponse(
     @SerialName("id")
     val id: Long,
 
@@ -13,4 +13,7 @@ data class RepositoryResponse(
 
     @SerialName("description")
     val description: String?,
+
+    @SerialName("stargazers_count")
+    val stars: Int?,
 )

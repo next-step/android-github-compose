@@ -13,4 +13,7 @@ data class GitHubRepoResponse(
 
     @SerialName("description")
     val description: String?,
+
+    @SerialName("stargazers_count")
+    val stars: Int?,
 )

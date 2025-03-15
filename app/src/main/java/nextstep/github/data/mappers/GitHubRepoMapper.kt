@@ -7,4 +7,5 @@ fun GitHubRepoResponse.toDomain() = GitHubRepo(
     id = id,
     fullName = fullName,
     description = description,
+    stars = stars ?: 0,
 )

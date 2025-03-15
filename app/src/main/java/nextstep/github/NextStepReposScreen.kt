@@ -10,6 +10,7 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -40,14 +41,14 @@ private fun NextStepReposScreen(
     nextStepRepos: List<GithubRepo>,
     modifier: Modifier = Modifier
 ) {
-    Scaffold(modifier = modifier,
+    Scaffold(
+        modifier = modifier,
+        containerColor = MaterialTheme.colorScheme.surface,
         topBar = {
             NextStepRepoTopBar()
         }) { innerPadding ->
         LazyColumn(modifier = modifier.padding(innerPadding)) {
-
             item { HorizontalDivider() }
-
             items(
                 items = nextStepRepos,
                 key = { item -> item.fullName }) { githubRepo ->

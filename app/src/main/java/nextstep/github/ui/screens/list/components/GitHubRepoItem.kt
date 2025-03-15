@@ -38,6 +38,7 @@ private fun GitHubRepoItemPreview() {
                 id = 1,
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                stars = 50,
             ),
             modifier = Modifier.fillMaxWidth(),
         )
@@ -53,6 +54,7 @@ private fun GitHubRepoItemPreview_NoDescription() {
                 id = 1,
                 fullName = "next-step/nextstep-docs",
                 description = null,
+                stars = 50,
             ),
             modifier = Modifier.fillMaxWidth(),
         )

@@ -8,5 +8,6 @@ fun List<RepositoryResponse>.toDataList(): List<RepositoryModel> = map { it.toDa
 fun RepositoryResponse.toData() = RepositoryModel(
     id = id,
     fullName = fullName ?: "",
-    description = description ?: ""
+    description = description ?: "",
+    stars = stars ?: 0
 )

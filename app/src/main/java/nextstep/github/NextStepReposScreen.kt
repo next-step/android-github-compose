@@ -10,7 +10,6 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -48,7 +47,6 @@ private fun NextStepReposScreen(
             NextStepRepoTopBar()
         }) { innerPadding ->
         LazyColumn(modifier = modifier.padding(innerPadding)) {
-            item { HorizontalDivider() }
             items(
                 items = nextStepRepos,
                 key = { item -> item.fullName }) { githubRepo ->
@@ -62,15 +60,18 @@ private fun NextStepReposScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NextStepRepoTopBar(modifier: Modifier = Modifier) {
-    CenterAlignedTopAppBar(
-        title = {
-            Text(
-                text = stringResource(R.string.nextstep_repos_top_bar_title),
-                style = MaterialTheme.typography.titleLarge
-            )
-        },
-        modifier = modifier,
-    )
+    Column {
+        CenterAlignedTopAppBar(
+            title = {
+                Text(
+                    text = stringResource(R.string.nextstep_repos_top_bar_title),
+                    style = MaterialTheme.typography.titleLarge
+                )
+            },
+            modifier = modifier,
+        )
+        HorizontalDivider()
+    }
 }
 
 @Composable

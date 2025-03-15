@@ -2,7 +2,11 @@ package nextstep.github
 
 import android.util.Log
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.ViewModelProvider
+import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.viewmodel.initializer
+import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
@@ -14,7 +18,7 @@ class GithubViewModel(
     githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
 
-    val githubRepositories: StateFlow<List<GithubRepo>> =
+    val nextStepRepos: StateFlow<List<GithubRepo>> =
         githubRepoRepository.getRepos("next-step")
             .catch {
                 Log.d("asdf", it.message.toString())
@@ -24,4 +28,16 @@ class GithubViewModel(
                 initialValue = emptyList(),
                 started = SharingStarted.WhileSubscribed(5000L)
             )
+
+    companion object {
+        val Factory: ViewModelProvider.Factory = viewModelFactory {
+            initializer {
+                val githubRepoRepository = (this[APPLICATION_KEY] as GithubApplication)
+                    .appContainer
+                    .githubRepoRepository
+
+                GithubViewModel(githubRepoRepository)
+            }
+        }
+    }
 }

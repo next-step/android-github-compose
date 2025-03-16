@@ -24,9 +24,12 @@ class RepositoryListViewModel(
 
     fun loadRepositoryList() {
         viewModelScope.launch {
-            _uiState.value = RepositoryListScreenUiState.Success(
-                repository.getRepos().toPersistentList()
-            )
+            val repositoryList = repository.getRepos().toPersistentList()
+            _uiState.value = if (repositoryList.isEmpty()) {
+                RepositoryListScreenUiState.Empty
+            } else {
+                RepositoryListScreenUiState.Success(repositoryList)
+            }
         }
     }
 

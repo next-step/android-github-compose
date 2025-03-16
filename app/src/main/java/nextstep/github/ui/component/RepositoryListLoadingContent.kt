@@ -6,6 +6,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.tooling.preview.Preview
 import nextstep.github.ui.theme.GithubTheme
 
@@ -13,7 +14,9 @@ import nextstep.github.ui.theme.GithubTheme
 fun RepositoryListLoadingContent(modifier: Modifier = Modifier) {
     Box(modifier = modifier) {
         CircularProgressIndicator(
-            modifier = Modifier.align(Alignment.Center)
+            modifier = Modifier
+                .align(Alignment.Center)
+                .testTag("loading_progress")
         )
     }
 }

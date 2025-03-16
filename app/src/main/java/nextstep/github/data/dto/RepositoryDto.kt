@@ -1,6 +1,6 @@
-package nextstep.github.data.model
+package nextstep.github.data.dto
 
-data class RepositoryModel(
+data class RepositoryDto(
     val id: Int,
     val fullName: String,
     val description: String,

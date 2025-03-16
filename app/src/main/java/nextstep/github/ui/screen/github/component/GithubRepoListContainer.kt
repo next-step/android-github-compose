@@ -22,6 +22,8 @@ fun GithubRepoListContainer(
             GithubRepoItem(
                 fullName = it.fullName,
                 description = it.description,
+                isHot = it.isOverFiftyStars,
+                starCount = it.stars,
             )
         }
     }

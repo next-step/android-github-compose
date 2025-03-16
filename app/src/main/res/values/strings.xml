@@ -6,4 +6,7 @@
     <string name="retry_action_label">재시도</string>
 
     <string name="empty_repositories_text">목록이 비었습니다.</string>
+
+    <string name="is_hot_text">HOT</string>
+
 </resources>

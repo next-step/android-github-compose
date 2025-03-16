@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
-import androidx.lifecycle.viewmodel.compose.viewModel
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -26,6 +25,10 @@ class GithubViewModel(
     val repositories: StateFlow<List<Repository>> = _repositories.asStateFlow()
 
     init {
+        getRepositories()
+    }
+
+    private fun getRepositories() {
         viewModelScope.launch {
             val repositories =
                 githubRepository.getRepositories(Const.ORGANIZATION_NAME).map { it.toRepository() }

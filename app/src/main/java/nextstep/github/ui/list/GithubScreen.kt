@@ -11,14 +11,30 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
+import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.ui.list.component.RepositoryItem
 import nextstep.github.ui.model.Repository
 import nextstep.github.ui.theme.GithubTheme
+
+@Composable
+fun GithubScreen(
+    modifier: Modifier = Modifier,
+    viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Factory)
+) {
+    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+
+    GithubScreen(
+        repositories = repositories,
+        modifier = modifier
+    )
+}
 
 @Composable
 fun GithubScreen(

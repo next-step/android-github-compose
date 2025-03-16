@@ -38,7 +38,7 @@ fun GithubScreen(
     modifier: Modifier = Modifier,
     viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Companion.Factory),
 ) {
-    val repositoryUiState by viewModel.repositoryUiState.collectAsStateWithLifecycle()
+    val repositoryUiState by viewModel.repositoryUiModel.collectAsStateWithLifecycle()
 
     val snackbarHostState = remember { SnackbarHostState() }
 
@@ -59,7 +59,7 @@ fun GithubScreen(
     }
 
     GithubScreen(
-        repositoryUiState = repositoryUiState,
+        repositoryUiModel = repositoryUiState,
         snackbarHostState = snackbarHostState,
         modifier = modifier
     )
@@ -68,7 +68,7 @@ fun GithubScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GithubScreen(
-    repositoryUiState: UiState<List<RepositoryUiState>>,
+    repositoryUiModel: UiState<List<RepositoryUiModel>>,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) {
@@ -102,7 +102,7 @@ fun GithubScreen(
                 .fillMaxSize()
                 .padding(it),
         ) {
-            when (repositoryUiState) {
+            when (repositoryUiModel) {
                 is UiState.Loading -> {
                     CenteredContent {
                         CircularProgressIndicator(
@@ -134,7 +134,7 @@ fun GithubScreen(
 
                 is UiState.Success -> {
                     GithubRepoListContainer(
-                        repositories = repositoryUiState.data,
+                        repositories = repositoryUiModel.data,
                         modifier = modifier
                     )
                 }
@@ -148,7 +148,7 @@ fun GithubScreen(
 private fun GithubScreenSuccessPreview() {
     val uiState = UiState.Success(
         data = List(10) {
-            RepositoryUiState(
+            RepositoryUiModel(
                 id = it,
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
@@ -157,7 +157,7 @@ private fun GithubScreenSuccessPreview() {
     )
 
     GithubScreen(
-        repositoryUiState = uiState,
+        repositoryUiModel = uiState,
         snackbarHostState = SnackbarHostState()
     )
 }
@@ -166,7 +166,7 @@ private fun GithubScreenSuccessPreview() {
 @Composable
 private fun GithubScreenEmptyPreview() {
     GithubScreen(
-        repositoryUiState = UiState.Empty,
+        repositoryUiModel = UiState.Empty,
         snackbarHostState = SnackbarHostState()
     )
 }
@@ -175,7 +175,7 @@ private fun GithubScreenEmptyPreview() {
 @Composable
 private fun GithubScreenLoadingPreview() {
     GithubScreen(
-        repositoryUiState = UiState.Loading,
+        repositoryUiModel = UiState.Loading,
         snackbarHostState = SnackbarHostState()
     )
 }
@@ -184,7 +184,7 @@ private fun GithubScreenLoadingPreview() {
 @Composable
 private fun GithubScreenFailurePreview() {
     GithubScreen(
-        repositoryUiState = UiState.Failure("Error message"),
+        repositoryUiModel = UiState.Failure("Error message"),
         snackbarHostState = SnackbarHostState()
     )
 }

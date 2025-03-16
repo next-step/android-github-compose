@@ -5,11 +5,11 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.ui.screen.github.RepositoryUiState
+import nextstep.github.ui.screen.github.RepositoryUiModel
 
 @Composable
 fun GithubRepoListContainer(
-    repositories: List<RepositoryUiState>,
+    repositories: List<RepositoryUiModel>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(
@@ -31,7 +31,7 @@ fun GithubRepoListContainer(
 @Composable
 private fun GithubRepoListContainerPreview() {
     val dummyList = List(3) {
-        RepositoryUiState(
+        RepositoryUiModel(
             id = it,
             fullName = "next-step/nextstep-docs",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",

@@ -39,7 +39,7 @@ internal fun GithubRepositoryItem(
             .padding(16.dp)
     ) {
         model.starCount?.let {
-            StarCountRow(count = it)
+            StarCountRow(count = it, showHotKeyword = model.showHotKeyword())
         }
 
         Text(
@@ -58,12 +58,12 @@ internal fun GithubRepositoryItem(
 }
 
 @Composable
-private fun StarCountRow(count: Int) {
+private fun StarCountRow(count: Int, showHotKeyword: Boolean) {
     Row(
         modifier = Modifier.fillMaxWidth(),
         verticalAlignment = Alignment.CenterVertically,
     ) {
-        if (count >= HOT_REPOSITORY_LIMIT_COUNT) {
+        if (showHotKeyword) {
             Text(
                 text = stringResource(R.string.hot),
                 style = MaterialTheme.typography.labelLarge,
@@ -87,8 +87,6 @@ private fun StarCountRow(count: Int) {
         }
     }
 }
-
-private const val HOT_REPOSITORY_LIMIT_COUNT = 50
 
 @Preview(showBackground = true)
 @Composable

@@ -3,14 +3,17 @@ package nextstep.github.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
@@ -40,7 +43,14 @@ fun RepositoryListScreen(
         viewModel.sideEffect.collect { sideEffect ->
             when (sideEffect) {
                 is RepositoryListScreenSideEffect.ShowErrorSnackBar -> {
-                    snackBarHostState.showSnackbar("예상치 못한 오류가 발생하였습니다.")
+                    snackBarHostState.showSnackbar(
+                        message = "예상치 못한 오류가 발생하였습니다.",
+                        actionLabel = "재시도",
+                    ).let {
+                        if (it == SnackbarResult.ActionPerformed) {
+                            viewModel.loadRepositoryList()
+                        }
+                    }
                 }
             }
         }
@@ -61,7 +71,17 @@ fun RepositoryListScreen(
 ) {
     Scaffold(
         topBar = { RepositoryListTopBar() },
-        snackbarHost = { SnackbarHost(snackBarHostState) },
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                snackbar = {
+                    Snackbar(
+                        snackbarData = it,
+                        actionColor = Color(0xFFD0BCFF),
+                    )
+                }
+            )
+        },
         modifier = modifier,
     ) { paddingValues ->
         when (uiState) {

@@ -16,7 +16,7 @@ class GithubRepositoryUseCase(private val githubRepository: GithubRepository) {
                         fullName = it.fullName,
                         description = it.description,
                         stars = it.stars,
-                        isOverFiftyStars = it.stars > 50 // 50개 이상의 star를 가진 repository인지 확인
+                        isOverFiftyStars = it.stars >= 50 // 50개 이상의 star를 가진 repository인지 확인
                     )
                 }
 

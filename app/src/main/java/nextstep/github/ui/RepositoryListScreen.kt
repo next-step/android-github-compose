@@ -3,8 +3,13 @@ package nextstep.github.ui
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
@@ -15,6 +20,7 @@ import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListEmptyContent
 import nextstep.github.ui.component.RepositoryListLoadingContent
 import nextstep.github.ui.component.RepositoryListTopBar
+import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
 import nextstep.github.ui.theme.GithubTheme
 
@@ -24,24 +30,38 @@ fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory),
 ) {
     val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
     LaunchedEffect(Unit) {
         viewModel.loadRepositoryList()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is RepositoryListScreenSideEffect.ShowErrorSnackBar -> {
+                    snackBarHostState.showSnackbar("예상치 못한 오류가 발생하였습니다.")
+                }
+            }
+        }
+    }
+
     RepositoryListScreen(
         uiState = uiState.value,
-        modifier = modifier
+        modifier = modifier,
+        snackBarHostState = snackBarHostState,
     )
 }
 
 @Composable
 fun RepositoryListScreen(
     uiState: RepositoryListScreenUiState,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState = SnackbarHostState(),
 ) {
     Scaffold(
         topBar = { RepositoryListTopBar() },
+        snackbarHost = { SnackbarHost(snackBarHostState) },
         modifier = modifier,
     ) { paddingValues ->
         when (uiState) {

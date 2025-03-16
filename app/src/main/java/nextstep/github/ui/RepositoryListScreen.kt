@@ -1,21 +1,19 @@
 package nextstep.github.ui
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.collections.immutable.toPersistentList
 import nextstep.github.data.entity.Repository
-import nextstep.github.ui.component.RepositoryItem
+import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListTopBar
+import nextstep.github.ui.model.RepositoryListScreenUiState
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -23,40 +21,39 @@ fun RepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory),
 ) {
-    val repositoryList = viewModel.repositoryList.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.loadRepositoryList()
     }
 
     RepositoryListScreen(
-        repositoryList = repositoryList.value,
+        uiState = uiState.value,
         modifier = modifier
     )
 }
 
 @Composable
 fun RepositoryListScreen(
-    repositoryList: List<Repository>,
+    uiState: RepositoryListScreenUiState,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         topBar = { RepositoryListTopBar() },
         modifier = modifier,
     ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            items(repositoryList.size) { index ->
-                RepositoryItem(
-                    repository = repositoryList[index],
-                    modifier = Modifier.fillMaxWidth()
+        when (uiState) {
+            is RepositoryListScreenUiState.Loading -> {
+                // Loading
+            }
+
+            is RepositoryListScreenUiState.Success -> {
+                RepositoryListContent(
+                    repositoryList = uiState.repositoryList,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
                 )
-                if (index < repositoryList.lastIndex) {
-                    HorizontalDivider(
-                        color = MaterialTheme.colorScheme.outlineVariant,
-                    )
-                }
             }
         }
     }
@@ -67,12 +64,24 @@ fun RepositoryListScreen(
 private fun RepositoryListScreenPreview() {
     GithubTheme {
         RepositoryListScreen(
-            repositoryList = List(10) {
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                )
-            }
+            uiState = RepositoryListScreenUiState.Success(
+                repositoryList = List(10) {
+                    Repository(
+                        fullName = "nextstep/github",
+                        description = "Github Repository for NextStep"
+                    )
+                }.toPersistentList()
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListEmptyScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Loading
         )
     }
 }

@@ -1,12 +1,12 @@
 package nextstep.github.data
 
 interface GithubRepository {
-    suspend fun getRepositories(organization: String): List<RepositoryEntity>
+    suspend fun getRepositories(): List<RepositoryEntity>
 }
 
 class GithubRepositoryImpl(private val githubService: GithubService) : GithubRepository {
 
-    override suspend fun getRepositories(organization: String): List<RepositoryEntity> {
-        return githubService.getRepositories(organization)
+    override suspend fun getRepositories(): List<RepositoryEntity> {
+        return githubService.getRepositories(Const.ORGANIZATION_NAME)
     }
 }

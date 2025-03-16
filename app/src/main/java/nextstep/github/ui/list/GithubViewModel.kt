@@ -11,7 +11,6 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
-import nextstep.github.Const
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
 import nextstep.github.ui.model.Repository
@@ -31,7 +30,7 @@ class GithubViewModel(
     private fun getRepositories() {
         viewModelScope.launch {
             val repositories =
-                githubRepository.getRepositories(Const.ORGANIZATION_NAME).map { it.toRepository() }
+                githubRepository.getRepositories().map { it.toRepository() }
             _repositories.update { repositories }
         }
     }

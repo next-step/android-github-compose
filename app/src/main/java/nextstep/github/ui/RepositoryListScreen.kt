@@ -12,6 +12,7 @@ import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.toPersistentList
 import nextstep.github.data.entity.Repository
 import nextstep.github.ui.component.RepositoryListContent
+import nextstep.github.ui.component.RepositoryListLoadingContent
 import nextstep.github.ui.component.RepositoryListTopBar
 import nextstep.github.ui.model.RepositoryListScreenUiState
 import nextstep.github.ui.theme.GithubTheme
@@ -44,7 +45,11 @@ fun RepositoryListScreen(
     ) { paddingValues ->
         when (uiState) {
             is RepositoryListScreenUiState.Loading -> {
-                // Loading
+                RepositoryListLoadingContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
             }
 
             is RepositoryListScreenUiState.Success -> {

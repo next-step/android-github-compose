@@ -132,10 +132,20 @@ private fun RepositoryListScreenPreview() {
 
 @Preview
 @Composable
-private fun RepositoryListEmptyScreenPreview() {
+private fun RepositoryListLoadingScreenPreview() {
     GithubTheme {
         RepositoryListScreen(
             uiState = RepositoryListScreenUiState.Loading
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListEmptyScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Empty
         )
     }
 }

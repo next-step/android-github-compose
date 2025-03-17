@@ -61,7 +61,7 @@ private fun NextStepReposScreen(
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun NextStepRepoTopBar(modifier: Modifier = Modifier) {
-    Column {
+    Column(modifier = modifier) {
         CenterAlignedTopAppBar(
             title = {
                 Text(
@@ -69,7 +69,6 @@ fun NextStepRepoTopBar(modifier: Modifier = Modifier) {
                     style = MaterialTheme.typography.titleLarge
                 )
             },
-            modifier = modifier,
         )
         HorizontalDivider()
     }

@@ -37,5 +37,12 @@ class GithubScreenTest {
         composeTestRule.onNodeWithTag("LoadingBox").assertIsDisplayed()
     }
 
+    @Test
+    fun 빈_목록_상태일_때에는_빈_화면_UI를_노출한다() {
+        githubUiState = GithubUiState.Empty
+        composeTestRule.onNodeWithTag("EmptyRepositoryBox").assertIsDisplayed()
+    }
+
+
 
 }

@@ -29,7 +29,11 @@ class GithubViewModel(
                         description = it.description ?: "",
                     )
                 }
-            _uiState.value = GithubUiState.Success(infoList)
+            _uiState.value = if (infoList.isEmpty()) {
+                GithubUiState.Empty
+            } else {
+                GithubUiState.Success(infoList)
+            }
         }
     }
 

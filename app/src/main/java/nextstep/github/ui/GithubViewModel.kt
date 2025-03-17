@@ -13,17 +13,12 @@ import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.GithubRepository
 
-data class RepositoryInfo(
-    val fullName: String,
-    val description: String,
-)
-
 class GithubViewModel(
     private val githubRepository: GithubRepository
 ) : ViewModel() {
 
-    private val _repositories: MutableStateFlow<List<RepositoryInfo>> = MutableStateFlow(emptyList())
-    val repositories: StateFlow<List<RepositoryInfo>> = _repositories.asStateFlow()
+    private val _uiState: MutableStateFlow<GithubUiState> = MutableStateFlow(GithubUiState.Loading)
+    val uiState: StateFlow<GithubUiState> = _uiState.asStateFlow()
 
     fun getRepositories(organization: String) {
         viewModelScope.launch {
@@ -34,7 +29,7 @@ class GithubViewModel(
                         description = it.description ?: "",
                     )
                 }
-            _repositories.value = infoList
+            _uiState.value = GithubUiState.Success(infoList)
         }
     }
 

@@ -11,6 +11,8 @@ import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.ui.view.RepositoryList
@@ -21,21 +23,21 @@ fun GithubScreen(
     modifier: Modifier = Modifier,
     viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Factory),
 ) {
-    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
+    val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.getRepositories(DEFAULT_ORGANIZATION)
     }
 
     GithubScreen(
-        repositories = repositories,
+        uiState = uiState,
         modifier = modifier,
     )
 }
 
 @Composable
 private fun GithubScreen(
-    repositories: List<RepositoryInfo>,
+    uiState: GithubUiState,
     modifier: Modifier = Modifier,
 ) {
     Scaffold(
@@ -43,10 +45,17 @@ private fun GithubScreen(
             GithubTopBar()
         },
         content = { paddingValues ->
-            RepositoryList(
-                repositories = repositories,
-                modifier = modifier.padding(paddingValues),
-            )
+            when (uiState) {
+                GithubUiState.Empty -> { }
+                GithubUiState.Error -> { }
+                GithubUiState.Loading -> { }
+                is GithubUiState.Success -> {
+                    RepositoryList(
+                        repositories = uiState.repositories,
+                        modifier = modifier.padding(paddingValues),
+                    )
+                }
+            }
         }
     )
 }
@@ -67,30 +76,30 @@ private fun GithubTopBar(
     )
 }
 
+private class GithubUiStatePreviewParameterProvider : PreviewParameterProvider<GithubUiState> {
+    override val values: Sequence<GithubUiState> = sequenceOf(
+        GithubUiState.Loading,
+        GithubUiState.Empty,
+        GithubUiState.Error,
+        GithubUiState.Success(
+            listOf(
+                RepositoryInfo(
+                    fullName = "fullName 1",
+                    description = "description 1",
+                ),
+                RepositoryInfo(
+                    fullName = "fullName 2",
+                    description = "description 2",
+                ),
+            ),
+        ),
+    )
+}
 
 @Preview
 @Composable
-private fun GithubScreenPreview() {
-    val repositories = listOf(
-        RepositoryInfo(
-            fullName = "fullName 1",
-            description = "description 1",
-        ),
-        RepositoryInfo(
-            fullName = "fullName 2",
-            description = "description 2",
-        ),
-        RepositoryInfo(
-            fullName = "fullName 3",
-            description = "description 3",
-        ),
-        RepositoryInfo(
-            fullName = "fullName 4",
-            description = "description 4",
-        ),
-    )
-
-    GithubScreen(
-        repositories = repositories
-    )
+private fun GithubScreenPreview(
+    @PreviewParameter(GithubUiStatePreviewParameterProvider::class) uiState: GithubUiState
+) {
+    GithubScreen(uiState = uiState)
 }

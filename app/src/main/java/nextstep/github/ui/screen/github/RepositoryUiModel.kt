@@ -6,8 +6,8 @@ data class RepositoryUiModel(
     val id: Int,
     val fullName: String,
     val description: String,
-    val stars: Int = 0,
-    val isOverFiftyStars: Boolean = false,
+    val stars: Int,
+    val isOverFiftyStars: Boolean,
 )
 
 fun List<Repository>.toUiStateList() = map { it.toUiState() }

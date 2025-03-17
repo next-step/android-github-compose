@@ -6,6 +6,7 @@ import kotlinx.serialization.json.Json
 import nextstep.github.data.repositories.GithubRepoRepository
 import nextstep.github.data.repositories.impls.RemoteGithubRepoRepository
 import nextstep.github.data.services.GithubRepoService
+import nextstep.github.domain.GetGitHubReposStreamUseCase
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -34,8 +35,8 @@ class AppContainer {
         .build()
 
     private val githubRepoService = retrofit.create(GithubRepoService::class.java)
-
-    val githubRepoRepository: GithubRepoRepository = RemoteGithubRepoRepository(githubRepoService)
+    private val githubRepoRepository: GithubRepoRepository = RemoteGithubRepoRepository(githubRepoService)
+    val getGitHubReposStreamUseCase = GetGitHubReposStreamUseCase(githubRepoRepository)
 
     companion object {
         private const val TAG_HTTP_LOG = "Http_Log"

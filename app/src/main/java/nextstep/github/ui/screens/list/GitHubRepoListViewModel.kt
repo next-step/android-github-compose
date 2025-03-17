@@ -39,7 +39,7 @@ class GitHubRepoListViewModel(
                     _sideEffect.emit(GitHubRepoListSideEffect.ShowError(throwable))
                 }
                 .collect { repositories ->
-                    _sideEffect.emit(GitHubRepoListSideEffect.Nothing)
+                    _sideEffect.emit(GitHubRepoListSideEffect.HideError)
 
                     when {
                         repositories.isEmpty() -> _uiState.value = GitHubRepoListUiState.Empty

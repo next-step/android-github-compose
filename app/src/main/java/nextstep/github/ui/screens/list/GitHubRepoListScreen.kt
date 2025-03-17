@@ -47,7 +47,7 @@ fun GitHubRepoListScreen(
                     }
                 }
 
-                GitHubRepoListSideEffect.Nothing -> Unit
+                GitHubRepoListSideEffect.HideError -> Unit
             }
         }
     }

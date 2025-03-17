@@ -30,6 +30,7 @@ class RepositoryListViewModel(
     val sideEffect = _sideEffect.receiveAsFlow()
 
     private val ceh: CoroutineExceptionHandler = CoroutineExceptionHandler { _, _ ->
+        _uiState.value = RepositoryListScreenUiState.Error
         _sideEffect.trySend(RepositoryListScreenSideEffect.ShowErrorSnackBar)
     }
 

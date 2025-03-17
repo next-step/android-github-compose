@@ -12,4 +12,6 @@ sealed interface RepositoryListScreenUiState{
     ): RepositoryListScreenUiState
 
     data object Loading: RepositoryListScreenUiState
+
+    data object Error: RepositoryListScreenUiState
 }

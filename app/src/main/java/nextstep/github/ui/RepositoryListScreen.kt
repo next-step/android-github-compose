@@ -21,6 +21,7 @@ import kotlinx.collections.immutable.toPersistentList
 import nextstep.github.data.entity.Repository
 import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListEmptyContent
+import nextstep.github.ui.component.RepositoryListErrorContent
 import nextstep.github.ui.component.RepositoryListLoadingContent
 import nextstep.github.ui.component.RepositoryListTopBar
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
@@ -109,6 +110,14 @@ fun RepositoryListScreen(
                         .padding(paddingValues)
                 )
             }
+
+            is RepositoryListScreenUiState.Error -> {
+                RepositoryListErrorContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
+            }
         }
     }
 }
@@ -146,6 +155,16 @@ private fun RepositoryListEmptyScreenPreview() {
     GithubTheme {
         RepositoryListScreen(
             uiState = RepositoryListScreenUiState.Empty
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListErrorScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Error
         )
     }
 }

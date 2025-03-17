@@ -1,4 +1,4 @@
-package nextstep.github.repo_list
+package nextstep.github.ui.repo_list
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

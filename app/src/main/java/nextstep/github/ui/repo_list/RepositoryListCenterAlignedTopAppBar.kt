@@ -1,4 +1,4 @@
-package nextstep.github.repo_list
+package nextstep.github.ui.repo_list
 
 import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api

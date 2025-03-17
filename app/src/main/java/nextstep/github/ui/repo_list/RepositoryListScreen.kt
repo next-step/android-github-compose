@@ -1,4 +1,4 @@
-package nextstep.github.repo_list
+package nextstep.github.ui.repo_list
 
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn

@@ -1,4 +1,4 @@
-package nextstep.github.repo_list
+package nextstep.github.ui.repo_list
 
 import android.os.Bundle
 import androidx.activity.ComponentActivity

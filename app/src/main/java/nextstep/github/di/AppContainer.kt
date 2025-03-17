@@ -2,7 +2,6 @@ package nextstep.github.di
 
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import nextstep.github.GithubViewModel
 import nextstep.github.data.api.GithubService
 import nextstep.github.data.repository.GithubRepoRepository
 import okhttp3.MediaType.Companion.toMediaType
@@ -21,10 +20,8 @@ class AppContainer {
 
     private val githubService = retrofit.create(GithubService::class.java)
 
-    private val githubRepoRepository: GithubRepoRepository =
+    val githubRepoRepository: GithubRepoRepository =
         GithubRepoRepository(githubService = githubService)
-
-    val githubViewModel: GithubViewModel = GithubViewModel(githubRepoRepository)
 
     companion object {
         private const val CONTENT_TYPE = "application/json"

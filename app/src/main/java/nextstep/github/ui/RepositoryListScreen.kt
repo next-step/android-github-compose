@@ -1,21 +1,31 @@
 package nextstep.github.ui
 
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.material3.HorizontalDivider
-import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.collections.immutable.toPersistentList
 import nextstep.github.data.entity.Repository
-import nextstep.github.ui.component.RepositoryItem
+import nextstep.github.ui.component.RepositoryListContent
+import nextstep.github.ui.component.RepositoryListEmptyContent
+import nextstep.github.ui.component.RepositoryListErrorContent
+import nextstep.github.ui.component.RepositoryListLoadingContent
 import nextstep.github.ui.component.RepositoryListTopBar
+import nextstep.github.ui.model.RepositoryListScreenSideEffect
+import nextstep.github.ui.model.RepositoryListScreenUiState
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -23,41 +33,90 @@ fun RepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory),
 ) {
-    val repositoryList = viewModel.repositoryList.collectAsStateWithLifecycle()
+    val uiState = viewModel.uiState.collectAsStateWithLifecycle()
+    val snackBarHostState by remember { mutableStateOf(SnackbarHostState()) }
 
     LaunchedEffect(Unit) {
         viewModel.loadRepositoryList()
     }
 
+    LaunchedEffect(Unit) {
+        viewModel.sideEffect.collect { sideEffect ->
+            when (sideEffect) {
+                is RepositoryListScreenSideEffect.ShowErrorSnackBar -> {
+                    snackBarHostState.showSnackbar(
+                        message = "예상치 못한 오류가 발생하였습니다.",
+                        actionLabel = "재시도",
+                    ).let {
+                        if (it == SnackbarResult.ActionPerformed) {
+                            viewModel.loadRepositoryList()
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     RepositoryListScreen(
-        repositoryList = repositoryList.value,
-        modifier = modifier
+        uiState = uiState.value,
+        modifier = modifier,
+        snackBarHostState = snackBarHostState,
     )
 }
 
 @Composable
 fun RepositoryListScreen(
-    repositoryList: List<Repository>,
-    modifier: Modifier = Modifier
+    uiState: RepositoryListScreenUiState,
+    modifier: Modifier = Modifier,
+    snackBarHostState: SnackbarHostState = SnackbarHostState(),
 ) {
     Scaffold(
         topBar = { RepositoryListTopBar() },
-        modifier = modifier,
-    ) { paddingValues ->
-        LazyColumn(
-            modifier = Modifier.padding(paddingValues)
-        ) {
-            items(repositoryList.size) { index ->
-                RepositoryItem(
-                    repository = repositoryList[index],
-                    modifier = Modifier.fillMaxWidth()
-                )
-                if (index < repositoryList.lastIndex) {
-                    HorizontalDivider(
-                        thickness = 1.dp,
-                        color = MaterialTheme.colorScheme.outlineVariant,
+        snackbarHost = {
+            SnackbarHost(
+                hostState = snackBarHostState,
+                snackbar = {
+                    Snackbar(
+                        snackbarData = it,
+                        actionColor = Color(0xFFD0BCFF),
                     )
                 }
+            )
+        },
+        modifier = modifier,
+    ) { paddingValues ->
+        when (uiState) {
+            is RepositoryListScreenUiState.Loading -> {
+                RepositoryListLoadingContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
+            }
+
+            is RepositoryListScreenUiState.Success -> {
+                RepositoryListContent(
+                    repositoryList = uiState.repositoryList,
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
+            }
+
+            is RepositoryListScreenUiState.Empty -> {
+                RepositoryListEmptyContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
+            }
+
+            is RepositoryListScreenUiState.Error -> {
+                RepositoryListErrorContent(
+                    modifier = Modifier
+                        .fillMaxSize()
+                        .padding(paddingValues)
+                )
             }
         }
     }
@@ -68,12 +127,44 @@ fun RepositoryListScreen(
 private fun RepositoryListScreenPreview() {
     GithubTheme {
         RepositoryListScreen(
-            repositoryList = List(10) {
-                Repository(
-                    fullName = "nextstep/github",
-                    description = "Github Repository for NextStep"
-                )
-            }
+            uiState = RepositoryListScreenUiState.Success(
+                repositoryList = List(10) {
+                    Repository(
+                        fullName = "nextstep/github",
+                        description = "Github Repository for NextStep"
+                    )
+                }.toPersistentList()
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListLoadingScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Loading
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListEmptyScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Empty
+        )
+    }
+}
+
+@Preview
+@Composable
+private fun RepositoryListErrorScreenPreview() {
+    GithubTheme {
+        RepositoryListScreen(
+            uiState = RepositoryListScreenUiState.Error
         )
     }
 }

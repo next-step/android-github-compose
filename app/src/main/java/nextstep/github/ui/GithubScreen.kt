@@ -6,16 +6,23 @@ import androidx.compose.material3.CenterAlignedTopAppBar
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
+import kotlinx.coroutines.launch
 import nextstep.github.ui.view.EmptyRepositoryBox
 import nextstep.github.ui.view.LoadingBox
 import nextstep.github.ui.view.RepositoryList
@@ -27,13 +34,32 @@ fun GithubScreen(
     viewModel: GithubViewModel = viewModel(factory = GithubViewModel.Factory),
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
+    val scope = rememberCoroutineScope()
 
     LaunchedEffect(Unit) {
+        scope.launch {
+            viewModel.uiEvent.collectLatest { event ->
+                when (event) {
+                    GithubUiEvent.ShowErrorSnackBar -> {
+                        val snackBarResult = snackbarHostState.showSnackbar(
+                            message = "예상치 못한 오류가 발생했습니다.",
+                            withDismissAction = true,
+                            actionLabel = "재시도",
+                        )
+                        if (snackBarResult == SnackbarResult.ActionPerformed) {
+                            viewModel.getRepositories(DEFAULT_ORGANIZATION)
+                        }
+                    }
+                }
+            }
+        }
         viewModel.getRepositories(DEFAULT_ORGANIZATION)
     }
 
     GithubScreen(
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
         modifier = modifier,
     )
 }
@@ -42,10 +68,14 @@ fun GithubScreen(
 fun GithubScreen(
     uiState: GithubUiState,
     modifier: Modifier = Modifier,
+    snackbarHostState: SnackbarHostState = remember { SnackbarHostState() },
 ) {
     Scaffold(
         topBar = {
             GithubTopBar()
+        },
+        snackbarHost = {
+            SnackbarHost(hostState = snackbarHostState)
         },
         content = { paddingValues ->
             when (uiState) {
@@ -57,7 +87,6 @@ fun GithubScreen(
                     )
                 }
 
-                GithubUiState.Error -> {}
                 GithubUiState.Loading -> {
                     LoadingBox(
                         modifier = modifier
@@ -97,7 +126,6 @@ private class GithubUiStatePreviewParameterProvider : PreviewParameterProvider<G
     override val values: Sequence<GithubUiState> = sequenceOf(
         GithubUiState.Loading,
         GithubUiState.Empty,
-        GithubUiState.Error,
         GithubUiState.Success(
             listOf(
                 RepositoryInfo(
@@ -118,5 +146,8 @@ private class GithubUiStatePreviewParameterProvider : PreviewParameterProvider<G
 private fun GithubScreenPreview(
     @PreviewParameter(GithubUiStatePreviewParameterProvider::class) uiState: GithubUiState
 ) {
-    GithubScreen(uiState = uiState)
+    GithubScreen(
+        uiState = uiState,
+        snackbarHostState = remember { SnackbarHostState() },
+    )
 }

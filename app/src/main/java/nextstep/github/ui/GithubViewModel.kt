@@ -6,8 +6,11 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.SharedFlow
 import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
@@ -20,20 +23,36 @@ class GithubViewModel(
     private val _uiState: MutableStateFlow<GithubUiState> = MutableStateFlow(GithubUiState.Loading)
     val uiState: StateFlow<GithubUiState> = _uiState.asStateFlow()
 
+    private val _uiEvent : MutableSharedFlow<GithubUiEvent> = MutableSharedFlow()
+    val uiEvent : SharedFlow<GithubUiEvent> = _uiEvent.asSharedFlow()
+
     fun getRepositories(organization: String) {
         viewModelScope.launch {
-            val infoList = githubRepository.getRepositories(organization)
-                .map {
-                    RepositoryInfo(
-                        fullName = it.fullName ?: "",
-                        description = it.description ?: "",
-                    )
-                }
-            _uiState.value = if (infoList.isEmpty()) {
-                GithubUiState.Empty
-            } else {
-                GithubUiState.Success(infoList)
+            runCatching {
+                return@runCatching githubRepository.getRepositories(organization)
+                    .map {
+                        RepositoryInfo(
+                            fullName = it.fullName ?: "",
+                            description = it.description ?: "",
+                        )
+                    }
             }
+                .onSuccess { infoList ->
+                    _uiState.value = if (infoList.isEmpty()) {
+                        GithubUiState.Empty
+                    } else {
+                        GithubUiState.Success(infoList)
+                    }
+                }
+                .onFailure {
+                    sendUiEvent(GithubUiEvent.ShowErrorSnackBar)
+                }
+        }
+    }
+
+    fun sendUiEvent(event: GithubUiEvent) {
+        viewModelScope.launch {
+            _uiEvent.emit(event)
         }
     }
 

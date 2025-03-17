@@ -38,7 +38,7 @@ fun NextStepReposScreen(
 }
 
 @Composable
-private fun NextStepReposScreen(
+fun NextStepReposScreen(
     nextStepRepos: List<GithubRepo>,
     modifier: Modifier = Modifier
 ) {
@@ -48,7 +48,9 @@ private fun NextStepReposScreen(
         topBar = {
             NextStepRepoTopBar()
         }) { innerPadding ->
-        LazyColumn(modifier = modifier.padding(innerPadding)) {
+        LazyColumn(modifier = modifier
+            .padding(innerPadding)
+            .testTag("repo_list")) {
             items(
                 items = nextStepRepos,
                 key = { item -> item.fullName }) { githubRepo ->

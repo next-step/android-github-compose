@@ -14,13 +14,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.model.GithubRepo
+import nextstep.github.ui.preview.BackgroundPreview
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -60,7 +61,7 @@ private fun NextStepReposScreen(
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun NextStepRepoTopBar(modifier: Modifier = Modifier) {
+private fun NextStepRepoTopBar(modifier: Modifier = Modifier) {
     Column(modifier = modifier) {
         CenterAlignedTopAppBar(
             title = {
@@ -89,7 +90,7 @@ private fun NextStepRepoItem(
     }
 }
 
-@Preview(showBackground = true)
+@BackgroundPreview
 @Composable
 private fun NextStepReposScreenPreview() {
     GithubTheme {
@@ -104,7 +105,7 @@ private fun NextStepReposScreenPreview() {
     }
 }
 
-@Preview(showBackground = true)
+@BackgroundPreview
 @Composable
 private fun NextStepRepoItemPreview() {
     GithubTheme {
@@ -116,3 +117,4 @@ private fun NextStepRepoItemPreview() {
         )
     }
 }
+

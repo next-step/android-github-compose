@@ -68,24 +68,24 @@ internal fun GitHubRepositoryListScreen(
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPadding ->
+        val contentModifier = Modifier.padding(innerPadding)
         when {
             uiState.isLoading -> {
                 RepositoryLoadingContent(
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = contentModifier
                 )
             }
 
             uiState.isEmpty -> {
                 RepositoryEmptyContent(
-                    modifier = Modifier.padding(innerPadding)
+                    modifier = contentModifier
                 )
             }
 
             else -> {
                 RepositoryListContent(
                     repositories = uiState.repositories,
-                    modifier = Modifier
-                        .padding(innerPadding),
+                    modifier = contentModifier
                 )
             }
         }

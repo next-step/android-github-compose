@@ -1,7 +1,10 @@
 package nextstep.github.ui
 
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
@@ -9,12 +12,14 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import nextstep.github.ui.view.LoadingBox
 import nextstep.github.ui.view.RepositoryList
 import nextstep.github.util.Const.DEFAULT_ORGANIZATION
 
@@ -36,7 +41,7 @@ fun GithubScreen(
 }
 
 @Composable
-private fun GithubScreen(
+fun GithubScreen(
     uiState: GithubUiState,
     modifier: Modifier = Modifier,
 ) {
@@ -48,7 +53,11 @@ private fun GithubScreen(
             when (uiState) {
                 GithubUiState.Empty -> { }
                 GithubUiState.Error -> { }
-                GithubUiState.Loading -> { }
+                GithubUiState.Loading -> {
+                    LoadingBox(
+                        modifier = modifier.padding(paddingValues).fillMaxSize(),
+                    )
+                }
                 is GithubUiState.Success -> {
                     RepositoryList(
                         repositories = uiState.repositories,

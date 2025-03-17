@@ -25,7 +25,7 @@ class GitHubRepositoryListScreenTest {
     @get:Rule
     val composeTestRule = createComposeRule()
 
-    private var uiState: GitHubRepositoryListState by mutableStateOf(GitHubRepositoryListState.Loading)
+    private var uiState: GitHubRepositoryListState by mutableStateOf(GitHubRepositoryListState())
     val snackBarHostState = SnackbarHostState()
 
     @Before
@@ -47,7 +47,7 @@ class GitHubRepositoryListScreenTest {
 
     @Test
     fun `로딩중에는_원형_프로그래스바가_보인다`() {
-        uiState = GitHubRepositoryListState.Loading
+        uiState = GitHubRepositoryListState(isLoading = true)
 
         composeTestRule
             .onNodeWithTag("CircularProgressIndicator")
@@ -56,7 +56,7 @@ class GitHubRepositoryListScreenTest {
 
     @Test
     fun `레포지토리가_없는경우_안내_문구가_보인다`() {
-        uiState = GitHubRepositoryListState.Empty
+        uiState = GitHubRepositoryListState(isLoading = false, repositories = emptyList())
 
         composeTestRule
             .onNodeWithText("목록이 비었습니다.")
@@ -72,7 +72,7 @@ class GitHubRepositoryListScreenTest {
                 description = "설탕말고설명$it"
             )
         }
-        uiState = GitHubRepositoryListState.Repositories(repositories)
+        uiState = GitHubRepositoryListState(isLoading = false, repositories = repositories)
 
         composeTestRule
             .onNodeWithText("풀무원말고풀네임1")

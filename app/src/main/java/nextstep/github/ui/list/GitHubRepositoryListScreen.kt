@@ -68,24 +68,24 @@ internal fun GitHubRepositoryListScreen(
         },
         snackbarHost = { SnackbarHost(snackBarHostState) }
     ) { innerPadding ->
-        when (uiState) {
-            GitHubRepositoryListState.Empty -> {
-                RepositoryEmptyContent(
-                    modifier = Modifier.padding(innerPadding)
-                )
-            }
-
-            GitHubRepositoryListState.Loading -> {
+        when {
+            uiState.isLoading -> {
                 RepositoryLoadingContent(
                     modifier = Modifier.padding(innerPadding)
                 )
             }
 
-            is GitHubRepositoryListState.Repositories -> {
+            uiState.isEmpty -> {
+                RepositoryEmptyContent(
+                    modifier = Modifier.padding(innerPadding)
+                )
+            }
+
+            else -> {
                 RepositoryListContent(
-                    repositories = uiState.list,
+                    repositories = uiState.repositories,
                     modifier = Modifier
-                        .padding(innerPadding)
+                        .padding(innerPadding),
                 )
             }
         }
@@ -106,10 +106,11 @@ private fun GitHubRepositoryListScreenPreview(
 private class GitHubRepositoryListScreenParameterProvider :
     CollectionPreviewParameterProvider<GitHubRepositoryListState>(
         listOf(
-            GitHubRepositoryListState.Empty,
-            GitHubRepositoryListState.Loading,
-            GitHubRepositoryListState.Repositories(
-                List(20) {
+            GitHubRepositoryListState(isLoading = false, repositories = emptyList()), // Empty
+            GitHubRepositoryListState(isLoading = true), // Loading
+            GitHubRepositoryListState(
+                isLoading = false,
+                repositories = List(20) {
                     Repository(
                         id = it,
                         fullName = "RepositoryFullName/$it",

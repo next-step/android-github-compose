@@ -9,6 +9,7 @@ import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GitHubApplication
 import nextstep.github.domain.usecase.GetNextStepRepositoriesUseCase
@@ -17,7 +18,7 @@ class GitHubRepositoryListViewModel(
     private val getNextStepRepositoriesUseCase: GetNextStepRepositoriesUseCase,
 ) : ViewModel() {
     private val _uiState: MutableStateFlow<GitHubRepositoryListState> =
-        MutableStateFlow(GitHubRepositoryListState.Loading)
+        MutableStateFlow(GitHubRepositoryListState())
     val uiState = _uiState.asStateFlow()
 
     private val _errorEvent = Channel<Throwable>()
@@ -28,14 +29,15 @@ class GitHubRepositoryListViewModel(
     }
 
     fun fetchRepositories() = viewModelScope.launch {
-        _uiState.value = GitHubRepositoryListState.Loading
+        _uiState.update { it.copy(isLoading = true) }
 
         getNextStepRepositoriesUseCase()
-            .onSuccess {
-                _uiState.value = if (it.isEmpty()) {
-                    GitHubRepositoryListState.Empty
-                } else {
-                    GitHubRepositoryListState.Repositories(it)
+            .onSuccess { list ->
+                _uiState.update {
+                    it.copy(
+                        isLoading = false,
+                        repositories = list
+                    )
                 }
             }
             .onFailure {

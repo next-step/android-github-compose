@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repositories.GithubRepoRepository
@@ -25,7 +26,8 @@ class GitHubRepoListViewModel(
         MutableStateFlow(GitHubRepoListUiState.Loading)
     val uiState: StateFlow<GitHubRepoListUiState> = _uiState.asStateFlow()
 
-    private val _sideEffect: MutableSharedFlow<GitHubRepoListSideEffect> = MutableSharedFlow(replay = 1)
+    private val _sideEffect: MutableSharedFlow<GitHubRepoListSideEffect> =
+        MutableSharedFlow(replay = 1)
     val sideEffect: SharedFlow<GitHubRepoListSideEffect> = _sideEffect.asSharedFlow()
 
     init {
@@ -42,8 +44,8 @@ class GitHubRepoListViewModel(
                     _sideEffect.emit(GitHubRepoListSideEffect.HideError)
 
                     when {
-                        repositories.isEmpty() -> _uiState.value = GitHubRepoListUiState.Empty
-                        else -> _uiState.value = GitHubRepoListUiState.Success(repositories)
+                        repositories.isEmpty() -> _uiState.update { GitHubRepoListUiState.Empty }
+                        else -> _uiState.update { GitHubRepoListUiState.Success(repositories) }
                     }
                 }
         }

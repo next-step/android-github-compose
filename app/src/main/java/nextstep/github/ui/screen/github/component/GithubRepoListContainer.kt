@@ -5,7 +5,7 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.ui.screen.github.RepositoryUiModel
+import nextstep.github.ui.screen.github.model.RepositoryUiModel
 
 @Composable
 fun GithubRepoListContainer(

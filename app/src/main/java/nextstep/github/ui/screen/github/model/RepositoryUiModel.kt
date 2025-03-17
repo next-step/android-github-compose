@@ -1,4 +1,4 @@
-package nextstep.github.ui.screen.github
+package nextstep.github.ui.screen.github.model
 
 import nextstep.github.domain.model.Repository
 

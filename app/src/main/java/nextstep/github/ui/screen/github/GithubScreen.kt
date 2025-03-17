@@ -30,6 +30,7 @@ import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
 import nextstep.github.ui.screen.component.CenteredContent
 import nextstep.github.ui.screen.github.component.GithubRepoListContainer
+import nextstep.github.ui.screen.github.model.RepositoryUiModel
 import nextstep.github.ui.theme.topAppBarContainer
 import nextstep.github.ui.uistate.UiState
 

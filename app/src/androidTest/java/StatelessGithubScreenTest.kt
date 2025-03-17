@@ -16,7 +16,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.test.advanceUntilIdle
 import kotlinx.coroutines.test.runTest
 import nextstep.github.ui.screen.github.GithubScreen
-import nextstep.github.ui.screen.github.RepositoryUiModel
+import nextstep.github.ui.screen.github.model.RepositoryUiModel
 import nextstep.github.ui.uistate.UiState
 import org.junit.Rule
 import org.junit.Test

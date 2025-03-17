@@ -15,6 +15,8 @@ import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
 import nextstep.github.domain.GithubRepositoryUseCase
 import nextstep.github.domain.RepositoryResult
+import nextstep.github.ui.screen.github.model.RepositoryUiModel
+import nextstep.github.ui.screen.github.model.toUiStateList
 import nextstep.github.ui.uistate.UiState
 
 

@@ -85,6 +85,16 @@ private fun GithubTopBar(
 
 @Preview
 @Composable
+private fun GithubTopBarPreview() {
+    GithubTheme {
+        GithubTopBar(
+            title = stringResource(R.string.repository_list_title)
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun GithubScreenPreview() {
     GithubTheme {
         GithubScreen(

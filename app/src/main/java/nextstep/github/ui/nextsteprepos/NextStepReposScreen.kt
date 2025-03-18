@@ -118,7 +118,7 @@ fun NextStepReposScreen(
 
 @Composable
 private fun NextStepRepoRepos(
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     uiState: NextStepReposUiState
 ) {
     LazyColumn(

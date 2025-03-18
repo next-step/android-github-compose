@@ -1,11 +1,14 @@
 package nextstep.github.ui.nextsteprepos
 
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.CenterAlignedTopAppBar
+import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
@@ -13,6 +16,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
@@ -29,17 +33,17 @@ fun NextStepReposScreen(
     modifier: Modifier = Modifier,
     viewModel: NextStepReposViewModel = viewModel()
 ) {
-    val nextStepRepos by viewModel.nextStepRepos.collectAsStateWithLifecycle()
+    val uiState: NextStepReposUiState by viewModel.uiState.collectAsStateWithLifecycle()
 
     NextStepReposScreen(
-        nextStepRepos = nextStepRepos,
+        uiState = uiState,
         modifier = modifier
     )
 }
 
 @Composable
 fun NextStepReposScreen(
-    nextStepRepos: List<GithubRepo>,
+    uiState: NextStepReposUiState,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
@@ -48,15 +52,34 @@ fun NextStepReposScreen(
         topBar = {
             NextStepRepoTopBar()
         }) { innerPadding ->
-        LazyColumn(modifier = modifier
-            .padding(innerPadding)
-            .testTag("repo_list")) {
-            items(
-                items = nextStepRepos,
-                key = { item -> item.fullName }) { githubRepo ->
-                NextStepRepoItem(githubRepo = githubRepo)
-                HorizontalDivider()
+
+        if (uiState.isLoading) {
+            Box(modifier.fillMaxSize()) {
+                CircularProgressIndicator(Modifier.align(Alignment.Center))
             }
+        } else {
+            NextStepRepoRepos(
+                uiState = uiState,
+                modifier = modifier.padding(innerPadding)
+            )
+        }
+    }
+}
+
+@Composable
+private fun NextStepRepoRepos(
+    modifier: Modifier,
+    uiState: NextStepReposUiState
+) {
+    LazyColumn(
+        modifier = modifier
+            .testTag("repo_list")
+    ) {
+        items(
+            items = uiState.nextStepRepos,
+            key = { item -> item.fullName }) { githubRepo ->
+            NextStepRepoItem(githubRepo = githubRepo)
+            HorizontalDivider()
         }
     }
 }
@@ -97,12 +120,15 @@ private fun NextStepRepoItem(
 private fun NextStepReposScreenPreview() {
     GithubTheme {
         NextStepReposScreen(
-            nextStepRepos = List(20) { it ->
-                GithubRepo(
-                    fullName = "next-step/nextstep-docs-$it",
-                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
-                )
-            }
+            uiState = NextStepReposUiState(
+                isLoading = false,
+                nextStepRepos = List(20) { it ->
+                    GithubRepo(
+                        fullName = "next-step/nextstep-docs-$it",
+                        description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                    )
+                }
+            ),
         )
     }
 }

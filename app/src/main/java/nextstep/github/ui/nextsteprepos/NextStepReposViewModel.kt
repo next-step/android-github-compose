@@ -10,23 +10,22 @@ import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.map
 import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepoRepository
-import nextstep.github.model.GithubRepo
 
 class NextStepReposViewModel(
     githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
 
-    val nextStepRepos: StateFlow<List<GithubRepo>> =
+    val uiState: StateFlow<NextStepReposUiState> =
         githubRepoRepository.getRepos("next-step")
-            .catch {
-                Log.d("asdf", it.message.toString())
-            }
+            .catch { Log.d("asdf", it.message.toString()) }
+            .map { NextStepReposUiState(nextStepRepos = it, isLoading = false) }
             .stateIn(
                 scope = viewModelScope,
-                initialValue = emptyList(),
+                initialValue = NextStepReposUiState(),
                 started = SharingStarted.WhileSubscribed(5000L)
             )
 

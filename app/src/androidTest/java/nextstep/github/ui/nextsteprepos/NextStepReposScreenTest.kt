@@ -25,7 +25,7 @@ class NextStepReposScreenTest {
             )
         }
         val uiState = NextStepReposUiState(
-            isLoading = false,
+            uiState = UiState.Success,
             nextStepRepos = repos
         )
 
@@ -58,7 +58,7 @@ class NextStepReposScreenTest {
             )
         }
         val uiState = NextStepReposUiState(
-            isLoading = false,
+            uiState = UiState.Success,
             nextStepRepos = repos
         )
 
@@ -84,7 +84,7 @@ class NextStepReposScreenTest {
     fun 저장소_목록이_비어있을_때_화면에_보인다() {
         // given
         val uiState = NextStepReposUiState(
-            isLoading = false,
+            uiState = UiState.Success,
             nextStepRepos = emptyList()
         )
 
@@ -104,7 +104,7 @@ class NextStepReposScreenTest {
     @Test
     fun 로딩중이면_로딩바가_보인다() {
         // given
-        val uiState = NextStepReposUiState(isLoading = true)
+        val uiState = NextStepReposUiState(uiState = UiState.Loading)
 
         composeTestRule.setContent {
             NextStepReposScreen(

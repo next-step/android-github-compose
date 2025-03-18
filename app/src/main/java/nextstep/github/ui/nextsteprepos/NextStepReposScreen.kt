@@ -85,8 +85,8 @@ fun NextStepReposScreen(
             NextStepRepoTopBar()
         }) { innerPadding ->
 
-        when {
-            uiState.isLoading -> {
+        when (uiState.uiState) {
+            UiState.Loading -> {
                 Box(modifier.fillMaxSize()) {
                     CircularProgressIndicator(
                         Modifier
@@ -96,22 +96,25 @@ fun NextStepReposScreen(
                 }
             }
 
-            uiState.isEmpty -> {
-                Box(modifier.fillMaxSize()) {
-                    Text(
-                        text = stringResource(R.string.nextstep_repos_empty),
-                        style = MaterialTheme.typography.headlineSmall,
-                        modifier = Modifier.align(Alignment.Center)
+            UiState.Success -> {
+                if (uiState.isEmpty) {
+                    Box(modifier.fillMaxSize()) {
+                        Text(
+                            text = stringResource(R.string.nextstep_repos_empty),
+                            style = MaterialTheme.typography.headlineSmall,
+                            modifier = Modifier.align(Alignment.Center)
+                        )
+                    }
+                } else {
+                    NextStepRepoRepos(
+                        uiState = uiState,
+                        modifier = modifier.padding(innerPadding)
                     )
                 }
             }
 
-            else -> {
-                NextStepRepoRepos(
-                    uiState = uiState,
-                    modifier = modifier.padding(innerPadding)
-                )
-            }
+            is UiState.Error -> {}
+
         }
     }
 }
@@ -171,7 +174,7 @@ private fun NextStepReposScreenPreview() {
     GithubTheme {
         NextStepReposScreen(
             uiState = NextStepReposUiState(
-                isLoading = false,
+                uiState = UiState.Success,
                 nextStepRepos = List(20) { it ->
                     GithubRepo(
                         fullName = "next-step/nextstep-docs-$it",
@@ -190,7 +193,7 @@ private fun NextStepReposScreenIsEmptyPreview() {
     GithubTheme {
         NextStepReposScreen(
             uiState = NextStepReposUiState(
-                isLoading = false,
+                uiState = UiState.Success,
                 nextStepRepos = emptyList()
             ),
             snackbarHostState = SnackbarHostState()

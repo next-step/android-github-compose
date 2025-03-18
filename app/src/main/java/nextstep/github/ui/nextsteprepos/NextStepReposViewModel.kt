@@ -19,7 +19,8 @@ class NextStepReposViewModel(
     private val githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
 
-    private val _uiState:MutableStateFlow<NextStepReposUiState> = MutableStateFlow(NextStepReposUiState())
+    private val _uiState: MutableStateFlow<NextStepReposUiState> =
+        MutableStateFlow(NextStepReposUiState())
     val uiState: StateFlow<NextStepReposUiState> = _uiState.asStateFlow()
 
     private val _effect: Channel<NestStepReposEffect> = Channel()
@@ -30,11 +31,11 @@ class NextStepReposViewModel(
     }
 
     fun fetchNextStepRepos() = viewModelScope.launch {
-        _uiState.value = _uiState.value.copy(isLoading = true)
+        _uiState.value = _uiState.value.copy(uiState = UiState.Loading)
         githubRepoRepository.getRepos("next-step")
             .onSuccess {
                 _uiState.value = NextStepReposUiState(
-                    isLoading = false,
+                    uiState = UiState.Success,
                     nextStepRepos = it,
                 )
             }.onFailure {
@@ -53,9 +54,4 @@ class NextStepReposViewModel(
             }
         }
     }
-}
-
-
-sealed interface NestStepReposEffect {
-    data class ShowError(val message: String) : NestStepReposEffect
 }

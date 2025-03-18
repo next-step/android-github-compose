@@ -11,6 +11,7 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
 import nextstep.github.domain.GithubRepositoryUseCase
@@ -41,21 +42,21 @@ class GithubViewModel(
     suspend fun fetchRepositories(
         organization: String,
     ) {
-        githubRepositoryUseCase.getRepositories(
+        val result = githubRepositoryUseCase.getRepositories(
             organization = organization,
-        ).collect {
-            when (it) {
-                is RepositoryResult.Success -> {
-                    if (it.data.isEmpty()) {
-                        _repositoryUiModel.value = UiState.Empty
-                    } else {
-                        _repositoryUiModel.value = UiState.Success(it.data.toUiStateList())
-                    }
+        ).first()
+
+        when (result) {
+            is RepositoryResult.Success -> {
+                if (result.data.isEmpty()) {
+                    _repositoryUiModel.value = UiState.Empty
+                } else {
+                    _repositoryUiModel.value = UiState.Success(result.data.toUiStateList())
                 }
-                is RepositoryResult.Error -> {
-                    _repositoryUiModel.value = UiState.Failure(it.exception.message ?: "Unknown error")
-                    notifyFailure(it.exception.message ?: "Unknown error")
-                }
+            }
+            is RepositoryResult.Error -> {
+                _repositoryUiModel.value = UiState.Failure(result.exception.message ?: "Unknown error")
+                notifyFailure(result.exception.message ?: "Unknown error")
             }
         }
     }

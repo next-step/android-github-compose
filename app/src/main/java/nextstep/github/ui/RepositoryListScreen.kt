@@ -22,7 +22,6 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import nextstep.github.domain.entity.Repository
 import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListEmptyContent
 import nextstep.github.ui.component.RepositoryListErrorContent
@@ -30,6 +29,7 @@ import nextstep.github.ui.component.RepositoryListLoadingContent
 import nextstep.github.ui.component.RepositoryListTopBar
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
+import nextstep.github.ui.model.RepositoryUiModel
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
@@ -133,9 +133,11 @@ private fun RepositoryListScreenPreview() {
         RepositoryListScreen(
             uiState = RepositoryListScreenUiState.Success(
                 repositoryList = List(10) {
-                    Repository(
+                    RepositoryUiModel(
                         fullName = "nextstep/github",
-                        description = "Github Repository for NextStep"
+                        description = "Github Repository for NextStep",
+                        stars = 50,
+                        isHot = true,
                     )
                 }.toPersistentList()
             )

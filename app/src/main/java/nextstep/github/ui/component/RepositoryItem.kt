@@ -9,12 +9,12 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.domain.entity.Repository
+import nextstep.github.ui.model.RepositoryUiModel
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryItem(
-    repository: Repository,
+    repository: RepositoryUiModel,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -37,12 +37,29 @@ fun RepositoryItem(
 
 @Preview
 @Composable
+private fun RepositoryHotItemPreview() {
+    GithubTheme {
+        RepositoryItem(
+            repository = RepositoryUiModel(
+                fullName = "nextstep/github",
+                description = "Github Repository for NextStep",
+                stars = 50,
+                isHot = true,
+            )
+        )
+    }
+}
+
+@Preview
+@Composable
 private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
-            repository = Repository(
+            repository = RepositoryUiModel(
                 fullName = "nextstep/github",
-                description = "Github Repository for NextStep"
+                description = "Github Repository for NextStep",
+                stars = 0,
+                isHot = false,
             )
         )
     }

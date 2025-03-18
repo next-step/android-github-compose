@@ -19,13 +19,15 @@ import nextstep.github.data.repository.api.GithubRepository
 import nextstep.github.domain.usecase.CheckIsHotRepoUseCase
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
+import nextstep.github.ui.model.toUiModel
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
     private val checkIsHotRepoUseCase: CheckIsHotRepoUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<RepositoryListScreenUiState>(RepositoryListScreenUiState.Loading)
+    private val _uiState =
+        MutableStateFlow<RepositoryListScreenUiState>(RepositoryListScreenUiState.Loading)
     val uiState: StateFlow<RepositoryListScreenUiState> = _uiState.asStateFlow()
 
     private val _sideEffect: Channel<RepositoryListScreenSideEffect> = Channel()
@@ -38,7 +40,11 @@ class RepositoryListViewModel(
 
     fun loadRepositoryList() {
         viewModelScope.launch(ceh) {
-            val repositoryList = repository.getRepos().toPersistentList()
+            val repositoryList = repository.getRepos()
+                .map {
+                    val isHot = checkIsHotRepoUseCase(it.stars)
+                    it.toUiModel(isHot)
+                }.toPersistentList()
             _uiState.value = if (repositoryList.isEmpty()) {
                 RepositoryListScreenUiState.Empty
             } else {

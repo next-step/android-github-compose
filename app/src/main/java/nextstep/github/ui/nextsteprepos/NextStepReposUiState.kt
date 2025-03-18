@@ -5,4 +5,6 @@ import nextstep.github.model.GithubRepo
 data class NextStepReposUiState(
     val isLoading: Boolean = true,
     val nextStepRepos: List<GithubRepo> = emptyList()
-)
+) {
+    val isEmpty: Boolean get() = nextStepRepos.isEmpty()
+}

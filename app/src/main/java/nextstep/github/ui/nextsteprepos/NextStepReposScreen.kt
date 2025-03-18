@@ -13,9 +13,14 @@ import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.SnackbarResult
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
@@ -23,6 +28,7 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
+import kotlinx.coroutines.flow.collectLatest
 import nextstep.github.R
 import nextstep.github.model.GithubRepo
 import nextstep.github.ui.preview.BackgroundPreview
@@ -34,21 +40,43 @@ fun NextStepReposScreen(
     viewModel: NextStepReposViewModel = viewModel()
 ) {
     val uiState: NextStepReposUiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val snackbarHostState = remember { SnackbarHostState() }
 
     NextStepReposScreen(
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
         modifier = modifier
     )
+
+    LaunchedEffect(viewModel) {
+        viewModel.effect.collectLatest {
+            when (it) {
+                is NestStepReposEffect.ShowError -> {
+                    val result = snackbarHostState.showSnackbar(it.message, actionLabel = "재시도")
+                    when (result) {
+                        SnackbarResult.ActionPerformed -> {
+                            viewModel.fetchNextStepRepos()
+                        }
+
+                        SnackbarResult.Dismissed -> {}
+                    }
+
+                }
+            }
+        }
+    }
 }
 
 @Composable
 fun NextStepReposScreen(
     uiState: NextStepReposUiState,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
     Scaffold(
         modifier = modifier,
         containerColor = MaterialTheme.colorScheme.surface,
+        snackbarHost = { SnackbarHost(snackbarHostState) },
         topBar = {
             NextStepRepoTopBar()
         }) { innerPadding ->
@@ -129,6 +157,7 @@ private fun NextStepReposScreenPreview() {
                     )
                 }
             ),
+            snackbarHostState = SnackbarHostState()
         )
     }
 }

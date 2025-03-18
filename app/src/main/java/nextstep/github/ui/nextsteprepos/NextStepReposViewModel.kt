@@ -1,33 +1,46 @@
 package nextstep.github.ui.nextsteprepos
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.APPLICATION_KEY
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.map
-import kotlinx.coroutines.flow.stateIn
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepoRepository
 
 class NextStepReposViewModel(
-    githubRepoRepository: GithubRepoRepository
+    private val githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
 
-    val uiState: StateFlow<NextStepReposUiState> =
+    private val _uiState:MutableStateFlow<NextStepReposUiState> = MutableStateFlow(NextStepReposUiState())
+    val uiState: StateFlow<NextStepReposUiState> = _uiState.asStateFlow()
+
+    private val _effect: Channel<NestStepReposEffect> = Channel()
+    val effect = _effect.receiveAsFlow()
+
+    init {
+        fetchNextStepRepos()
+    }
+
+    fun fetchNextStepRepos() = viewModelScope.launch {
+        _uiState.value = _uiState.value.copy(isLoading = true)
         githubRepoRepository.getRepos("next-step")
-            .catch { Log.d("asdf", it.message.toString()) }
-            .map { NextStepReposUiState(nextStepRepos = it, isLoading = false) }
-            .stateIn(
-                scope = viewModelScope,
-                initialValue = NextStepReposUiState(),
-                started = SharingStarted.WhileSubscribed(5000L)
-            )
+            .onSuccess {
+                _uiState.value = NextStepReposUiState(
+                    isLoading = false,
+                    nextStepRepos = it,
+                )
+            }.onFailure {
+                _effect.send(NestStepReposEffect.ShowError("예상치 못한 오류가 발생했습니다."))
+            }
+    }
 
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
@@ -40,4 +53,9 @@ class NextStepReposViewModel(
             }
         }
     }
+}
+
+
+sealed interface NestStepReposEffect {
+    data class ShowError(val message: String) : NestStepReposEffect
 }

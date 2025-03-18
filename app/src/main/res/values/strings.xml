@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">GitHub</string>
+    <string name="repository_list_title">NEXTSTEP Repositories</string>
 </resources>

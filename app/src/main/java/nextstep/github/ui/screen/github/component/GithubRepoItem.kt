@@ -52,10 +52,8 @@ fun GithubRepoItem(
                         color = MaterialTheme.colorScheme.primary,
                         fontWeight = FontWeight.W500,
                     )
-                } else {
-                    Spacer(modifier = Modifier)
                 }
-
+                Spacer(modifier = Modifier.weight(1f))
                 StarCountRow(
                     starCount = starCount,
                 )

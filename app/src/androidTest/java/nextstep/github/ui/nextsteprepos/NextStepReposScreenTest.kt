@@ -1,5 +1,6 @@
 package nextstep.github.ui.nextsteprepos
 
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.ui.test.assertIsDisplayed
 import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onNodeWithTag
@@ -23,10 +24,15 @@ class NextStepReposScreenTest {
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소-$number"
             )
         }
+        val uiState = NextStepReposUiState(
+            isLoading = false,
+            nextStepRepos = repos
+        )
 
         composeTestRule.setContent {
             NextStepReposScreen(
-                nextStepRepos = repos
+                uiState = uiState,
+                snackbarHostState = SnackbarHostState()
             )
         }
 
@@ -36,6 +42,9 @@ class NextStepReposScreenTest {
             composeTestRule.onNodeWithText("nextstep 매뉴얼 및 문서를 관리하는 저장소-$number")
                 .assertIsDisplayed()
         }
+
+        // then: 로딩이 보이지 않는다.
+        composeTestRule.onNodeWithTag("loading_indicator").assertDoesNotExist()
     }
 
     @Test
@@ -48,10 +57,15 @@ class NextStepReposScreenTest {
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소-$number"
             )
         }
+        val uiState = NextStepReposUiState(
+            isLoading = false,
+            nextStepRepos = repos
+        )
 
         composeTestRule.setContent {
             NextStepReposScreen(
-                nextStepRepos = repos,
+                uiState = uiState,
+                snackbarHostState = SnackbarHostState()
             )
         }
 
@@ -61,5 +75,45 @@ class NextStepReposScreenTest {
         // then: 마지막 저장소의 정보가 화면에 노출되어야 함
         composeTestRule.onNodeWithText("next-step/nextstep-docs-100").assertIsDisplayed()
         composeTestRule.onNodeWithText("nextstep 매뉴얼 및 문서를 관리하는 저장소-100").assertIsDisplayed()
+
+        // then: 로딩이 보이지 않는다.
+        composeTestRule.onNodeWithTag("loading_indicator").assertDoesNotExist()
+    }
+
+    @Test
+    fun 저장소_목록이_비어있을_때_화면에_보인다() {
+        // given
+        val uiState = NextStepReposUiState(
+            isLoading = false,
+            nextStepRepos = emptyList()
+        )
+
+        composeTestRule.setContent {
+            NextStepReposScreen(
+                uiState = uiState,
+                snackbarHostState = SnackbarHostState()
+            )
+        }
+
+        // then: 저장소 목록이 비어있을 때 "저장소가 없습니다" 메시지가 화면에 노출되어야 함
+        composeTestRule.onNodeWithText("목록이 비었습니다.").assertIsDisplayed()
+        // then: 로딩이 보이지 않는다.
+        composeTestRule.onNodeWithTag("loading_indicator").assertDoesNotExist()
+    }
+
+    @Test
+    fun 로딩중이면_로딩바가_보인다() {
+        // given
+        val uiState = NextStepReposUiState(isLoading = true)
+
+        composeTestRule.setContent {
+            NextStepReposScreen(
+                uiState = uiState,
+                snackbarHostState = SnackbarHostState()
+            )
+        }
+
+        // then: 로딩이 보이지 않는다.
+        composeTestRule.onNodeWithTag("loading_indicator").assertIsDisplayed()
     }
 }

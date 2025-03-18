@@ -23,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
@@ -41,6 +42,7 @@ fun NextStepReposScreen(
 ) {
     val uiState: NextStepReposUiState by viewModel.uiState.collectAsStateWithLifecycle()
     val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
 
     NextStepReposScreen(
         uiState = uiState,
@@ -52,7 +54,10 @@ fun NextStepReposScreen(
         viewModel.effect.collectLatest {
             when (it) {
                 is NestStepReposEffect.ShowError -> {
-                    val result = snackbarHostState.showSnackbar(it.message, actionLabel = "재시도")
+                    val result = snackbarHostState.showSnackbar(
+                        message = it.message,
+                        actionLabel = context.getString(R.string.nextstep_repos_empty)
+                    )
                     when (result) {
                         SnackbarResult.ActionPerformed -> {
                             viewModel.fetchNextStepRepos()
@@ -60,7 +65,6 @@ fun NextStepReposScreen(
 
                         SnackbarResult.Dismissed -> {}
                     }
-
                 }
             }
         }
@@ -81,15 +85,33 @@ fun NextStepReposScreen(
             NextStepRepoTopBar()
         }) { innerPadding ->
 
-        if (uiState.isLoading) {
-            Box(modifier.fillMaxSize()) {
-                CircularProgressIndicator(Modifier.align(Alignment.Center))
+        when {
+            uiState.isLoading -> {
+                Box(modifier.fillMaxSize()) {
+                    CircularProgressIndicator(
+                        Modifier
+                            .align(Alignment.Center)
+                            .testTag("loading_indicator")
+                    )
+                }
             }
-        } else {
-            NextStepRepoRepos(
-                uiState = uiState,
-                modifier = modifier.padding(innerPadding)
-            )
+
+            uiState.isEmpty -> {
+                Box(modifier.fillMaxSize()) {
+                    Text(
+                        text = stringResource(R.string.nextstep_repos_empty),
+                        style = MaterialTheme.typography.headlineSmall,
+                        modifier = Modifier.align(Alignment.Center)
+                    )
+                }
+            }
+
+            else -> {
+                NextStepRepoRepos(
+                    uiState = uiState,
+                    modifier = modifier.padding(innerPadding)
+                )
+            }
         }
     }
 }
@@ -164,7 +186,22 @@ private fun NextStepReposScreenPreview() {
 
 @BackgroundPreview
 @Composable
-private fun NextStepRepoItemPreview() {
+private fun NextStepReposScreenIsEmptyPreview() {
+    GithubTheme {
+        NextStepReposScreen(
+            uiState = NextStepReposUiState(
+                isLoading = false,
+                nextStepRepos = emptyList()
+            ),
+            snackbarHostState = SnackbarHostState()
+        )
+    }
+}
+
+
+@BackgroundPreview
+@Composable
+private fun NextStepReposItemPreview() {
     GithubTheme {
         NextStepRepoItem(
             githubRepo = GithubRepo(
@@ -174,4 +211,3 @@ private fun NextStepRepoItemPreview() {
         )
     }
 }
-

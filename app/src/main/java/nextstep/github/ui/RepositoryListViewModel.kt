@@ -16,11 +16,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.NextGitHubApplication
 import nextstep.github.data.repository.api.GithubRepository
+import nextstep.github.domain.usecase.CheckIsHotRepoUseCase
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
+    private val checkIsHotRepoUseCase: CheckIsHotRepoUseCase,
 ) : ViewModel() {
 
     private val _uiState = MutableStateFlow<RepositoryListScreenUiState>(RepositoryListScreenUiState.Loading)
@@ -48,10 +50,15 @@ class RepositoryListViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as NextGitHubApplication)
-                    .appContainer
-                    .githubRepository
-                RepositoryListViewModel(githubRepository)
+                val appContainer = (this[APPLICATION_KEY] as NextGitHubApplication).appContainer
+
+                val githubRepository = appContainer.githubRepository
+                val checkIsHotRepoUseCase = appContainer.checkIsHotRepoUseCase
+
+                RepositoryListViewModel(
+                    repository = githubRepository,
+                    checkIsHotRepoUseCase = checkIsHotRepoUseCase,
+                )
             }
         }
     }

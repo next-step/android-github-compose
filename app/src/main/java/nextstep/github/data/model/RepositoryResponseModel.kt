@@ -2,7 +2,7 @@ package nextstep.github.data.model
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
-import nextstep.github.data.entity.Repository
+import nextstep.github.domain.entity.Repository
 
 @Serializable
 data class RepositoryResponseModel(

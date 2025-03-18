@@ -22,7 +22,7 @@ import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.toPersistentList
 import kotlinx.coroutines.launch
-import nextstep.github.data.entity.Repository
+import nextstep.github.domain.entity.Repository
 import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListEmptyContent
 import nextstep.github.ui.component.RepositoryListErrorContent

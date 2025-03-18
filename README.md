@@ -22,6 +22,6 @@
 
 ### 4단계
 - [x] 데이터 받아올 때 Star 수도 받아 오도록 수정
-- [] domain 패키지 생성 후 entity 이동 및 50개 판단 로직 추가
+- [x] domain 패키지 생성 후 entity 이동 및 50개 판단 로직 추가
 - [] Start 수 노출 및 Hot 표시 UI 구현
 - [] UiModel 생성 후 UI 표시

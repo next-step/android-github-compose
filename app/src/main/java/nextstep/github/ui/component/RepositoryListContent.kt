@@ -6,7 +6,7 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import nextstep.github.data.entity.Repository
+import nextstep.github.domain.entity.Repository
 
 @Composable
 fun RepositoryListContent(

@@ -126,8 +126,8 @@ private fun NextStepRepoRepos(
             .testTag("repo_list")
     ) {
         items(
-            items = uiState.nextStepRepos,
-            key = { item -> item.fullName }) { githubRepo ->
+            items = uiState.nextStepRepos
+        ) { githubRepo ->
             NextStepRepoItem(githubRepo = githubRepo)
             HorizontalDivider()
         }

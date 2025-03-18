@@ -3,8 +3,10 @@ package nextstep.github.data
 import android.util.Log
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import kotlinx.serialization.json.Json
-import nextstep.github.data.repositories.impls.RemoteGithubRepository
-import nextstep.github.data.services.GithubService
+import nextstep.github.data.repositories.GithubRepoRepository
+import nextstep.github.data.repositories.impls.RemoteGithubRepoRepository
+import nextstep.github.data.services.GithubRepoService
+import nextstep.github.domain.GetGitHubReposStreamUseCase
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -32,9 +34,9 @@ class AppContainer {
         .addConverterFactory(serialization.asConverterFactory(CONTENT_TYPE.toMediaType()))
         .build()
 
-    private val githubService = retrofit.create(GithubService::class.java)
-
-    val githubRepository = RemoteGithubRepository(githubService)
+    private val githubRepoService = retrofit.create(GithubRepoService::class.java)
+    private val githubRepoRepository: GithubRepoRepository = RemoteGithubRepoRepository(githubRepoService)
+    val getGitHubReposStreamUseCase = GetGitHubReposStreamUseCase(githubRepoRepository)
 
     companion object {
         private const val TAG_HTTP_LOG = "Http_Log"

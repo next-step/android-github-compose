@@ -74,6 +74,7 @@ dependencies {
     debugImplementation(libs.androidx.ui.tooling)
     debugImplementation(libs.androidx.ui.test.manifest)
 
+    testImplementation(libs.mockk)
     androidTestImplementation(libs.mockk.android)
     testImplementation(libs.kotlinx.coroutines.test)
 }

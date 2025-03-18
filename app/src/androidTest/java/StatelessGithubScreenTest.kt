@@ -33,21 +33,21 @@ class StatelessGithubScreenTest {
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
                 stars = 50,
-                isOverFiftyStars = true,
+                isHot = true,
             ),
             RepositoryUiModel(
                 id = 2,
                 fullName = "next-step/holy-moly",
                 description = "nextstep 홀리몰리한 저장소",
                 stars = 100,
-                isOverFiftyStars = true,
+                isHot = true,
             ),
             RepositoryUiModel(
                 id = 3,
                 fullName = "next-step/haly-galy",
                 description = "nextstep 할리갈리한 저장소",
                 stars = 49,
-                isOverFiftyStars = false,
+                isHot = false,
             ),
         )
     )

@@ -154,7 +154,7 @@ private fun GithubScreenSuccessPreview() {
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
                 stars = 50,
-                isOverFiftyStars = true,
+                isHot = true,
             )
         }
     )

@@ -56,7 +56,7 @@ fun NextStepReposScreen(
                 is NestStepReposEffect.ShowError -> {
                     val result = snackbarHostState.showSnackbar(
                         message = it.message,
-                        actionLabel = context.getString(R.string.nextstep_repos_empty)
+                        actionLabel = context.getString(R.string.nextstep_repos_retry)
                     )
                     when (result) {
                         SnackbarResult.ActionPerformed -> {
@@ -113,7 +113,9 @@ fun NextStepReposScreen(
                 }
             }
 
-            is UiState.Error -> {}
+            is UiState.Error -> {
+                Box(modifier.fillMaxSize()) {}
+            }
 
         }
     }
@@ -200,7 +202,6 @@ private fun NextStepReposScreenIsEmptyPreview() {
         )
     }
 }
-
 
 @BackgroundPreview
 @Composable

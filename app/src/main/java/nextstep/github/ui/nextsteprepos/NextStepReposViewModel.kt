@@ -39,6 +39,7 @@ class NextStepReposViewModel(
                     nextStepRepos = it,
                 )
             }.onFailure {
+                _uiState.value = _uiState.value.copy(uiState = UiState.Error("예상치 못한 오류가 발생했습니다."))
                 _effect.send(NestStepReposEffect.ShowError("예상치 못한 오류가 발생했습니다."))
             }
     }

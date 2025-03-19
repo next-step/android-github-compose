@@ -2,6 +2,7 @@ package nextstep.github
 
 import junit.framework.TestCase.assertEquals
 import junit.framework.TestCase.assertTrue
+import junit.framework.TestCase.fail
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.test.runTest
@@ -47,10 +48,14 @@ class GithubViewModelTest {
         // then: ViewModel의 상태가 Success로 변경되어야 함
         val state = viewModel.repositoryUiModel.value
         assertTrue(state is UiState.Success)
-        if (state is UiState.Success) {
-            assertEquals(1, state.data.size)
-            // 추가 검증: 데이터 변환이 올바르게 이루어졌는지 확인
-            assertEquals("Test/Repo", state.data.first().fullName)
+
+        when (state) {
+            is UiState.Success -> {
+                assertEquals(1, state.data.size)
+                // 추가 검증: 데이터 변환이 올바르게 이루어졌는지 확인
+                assertEquals("Test/Repo", state.data.first().fullName)
+            }
+            else -> fail("Expected state to be UiState.Success but was $state")
         }
     }
 

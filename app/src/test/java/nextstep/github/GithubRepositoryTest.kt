@@ -30,9 +30,9 @@ class GithubRepositoryTest {
 
         // then: Result가 성공이며, 반환된 데이터가 예상과 일치하는지 검증
         assertTrue(result.isSuccess)
-        result.onSuccess { data ->
-            assertEquals(expectedData, data)
-        }
+
+        val data = result.getOrThrow()
+        assertEquals(expectedData, data)
     }
 
     @Test

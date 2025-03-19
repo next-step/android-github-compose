@@ -40,29 +40,10 @@ fun GitHubRepositoryItem(
         val itemsModifier = Modifier
             .padding(horizontal = 16.dp)
             .fillMaxWidth()
-        Row(
+        StarContents(
+            repository = repository,
             modifier = itemsModifier.padding(top = 16.dp),
-            verticalAlignment = Alignment.CenterVertically,
-        ) {
-            if (repository.isHot) {
-                Text(
-                    text = stringResource(R.string.hot),
-                    style = MaterialTheme.typography.labelLarge,
-                    color = MaterialTheme.colorScheme.primary,
-                )
-            }
-            Spacer(modifier = Modifier.weight(1f))
-            Image(
-                imageVector = Icons.Filled.Star,
-                contentDescription = null,
-                modifier = Modifier.size(18.dp)
-            )
-            Text(
-                text = repository.stars.toString(),
-                style = MaterialTheme.typography.labelLarge,
-                color = Color.Black
-            )
-        }
+        )
         Text(
             text = repository.fullName,
             style = MaterialTheme.typography.titleLarge,
@@ -77,6 +58,36 @@ fun GitHubRepositoryItem(
         )
         Spacer(modifier = Modifier.weight(1f))
         HorizontalDivider(modifier = Modifier.fillMaxWidth())
+    }
+}
+
+@Composable
+private fun StarContents(
+    repository: Repository,
+    modifier: Modifier = Modifier
+) {
+    Row(
+        modifier = modifier,
+        verticalAlignment = Alignment.CenterVertically,
+    ) {
+        if (repository.isHot) {
+            Text(
+                text = stringResource(R.string.hot),
+                style = MaterialTheme.typography.labelLarge,
+                color = MaterialTheme.colorScheme.primary,
+            )
+        }
+        Spacer(modifier = Modifier.weight(1f))
+        Image(
+            imageVector = Icons.Filled.Star,
+            contentDescription = null,
+            modifier = Modifier.size(18.dp)
+        )
+        Text(
+            text = repository.stars.toString(),
+            style = MaterialTheme.typography.labelLarge,
+            color = Color.Black
+        )
     }
 }
 

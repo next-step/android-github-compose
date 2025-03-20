@@ -8,4 +8,5 @@ data class RepositoryResponse(
     @SerialName("id") val id: Int,
     @SerialName("full_name") val fullName: String?,
     @SerialName("description") val description: String?,
+    @SerialName("stargazers_count") val stars: Int?,
 )

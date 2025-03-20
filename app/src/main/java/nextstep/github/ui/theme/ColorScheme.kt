@@ -8,3 +8,7 @@ import androidx.compose.ui.graphics.Color
 val ColorScheme.topAppBarContainer: Color
     @Composable
     get() = if (isSystemInDarkTheme()) Color(0xFF121212) else Color(0xFFFFFFFF)
+
+val ColorScheme.black: Color
+    @Composable
+    get() = Color(0xFF000000)

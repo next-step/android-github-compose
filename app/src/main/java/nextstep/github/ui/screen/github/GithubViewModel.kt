@@ -11,20 +11,24 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import nextstep.github.MainApplication
-import nextstep.github.data.repository.GithubRepository
+import nextstep.github.domain.GithubRepositoryUseCase
+import nextstep.github.domain.RepositoryResult
+import nextstep.github.ui.screen.github.model.RepositoryUiModel
+import nextstep.github.ui.screen.github.model.toUiStateList
 import nextstep.github.ui.uistate.UiState
 
 
 class GithubViewModel(
-    private val githubRepository: GithubRepository,
+    private val githubRepositoryUseCase: GithubRepositoryUseCase,
 ) : ViewModel() {
 
-    private val _repositoryUiState =
-        MutableStateFlow<UiState<List<RepositoryUiState>>>(UiState.Loading)
-    val repositoryUiState: StateFlow<UiState<List<RepositoryUiState>>> =
-        _repositoryUiState.asStateFlow()
+    private val _repositoryUiModel =
+        MutableStateFlow<UiState<List<RepositoryUiModel>>>(UiState.Loading)
+    val repositoryUiModel: StateFlow<UiState<List<RepositoryUiModel>>> =
+        _repositoryUiModel.asStateFlow()
 
     private val _errorFlow = MutableSharedFlow<String>(replay = 1)
     val errorFlow = _errorFlow.asSharedFlow()
@@ -38,17 +42,22 @@ class GithubViewModel(
     suspend fun fetchRepositories(
         organization: String,
     ) {
-        githubRepository.getRepositories(
-            organization = organization
-        ).onSuccess { repositories ->
-            if (repositories.isEmpty()) {
-                _repositoryUiState.value = UiState.Empty
-            } else {
-                _repositoryUiState.value = UiState.Success(repositories.toUiStateList())
+        val result = githubRepositoryUseCase.getRepositories(
+            organization = organization,
+        ).first()
+
+        when (result) {
+            is RepositoryResult.Success -> {
+                if (result.data.isEmpty()) {
+                    _repositoryUiModel.value = UiState.Empty
+                } else {
+                    _repositoryUiModel.value = UiState.Success(result.data.toUiStateList())
+                }
             }
-        }.onFailure {
-            _repositoryUiState.value = UiState.Failure(it.message ?: "Unknown error")
-            notifyFailure(it.message ?: "Unknown error")
+            is RepositoryResult.Error -> {
+                _repositoryUiModel.value = UiState.Failure(result.exception.message ?: "Unknown error")
+                notifyFailure(result.exception.message ?: "Unknown error")
+            }
         }
     }
 
@@ -65,10 +74,11 @@ class GithubViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as MainApplication)
+                val githubRepositoryUseCase = (this[APPLICATION_KEY] as MainApplication)
                     .appContainer
-                    .githubRepository
-                GithubViewModel(githubRepository)
+                    .githubRepositoryUseCase
+
+                GithubViewModel(githubRepositoryUseCase)
             }
         }
     }

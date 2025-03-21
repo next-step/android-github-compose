@@ -114,7 +114,8 @@ private class GitHubRepositoryListScreenParameterProvider :
                     Repository(
                         id = it,
                         fullName = "RepositoryFullName/$it",
-                        description = "RepositoryDescription -$it"
+                        description = "RepositoryDescription -$it",
+                        stars = 0
                     )
                 }
             ),

@@ -69,7 +69,8 @@ class GitHubRepositoryListScreenTest {
             Repository(
                 id = it,
                 fullName = "풀무원말고풀네임$it",
-                description = "설탕말고설명$it"
+                description = "설탕말고설명$it",
+                stars = it
             )
         }
         uiState = GitHubRepositoryListState(isLoading = false, repositories = repositories)

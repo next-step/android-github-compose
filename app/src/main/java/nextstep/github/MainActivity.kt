@@ -1,6 +1,7 @@
 package nextstep.github
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.lifecycle.lifecycleScope
@@ -15,7 +16,8 @@ class MainActivity : ComponentActivity() {
         val repository = appContainer.githubRepository
 
         lifecycleScope.launch {
-            repository.getRepositories("next-step")
+            val repository = repository.getRepositories("next-step")
+            Log.d("repository", repository.toString())
         }
 
         setContent {

@@ -12,12 +12,12 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import nextstep.github.ui.model.RepositoryUiModel
+import nextstep.github.domain.entity.Repository
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryItem(
-    repository: RepositoryUiModel,
+    repository: Repository,
     modifier: Modifier = Modifier,
 ) {
     Column(
@@ -60,7 +60,7 @@ fun RepositoryItem(
 private fun RepositoryHotItemPreview() {
     GithubTheme {
         RepositoryItem(
-            repository = RepositoryUiModel(
+            repository = Repository(
                 fullName = "nextstep/github",
                 description = "Github Repository for NextStep",
                 stars = 50,
@@ -75,7 +75,7 @@ private fun RepositoryHotItemPreview() {
 private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
-            repository = RepositoryUiModel(
+            repository = Repository(
                 fullName = "nextstep/github",
                 description = "Github Repository for NextStep",
                 stars = 0,

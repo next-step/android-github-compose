@@ -8,7 +8,7 @@ import nextstep.github.data.GithubNetworkModule.provideJsonConverterFactory
 import nextstep.github.data.datasource.api.GithubDataSource
 import nextstep.github.data.repository.api.GithubRepository
 import nextstep.github.data.service.GithubService
-import nextstep.github.domain.usecase.CheckIsHotRepoUseCase
+import nextstep.github.domain.usecase.GetRepositoryListUseCase
 import retrofit2.Converter
 import retrofit2.Retrofit
 
@@ -18,7 +18,7 @@ interface AppContainer {
     val githubService: GithubService
     val githubDataSource: GithubDataSource
     val githubRepository: GithubRepository
-    val checkIsHotRepoUseCase: CheckIsHotRepoUseCase
+    val getRepositoryList: GetRepositoryListUseCase
 }
 
 class AppContainerImpl : AppContainer {
@@ -28,5 +28,5 @@ class AppContainerImpl : AppContainer {
     override val githubService = provideGithubService(retrofit)
     override val githubDataSource = provideGithubDataSource(githubService)
     override val githubRepository = provideGithubRepository(githubDataSource)
-    override val checkIsHotRepoUseCase: CheckIsHotRepoUseCase = CheckIsHotRepoUseCase()
+    override val getRepositoryList: GetRepositoryListUseCase = GetRepositoryListUseCase(githubRepository)
 }

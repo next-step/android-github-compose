@@ -6,11 +6,11 @@ import androidx.compose.material3.HorizontalDivider
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import nextstep.github.ui.model.RepositoryUiModel
+import nextstep.github.domain.entity.Repository
 
 @Composable
 fun RepositoryListContent(
-    repositoryList: List<RepositoryUiModel>,
+    repositoryList: List<Repository>,
     modifier: Modifier = Modifier,
 ) {
     LazyColumn(

@@ -1,8 +1,20 @@
 package nextstep.github.domain.usecase
 
-class CheckIsHotRepoUseCase {
+import nextstep.github.data.repository.api.GithubRepository
+import nextstep.github.domain.entity.Repository
 
-    operator fun invoke(stars: Int): Boolean {
-        return stars >= 50
+class GetRepositoryListUseCase(
+    private val githubRepository: GithubRepository,
+) {
+
+    suspend operator fun invoke(): List<Repository> {
+        return githubRepository.getRepos().map {
+            Repository(
+                fullName = it.fullName.orEmpty(),
+                description = it.description.orEmpty(),
+                stars = it.stars ?: 0,
+                isHot = (it.stars ?: 0) > 50,
+            )
+        }
     }
 }

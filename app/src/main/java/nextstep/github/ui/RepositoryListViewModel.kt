@@ -16,14 +16,13 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.NextGitHubApplication
 import nextstep.github.data.repository.api.GithubRepository
-import nextstep.github.domain.usecase.CheckIsHotRepoUseCase
+import nextstep.github.domain.usecase.GetRepositoryListUseCase
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
-import nextstep.github.ui.model.toUiModel
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
-    private val checkIsHotRepoUseCase: CheckIsHotRepoUseCase,
+    private val getRepositoryListUseCase: GetRepositoryListUseCase,
 ) : ViewModel() {
 
     private val _uiState =
@@ -40,11 +39,7 @@ class RepositoryListViewModel(
 
     fun loadRepositoryList() {
         viewModelScope.launch(ceh) {
-            val repositoryList = repository.getRepos()
-                .map {
-                    val isHot = checkIsHotRepoUseCase(it.stars)
-                    it.toUiModel(isHot)
-                }.toPersistentList()
+            val repositoryList = getRepositoryListUseCase().toPersistentList()
             _uiState.value = if (repositoryList.isEmpty()) {
                 RepositoryListScreenUiState.Empty
             } else {
@@ -59,11 +54,11 @@ class RepositoryListViewModel(
                 val appContainer = (this[APPLICATION_KEY] as NextGitHubApplication).appContainer
 
                 val githubRepository = appContainer.githubRepository
-                val checkIsHotRepoUseCase = appContainer.checkIsHotRepoUseCase
+                val getRepositoryListUseCase = appContainer.getRepositoryList
 
                 RepositoryListViewModel(
                     repository = githubRepository,
-                    checkIsHotRepoUseCase = checkIsHotRepoUseCase,
+                    getRepositoryListUseCase = getRepositoryListUseCase,
                 )
             }
         }

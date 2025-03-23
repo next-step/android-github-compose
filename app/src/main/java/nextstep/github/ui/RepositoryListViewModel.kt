@@ -16,14 +16,17 @@ import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import nextstep.github.NextGitHubApplication
 import nextstep.github.data.repository.api.GithubRepository
+import nextstep.github.domain.usecase.GetRepositoryListUseCase
 import nextstep.github.ui.model.RepositoryListScreenSideEffect
 import nextstep.github.ui.model.RepositoryListScreenUiState
 
 class RepositoryListViewModel(
     private val repository: GithubRepository,
+    private val getRepositoryListUseCase: GetRepositoryListUseCase,
 ) : ViewModel() {
 
-    private val _uiState = MutableStateFlow<RepositoryListScreenUiState>(RepositoryListScreenUiState.Loading)
+    private val _uiState =
+        MutableStateFlow<RepositoryListScreenUiState>(RepositoryListScreenUiState.Loading)
     val uiState: StateFlow<RepositoryListScreenUiState> = _uiState.asStateFlow()
 
     private val _sideEffect: Channel<RepositoryListScreenSideEffect> = Channel()
@@ -36,7 +39,7 @@ class RepositoryListViewModel(
 
     fun loadRepositoryList() {
         viewModelScope.launch(ceh) {
-            val repositoryList = repository.getRepos().toPersistentList()
+            val repositoryList = getRepositoryListUseCase().toPersistentList()
             _uiState.value = if (repositoryList.isEmpty()) {
                 RepositoryListScreenUiState.Empty
             } else {
@@ -48,10 +51,15 @@ class RepositoryListViewModel(
     companion object {
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as NextGitHubApplication)
-                    .appContainer
-                    .githubRepository
-                RepositoryListViewModel(githubRepository)
+                val appContainer = (this[APPLICATION_KEY] as NextGitHubApplication).appContainer
+
+                val githubRepository = appContainer.githubRepository
+                val getRepositoryListUseCase = appContainer.getRepositoryList
+
+                RepositoryListViewModel(
+                    repository = githubRepository,
+                    getRepositoryListUseCase = getRepositoryListUseCase,
+                )
             }
         }
     }

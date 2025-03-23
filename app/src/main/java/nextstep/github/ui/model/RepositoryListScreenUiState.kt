@@ -1,7 +1,7 @@
 package nextstep.github.ui.model
 
 import kotlinx.collections.immutable.PersistentList
-import nextstep.github.data.entity.Repository
+import nextstep.github.domain.entity.Repository
 
 sealed interface RepositoryListScreenUiState{
 

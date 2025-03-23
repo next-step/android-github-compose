@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Snackbar
+import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHost
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.SnackbarResult
@@ -18,7 +19,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import kotlinx.collections.immutable.toPersistentList
-import nextstep.github.data.entity.Repository
+import nextstep.github.domain.entity.Repository
 import nextstep.github.ui.component.RepositoryListContent
 import nextstep.github.ui.component.RepositoryListEmptyContent
 import nextstep.github.ui.component.RepositoryListErrorContent
@@ -131,7 +132,9 @@ private fun RepositoryListScreenPreview() {
                 repositoryList = List(10) {
                     Repository(
                         fullName = "nextstep/github",
-                        description = "Github Repository for NextStep"
+                        description = "Github Repository for NextStep",
+                        stars = 50,
+                        isHot = true,
                     )
                 }.toPersistentList()
             )
@@ -163,8 +166,19 @@ private fun RepositoryListEmptyScreenPreview() {
 @Composable
 private fun RepositoryListErrorScreenPreview() {
     GithubTheme {
+        val snackBarHostState = SnackbarHostState()
+
+        LaunchedEffect(Unit) {
+            snackBarHostState.showSnackbar(
+                message = "예상치 못한 오류가 발생하였습니다.",
+                actionLabel = "재시도",
+                duration = SnackbarDuration.Indefinite,
+            )
+        }
+
         RepositoryListScreen(
-            uiState = RepositoryListScreenUiState.Error
+            uiState = RepositoryListScreenUiState.Error,
+            snackBarHostState = snackBarHostState
         )
     }
 }

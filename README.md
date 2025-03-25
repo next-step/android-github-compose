@@ -9,7 +9,7 @@
 - [x] 실제로 서버 데이터가 잘 로드되는지 Log로 확인한다.
 
 ## 2단계
-- [ ] RepositoryItem 구현
+- [x] RepositoryItem 구현
 - [ ] RepositoryList 구현
 - [ ] Repositories TopAppBar 구현
 - [ ] ViewModel 구현

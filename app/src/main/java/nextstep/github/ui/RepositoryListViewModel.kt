@@ -24,12 +24,14 @@ class RepositoryListViewModel(
     fun fetchRepositories() {
         viewModelScope.launch {
             _repositories.update {
-                githubRepository.getRepositories("next-step")
+                githubRepository.getRepositories(ORGANIZATION)
             }
         }
     }
 
     companion object {
+        private const val ORGANIZATION = "next-step"
+
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
                 val githubRepository = (this[APPLICATION_KEY] as GithubApplication)

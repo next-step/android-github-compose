@@ -11,5 +11,5 @@
 ## 2단계
 - [x] RepositoryItem 구현
 - [x] RepositoryList 구현
-- [ ] Repositories TopAppBar 구현
+- [x] Screen 구현
 - [ ] ViewModel 구현

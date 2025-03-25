@@ -12,4 +12,4 @@
 - [x] RepositoryItem 구현
 - [x] RepositoryList 구현
 - [x] Screen 구현
-- [ ] ViewModel 구현
+- [x] ViewModel 구현

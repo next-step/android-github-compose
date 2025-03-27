@@ -1,6 +1,6 @@
 package nextstep.github.ui.nextsteprepos
 
-import nextstep.github.model.GithubRepo
+import nextstep.github.domain.model.GithubRepo
 
 data class NextStepReposUiState(
     val uiState: UiState = UiState.Success,

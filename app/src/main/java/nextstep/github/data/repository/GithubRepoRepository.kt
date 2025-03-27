@@ -2,7 +2,7 @@ package nextstep.github.data.repository
 
 import nextstep.github.data.api.GithubService
 import nextstep.github.data.dto.toGithubRepo
-import nextstep.github.model.GithubRepo
+import nextstep.github.domain.model.GithubRepo
 
 class GithubRepoRepository(
     private val githubService: GithubService

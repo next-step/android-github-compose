@@ -9,6 +9,7 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -25,14 +26,14 @@ fun RepositoryListScreen(
     modifier: Modifier = Modifier,
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory)
 ) {
-    val repositories = viewModel.repositories.collectAsStateWithLifecycle()
+    val repositories by viewModel.repositories.collectAsStateWithLifecycle()
 
     LaunchedEffect(Unit) {
         viewModel.fetchRepositories()
     }
 
     RepositoryListScreen(
-        repositories = repositories.value,
+        repositories = repositories,
         modifier = modifier
     )
 }

@@ -18,7 +18,7 @@ fun RepositoryList(
     LazyColumn(
         modifier = modifier
     ) {
-        items(repositories) { item ->
+        items(repositories, key = { it.id }) { item ->
             RepositoryItem(
                 repository = item,
                 modifier = Modifier.fillMaxWidth()
@@ -34,6 +34,7 @@ private fun RepositoryListPreview() {
         RepositoryList(
             repositories = List(10) {
                 RepositoryEntity(
+                    id = it.toLong(),
                     fullName = "next-step/nextstep-docs",
                     description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
                 )

@@ -16,7 +16,7 @@
 
 ## 3단계
 - [x] Loading, Empty, Success 상태 구현
-- [ ] 상태에 따른 뷰 구현
-  - [ ] Loading : Indicator 출력, 에러 시 스낵바 출력
-  - [ ] Empty : "목록이 비었습니다" 출력
-  - [ ] Success : 리스트 출력
+- [x] 상태에 따른 뷰 구현
+  - [x] Loading : Indicator 출력, 에러 시 스낵바 출력
+  - [x] Empty : "목록이 비었습니다" 출력
+  - [x] Success : 리스트 출력

@@ -12,19 +12,30 @@ import kotlinx.coroutines.flow.update
 import kotlinx.coroutines.launch
 import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepoRepository
-import nextstep.github.data.repository.model.RepositoryEntity
+import nextstep.github.ui.model.RepositoryListUiState
 
 class RepositoryListViewModel(
     private val githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
-
-    private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
-    val repositories = _repositories.asStateFlow()
+    private val _uiState = MutableStateFlow<RepositoryListUiState>(RepositoryListUiState.Loading(false))
+    val uiState = _uiState.asStateFlow()
 
     fun fetchRepositories() {
         viewModelScope.launch {
-            _repositories.update {
+            runCatching {
                 githubRepoRepository.getRepositories(ORGANIZATION)
+            }.onSuccess { repositories ->
+                _uiState.update {
+                    if (repositories.isEmpty()) {
+                        RepositoryListUiState.Empty
+                    } else {
+                        RepositoryListUiState.Success(items = repositories)
+                    }
+                }
+            }.onFailure {
+                _uiState.update {
+                    RepositoryListUiState.Loading(error = true)
+                }
             }
         }
     }

@@ -6,10 +6,10 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
 import nextstep.github.data.repository.GithubRepoRepository
 import nextstep.github.ui.model.RepositoryListUiState
@@ -17,28 +17,22 @@ import nextstep.github.ui.model.RepositoryListUiState
 class RepositoryListViewModel(
     private val githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
-    private val _uiState = MutableStateFlow<RepositoryListUiState>(RepositoryListUiState.Loading(false))
-    val uiState = _uiState.asStateFlow()
+    val uiState = flow {
+        emit(RepositoryListUiState.Loading(error = false))
 
-    fun fetchRepositories() {
-        viewModelScope.launch {
-            runCatching {
-                githubRepoRepository.getRepositories(ORGANIZATION)
-            }.onSuccess { repositories ->
-                _uiState.update {
-                    if (repositories.isEmpty()) {
-                        RepositoryListUiState.Empty
-                    } else {
-                        RepositoryListUiState.Success(items = repositories)
-                    }
-                }
-            }.onFailure {
-                _uiState.update {
-                    RepositoryListUiState.Loading(error = true)
-                }
-            }
+        val repositories = githubRepoRepository.getRepositories(ORGANIZATION)
+        if (repositories.isEmpty()) {
+            emit(RepositoryListUiState.Empty)
+        } else {
+            emit(RepositoryListUiState.Success(items = repositories))
         }
-    }
+    }.catch {
+        emit(RepositoryListUiState.Loading(error = true))
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = RepositoryListUiState.Loading(error = false)
+    )
 
     companion object {
         private const val ORGANIZATION = "next-step"

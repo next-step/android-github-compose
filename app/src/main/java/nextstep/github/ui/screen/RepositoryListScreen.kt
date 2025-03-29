@@ -40,10 +40,6 @@ fun RepositoryListScreen(
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
 
-    LaunchedEffect(Unit) {
-        viewModel.fetchRepositories()
-    }
-
     RepositoryListScreen(
         uiState = uiState,
         modifier = modifier

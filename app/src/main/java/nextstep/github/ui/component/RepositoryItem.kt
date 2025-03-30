@@ -20,27 +20,25 @@ fun RepositoryItem(
     repository: RepositoryEntity,
     modifier: Modifier = Modifier
 ) {
-    repository.fullName?.let { name ->
+    Column(
+        modifier = modifier
+            .background(color = MaterialTheme.colorScheme.surface)
+    ) {
         Column(
-            modifier = modifier
-                .background(color = MaterialTheme.colorScheme.surface)
+            modifier = Modifier.padding(16.dp)
         ) {
-            Column(
-                modifier = Modifier.padding(16.dp)
-            ) {
-                Text(
-                    text = name,
-                    style = MaterialTheme.typography.titleLarge,
-                    color = Color.Black
-                )
-                Text(
-                    text = repository.description.orEmpty(),
-                    style = MaterialTheme.typography.bodyMedium,
-                    color = Color.Black
-                )
-            }
-            HorizontalDivider()
+            Text(
+                text = repository.fullName.orEmpty(),
+                style = MaterialTheme.typography.titleLarge,
+                color = Color.Black
+            )
+            Text(
+                text = repository.description.orEmpty(),
+                style = MaterialTheme.typography.bodyMedium,
+                color = Color.Black
+            )
         }
+        HorizontalDivider()
     }
 }
 
@@ -50,6 +48,7 @@ private fun RepositoryItemPreview() {
     GithubTheme {
         RepositoryItem(
             RepositoryEntity(
+                id = 0,
                 fullName = "next-step/nextstep-docs",
                 description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
             ),

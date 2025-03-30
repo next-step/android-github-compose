@@ -6,28 +6,33 @@ import androidx.lifecycle.ViewModelProvider.AndroidViewModelFactory.Companion.AP
 import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.update
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
-import nextstep.github.data.repository.GithubRepository
-import nextstep.github.data.repository.model.RepositoryEntity
+import nextstep.github.data.repository.GithubRepoRepository
+import nextstep.github.ui.model.RepositoryListUiState
 
 class RepositoryListViewModel(
-    private val githubRepository: GithubRepository
+    private val githubRepoRepository: GithubRepoRepository
 ) : ViewModel() {
+    val uiState = flow {
+        emit(RepositoryListUiState.Loading(error = false))
 
-    private val _repositories = MutableStateFlow<List<RepositoryEntity>>(emptyList())
-    val repositories = _repositories.asStateFlow()
-
-    fun fetchRepositories() {
-        viewModelScope.launch {
-            _repositories.update {
-                githubRepository.getRepositories(ORGANIZATION)
-            }
+        val repositories = githubRepoRepository.getRepositories(ORGANIZATION)
+        if (repositories.isEmpty()) {
+            emit(RepositoryListUiState.Empty)
+        } else {
+            emit(RepositoryListUiState.Success(items = repositories))
         }
-    }
+    }.catch {
+        emit(RepositoryListUiState.Loading(error = true))
+    }.stateIn(
+        scope = viewModelScope,
+        started = SharingStarted.WhileSubscribed(5_000),
+        initialValue = RepositoryListUiState.Loading(error = false)
+    )
 
     companion object {
         private const val ORGANIZATION = "next-step"
@@ -36,7 +41,7 @@ class RepositoryListViewModel(
             initializer {
                 val githubRepository = (this[APPLICATION_KEY] as GithubApplication)
                     .appContainer
-                    .githubRepository
+                    .githubRepoRepository
                 RepositoryListViewModel(githubRepository)
             }
         }

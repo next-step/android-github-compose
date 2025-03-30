@@ -13,3 +13,10 @@
 - [x] RepositoryList 구현
 - [x] Screen 구현
 - [x] ViewModel 구현
+
+## 3단계
+- [x] Loading, Empty, Success 상태 구현
+- [x] 상태에 따른 뷰 구현
+  - [x] Loading : Indicator 출력, 에러 시 스낵바 출력
+  - [x] Empty : "목록이 비었습니다" 출력
+  - [x] Success : 리스트 출력

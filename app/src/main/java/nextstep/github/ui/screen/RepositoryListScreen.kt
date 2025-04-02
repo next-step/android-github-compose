@@ -24,12 +24,14 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
+import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
 import nextstep.github.data.repository.model.RepositoryEntity
 import nextstep.github.ui.RepositoryListViewModel
 import nextstep.github.ui.component.RepositoryList
+import nextstep.github.ui.model.RepositoryListEvent
 import nextstep.github.ui.model.RepositoryListUiState
 import nextstep.github.ui.theme.GithubTheme
 
@@ -39,9 +41,26 @@ fun RepositoryListScreen(
     viewModel: RepositoryListViewModel = viewModel(factory = RepositoryListViewModel.Factory)
 ) {
     val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+    val lifecycleOwner = LocalLifecycleOwner.current
+    val snackbarHostState = remember { SnackbarHostState() }
+    val context = LocalContext.current
+
+    LaunchedEffect(lifecycleOwner) {
+        viewModel.event.collect {
+            when(it) {
+                is RepositoryListEvent.ShowSnackBar -> {
+                    snackbarHostState.showSnackbar(
+                        message = context.getString(it.msgRes),
+                        actionLabel = context.getString(it.actionLabelRes)
+                    )
+                }
+            }
+        }
+    }
 
     RepositoryListScreen(
         uiState = uiState,
+        snackbarHostState = snackbarHostState,
         modifier = modifier
     )
 }
@@ -50,10 +69,9 @@ fun RepositoryListScreen(
 @Composable
 fun RepositoryListScreen(
     uiState: RepositoryListUiState,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier
 ) {
-    val snackbarHostState = remember { SnackbarHostState() }
-
     Scaffold(
         modifier = modifier,
         topBar = {
@@ -91,17 +109,6 @@ fun RepositoryListScreen(
             }
 
             is RepositoryListUiState.Loading -> {
-                val context = LocalContext.current
-
-                LaunchedEffect(uiState.error) {
-                    if (uiState.error) {
-                        snackbarHostState.showSnackbar(
-                            message = context.getString(R.string.repository_list_fetch_error),
-                            actionLabel = context.getString(R.string.retry)
-                        )
-                    }
-                }
-
                 Box(
                     modifier = modifier
                         .fillMaxSize()
@@ -127,8 +134,7 @@ fun RepositoryListScreen(
 class UiStatePreviewParameterProvider : PreviewParameterProvider<RepositoryListUiState> {
     override val values = sequenceOf(
         RepositoryListUiState.Empty,
-        RepositoryListUiState.Loading(false),
-        RepositoryListUiState.Loading(true),
+        RepositoryListUiState.Loading,
         RepositoryListUiState.Success(
             List(10) {
                 RepositoryEntity(
@@ -147,8 +153,11 @@ private fun RepositoryListScreenPreview(
     @PreviewParameter(UiStatePreviewParameterProvider::class) uiState: RepositoryListUiState
 ) {
     GithubTheme {
+        val snackbarHostState = remember { SnackbarHostState() }
+
         RepositoryListScreen(
             uiState = uiState,
+            snackbarHostState = snackbarHostState,
             modifier = Modifier.fillMaxSize()
         )
     }

@@ -7,12 +7,16 @@ import androidx.lifecycle.viewModelScope
 import androidx.lifecycle.viewmodel.initializer
 import androidx.lifecycle.viewmodel.viewModelFactory
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.SharingStarted
+import kotlinx.coroutines.flow.asSharedFlow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
+import nextstep.github.R
 import nextstep.github.data.repository.GithubRepoRepository
+import nextstep.github.ui.model.RepositoryListEvent
 import nextstep.github.ui.model.RepositoryListUiState
 
 class RepositoryListViewModel(
@@ -21,8 +25,11 @@ class RepositoryListViewModel(
     val uiState = getRepositoriesFlow().stateIn(
         scope = viewModelScope,
         started = SharingStarted.WhileSubscribed(5_000),
-        initialValue = RepositoryListUiState.Loading(error = false)
+        initialValue = RepositoryListUiState.Loading
     )
+
+    private val _event = MutableSharedFlow<RepositoryListEvent>()
+    val event = _event.asSharedFlow()
 
     private fun getRepositoriesFlow(): Flow<RepositoryListUiState> {
         return flow {
@@ -33,7 +40,13 @@ class RepositoryListViewModel(
                 emit(RepositoryListUiState.Success(items = repositories))
             }
         }.catch {
-            emit(RepositoryListUiState.Loading(error = true))
+            emit(RepositoryListUiState.Loading)
+            _event.tryEmit(
+                RepositoryListEvent.ShowSnackBar(
+                    msgRes = R.string.repository_list_fetch_error,
+                    actionLabelRes = R.string.retry
+                )
+            )
         }
     }
 

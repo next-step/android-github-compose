@@ -4,4 +4,5 @@
     <string name="repository_list_empty_content">목록이 비었습니다.</string>
     <string name="repository_list_fetch_error">예상치 못한 오류가 발생했습니다.</string>
     <string name="retry">재시도</string>
+    <string name="repository_item_hot">HOT</string>
 </resources>

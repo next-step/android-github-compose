@@ -7,12 +7,12 @@ import androidx.compose.foundation.lazy.items
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.Preview
-import nextstep.github.data.repository.model.RepositoryEntity
+import nextstep.github.domain.model.Repository
 import nextstep.github.ui.theme.GithubTheme
 
 @Composable
 fun RepositoryList(
-    repositories: List<RepositoryEntity>,
+    repositories: List<Repository>,
     modifier: Modifier = Modifier
 ) {
     LazyColumn(
@@ -33,10 +33,11 @@ private fun RepositoryListPreview() {
     GithubTheme {
         RepositoryList(
             repositories = List(10) {
-                RepositoryEntity(
+                Repository(
                     id = it.toLong(),
                     fullName = "next-step/nextstep-docs",
-                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소"
+                    description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+                    stars = 500,
                 )
             },
             modifier = Modifier.fillMaxSize()

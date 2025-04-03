@@ -95,30 +95,11 @@ fun RepositoryListScreen(
     ) { paddingValues ->
         when (uiState) {
             RepositoryListUiState.Empty -> {
-                Box(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .background(color = MaterialTheme.colorScheme.surface),
-                    contentAlignment = Alignment.Center
-                ) {
-                    Text(
-                        text = stringResource(R.string.repository_list_empty_content),
-                        style = MaterialTheme.typography.headlineSmall,
-                    )
-                }
+                RepositoryEmptyView(Modifier.fillMaxSize())
             }
 
             is RepositoryListUiState.Loading -> {
-                Box(
-                    modifier = modifier
-                        .fillMaxSize()
-                        .background(color = MaterialTheme.colorScheme.surface),
-                    contentAlignment = Alignment.Center
-                ) {
-                    CircularProgressIndicator(
-                        color = MaterialTheme.colorScheme.primary
-                    )
-                }
+                RepositoryLoadingView(Modifier.fillMaxSize())
             }
 
             is RepositoryListUiState.Success -> {
@@ -130,6 +111,32 @@ fun RepositoryListScreen(
         }
     }
 }
+
+@Composable
+fun RepositoryEmptyView(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(color = MaterialTheme.colorScheme.surface),
+        contentAlignment = Alignment.Center
+    ) {
+        Text(
+            text = stringResource(R.string.repository_list_empty_content),
+            style = MaterialTheme.typography.headlineSmall,
+        )
+    }
+}
+
+@Composable
+fun RepositoryLoadingView(modifier: Modifier = Modifier) {
+    Box(
+        modifier = modifier.background(color = MaterialTheme.colorScheme.surface),
+        contentAlignment = Alignment.Center
+    ) {
+        CircularProgressIndicator(
+            color = MaterialTheme.colorScheme.primary
+        )
+    }
+}
+
 
 class UiStatePreviewParameterProvider : PreviewParameterProvider<RepositoryListUiState> {
     override val values = sequenceOf(

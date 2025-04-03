@@ -28,7 +28,7 @@ import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.lifecycle.viewmodel.compose.viewModel
 import nextstep.github.R
-import nextstep.github.data.repository.model.RepositoryEntity
+import nextstep.github.domain.model.Repository
 import nextstep.github.ui.RepositoryListViewModel
 import nextstep.github.ui.component.RepositoryList
 import nextstep.github.ui.model.RepositoryListEvent
@@ -144,7 +144,7 @@ class UiStatePreviewParameterProvider : PreviewParameterProvider<RepositoryListU
         RepositoryListUiState.Loading,
         RepositoryListUiState.Success(
             List(10) {
-                RepositoryEntity(
+                Repository(
                     id = it.toLong(),
                     fullName = "next-step/nextstep-docs",
                     description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",

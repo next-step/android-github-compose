@@ -23,19 +23,19 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import nextstep.github.R
-import nextstep.github.data.repository.model.RepositoryEntity
+import nextstep.github.domain.model.Repository
 import nextstep.github.ui.theme.GithubTheme
-import nextstep.github.util.orZero
 
 @Composable
 fun RepositoryItem(
-    repository: RepositoryEntity,
+    repository: Repository,
     modifier: Modifier = Modifier
 ) {
     RepositoryItem(
-        fullName = repository.fullName.orEmpty(),
-        description = repository.description.orEmpty(),
-        stars = repository.stars.orZero(),
+        fullName = repository.fullName,
+        description = repository.description,
+        stars = repository.stars,
+        isHot = repository.isHot,
         modifier = modifier
     )
 }
@@ -45,6 +45,7 @@ fun RepositoryItem(
     fullName: String,
     description: String,
     stars: Int,
+    isHot: Boolean,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -59,7 +60,7 @@ fun RepositoryItem(
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                if (stars >= 50) {
+                if (isHot) {
                     Text(
                         text = stringResource(R.string.repository_item_hot),
                         style = MaterialTheme.typography.labelLarge,
@@ -107,24 +108,24 @@ fun StarCount(
     }
 }
 
-private class StarCountPreviewParameterProvider : PreviewParameterProvider<Int> {
+private class RepositoryItemPreviewParameterProvider : PreviewParameterProvider<Boolean> {
     override val values = sequenceOf(
-        10,
-        50
+        true,
+        false
     )
 }
-
 
 @Preview
 @Composable
 private fun RepositoryItemPreview(
-    @PreviewParameter(StarCountPreviewParameterProvider::class) star: Int
+    @PreviewParameter(RepositoryItemPreviewParameterProvider::class) value: Boolean
 ) {
     GithubTheme {
         RepositoryItem(
             fullName = "next-step/nextstep-docs",
             description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
-            stars = star,
+            stars = 100,
+            isHot = value,
             modifier = Modifier.fillMaxWidth()
         )
     }

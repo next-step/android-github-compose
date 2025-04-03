@@ -15,12 +15,12 @@ import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.stateIn
 import nextstep.github.GithubApplication
 import nextstep.github.R
-import nextstep.github.data.repository.GithubRepoRepository
+import nextstep.github.domain.usecase.GetRepositoriesUseCase
 import nextstep.github.ui.model.RepositoryListEvent
 import nextstep.github.ui.model.RepositoryListUiState
 
 class RepositoryListViewModel(
-    private val githubRepoRepository: GithubRepoRepository
+    private val getRepositoryUseCase: GetRepositoriesUseCase
 ) : ViewModel() {
     val uiState = getRepositoriesFlow().stateIn(
         scope = viewModelScope,
@@ -33,7 +33,7 @@ class RepositoryListViewModel(
 
     private fun getRepositoriesFlow(): Flow<RepositoryListUiState> {
         return flow {
-            val repositories = githubRepoRepository.getRepositories(ORGANIZATION)
+            val repositories = getRepositoryUseCase(ORGANIZATION)
             if (repositories.isEmpty()) {
                 emit(RepositoryListUiState.Empty)
             } else {
@@ -55,10 +55,10 @@ class RepositoryListViewModel(
 
         val Factory: ViewModelProvider.Factory = viewModelFactory {
             initializer {
-                val githubRepository = (this[APPLICATION_KEY] as GithubApplication)
+                val getRepositoriesUseCase = (this[APPLICATION_KEY] as GithubApplication)
                     .appContainer
-                    .githubRepoRepository
-                RepositoryListViewModel(githubRepository)
+                    .getRepositoriesUseCase
+                RepositoryListViewModel(getRepositoriesUseCase)
             }
         }
     }

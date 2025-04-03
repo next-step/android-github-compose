@@ -32,6 +32,21 @@ fun RepositoryItem(
     repository: RepositoryEntity,
     modifier: Modifier = Modifier
 ) {
+    RepositoryItem(
+        fullName = repository.fullName.orEmpty(),
+        description = repository.description.orEmpty(),
+        stars = repository.stars.orZero(),
+        modifier = modifier
+    )
+}
+
+@Composable
+fun RepositoryItem(
+    fullName: String,
+    description: String,
+    stars: Int,
+    modifier: Modifier = Modifier
+) {
     Column(
         modifier = modifier
             .background(color = MaterialTheme.colorScheme.surface)
@@ -44,7 +59,7 @@ fun RepositoryItem(
             Row(
                 modifier = Modifier.fillMaxWidth(),
             ) {
-                if (repository.stars.orZero() >= 50) {
+                if (stars >= 50) {
                     Text(
                         text = stringResource(R.string.repository_item_hot),
                         style = MaterialTheme.typography.labelLarge,
@@ -53,16 +68,16 @@ fun RepositoryItem(
                 }
                 Spacer(modifier = Modifier.weight(1f))
                 StarCount(
-                    count = repository.stars.orZero(),
+                    count = stars,
                 )
             }
             Text(
-                text = repository.fullName.orEmpty(),
+                text = fullName,
                 style = MaterialTheme.typography.titleLarge,
                 color = Color.Black
             )
             Text(
-                text = repository.description.orEmpty(),
+                text = description,
                 style = MaterialTheme.typography.bodyMedium,
                 color = Color.Black
             )
@@ -107,12 +122,9 @@ private fun RepositoryItemPreview(
 ) {
     GithubTheme {
         RepositoryItem(
-            RepositoryEntity(
-                id = 0,
-                fullName = "next-step/nextstep-docs",
-                description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
-                stars = star
-            ),
+            fullName = "next-step/nextstep-docs",
+            description = "nextstep 매뉴얼 및 문서를 관리하는 저장소",
+            stars = star,
             modifier = Modifier.fillMaxWidth()
         )
     }

@@ -1,4 +1,4 @@
-package nextstep.github.ui.theme
+package nextstep.github.presentation.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

@@ -1,4 +1,4 @@
-package nextstep.github.ui.theme
+package nextstep.github.presentation.ui.theme
 
 import androidx.compose.ui.graphics.Color
 

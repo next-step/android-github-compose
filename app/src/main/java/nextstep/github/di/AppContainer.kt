@@ -12,6 +12,8 @@ import retrofit2.Retrofit
 
 class AppContainer {
 
+    var repositoryListContainer: RepositoryListContainer? = null
+
     private val serialization = Json { ignoreUnknownKeys = true }
     private val retrofit = Retrofit.Builder()
         .baseUrl(BASE_URL)

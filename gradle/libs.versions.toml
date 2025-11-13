@@ -12,6 +12,9 @@ composeBom = "2025.11.00"
 kotlinxSerializationJson = "1.9.0"
 retrofit2KotlinxSerializationConverter = "1.0.0"
 
+retrofit = "3.0.0"
+okhttp3 = "5.3.0"
+
 [libraries]
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
@@ -32,6 +35,9 @@ androidx-material3 = { group = "androidx.compose.material3", name = "material3" 
 
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
 retrofit2-kotlinx-serialization-converter = { module = "com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter", version.ref = "retrofit2KotlinxSerializationConverter" }
+
+retrofit = { module = "com.squareup.retrofit2:retrofit", version.ref = "retrofit" }
+okhttp3 = { module = "com.squareup.okhttp3:okhttp", version.ref = "okhttp3" }
 
 [plugins]
 android-application = { id = "com.android.application", version.ref = "agp" }

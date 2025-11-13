@@ -1,4 +1,4 @@
-package nextstep.github.presentation.ui.theme
+package nextstep.github.presentation.theme
 
 import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
